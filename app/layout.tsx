@@ -1,5 +1,6 @@
 import { Nanum_Gothic } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/navbar/navbar";
 
 const font = Nanum_Gothic({
   weight: ["400", "700", "800"],
@@ -24,6 +25,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={font.className}>
       <body className="bg-background text-foreground">
+        <Navbar />
         <main className="min-h-screen flex flex-col items-center">
           {children}
         </main>
