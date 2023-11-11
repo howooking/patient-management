@@ -1,28 +1,33 @@
-import { GeistSans } from 'geist/font'
-import './globals.css'
+import { Nanum_Gothic } from "next/font/google";
+import "./globals.css";
+
+const font = Nanum_Gothic({
+  weight: ["400", "700", "800"],
+  subsets: ["latin"],
+});
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000'
+  : "http://localhost:3000";
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: 'Next.js and Supabase Starter Kit',
-  description: 'The fastest way to build apps with Next.js and Supabase',
-}
+  title: "입원환자관리",
+  description: "The fastest way to build apps with Next.js and Supabase",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
+    <html lang="en" className={font.className}>
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center">
           {children}
         </main>
       </body>
     </html>
-  )
+  );
 }
