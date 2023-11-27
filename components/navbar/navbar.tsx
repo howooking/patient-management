@@ -29,7 +29,7 @@ export default async function Navbar() {
     <header className="bg-muted border-b-2">
       <div className="px-10 max-w-7xl mx-auto flex items-center justify-between h-12">
         <Link href="/" className="hover:scale-[0.98] transition">
-          <Image src={mainLogo} alt="main logo" width={150} priority />
+          홈
         </Link>
         <div className="flex items-center gap-2">
           {user ? (
