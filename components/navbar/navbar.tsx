@@ -7,6 +7,7 @@ import Image from "next/image";
 import mainLogo from "@/public/vetter hands.png";
 import AvatarDropdown from "./avatar-dropdown";
 import { CiLogout } from "react-icons/ci";
+import { ToggleTheme } from "./toggle-theme";
 
 export default async function Navbar() {
   const cookieStore = cookies();
@@ -50,6 +51,7 @@ export default async function Navbar() {
               <Button size="sm">로그인</Button>
             </Link>
           )}
+          <ToggleTheme />
         </div>
       </div>
     </header>
