@@ -52,9 +52,15 @@ export default async function Navbar() {
               )}
             </>
           ) : (
-            <Link href="/login">
-              <Button size="sm">로그인</Button>
-            </Link>
+            <>
+              {NAV_PAGES.map((page) => (
+                <Button key={page.title} asChild variant="ghost">
+                  <Link href={page.href}>{page.title}</Link>
+                </Button>
+              ))}
+              <Button variant="outline">로그인</Button>
+              <Button>무료로 시작하세요</Button>
+            </>
           )}
           <ToggleTheme />
         </div>
@@ -62,3 +68,9 @@ export default async function Navbar() {
     </header>
   );
 }
+
+const NAV_PAGES = [
+  { title: "상품", href: "/product" },
+  { title: "요금제", href: "/pricing" },
+  { title: "Contact", href: "/CONTACT" },
+];

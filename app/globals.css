@@ -57,7 +57,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-html {
-  line-height: 1;
-}
