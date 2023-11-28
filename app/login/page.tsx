@@ -4,30 +4,9 @@ import { createClient } from "@/utils/supabase/client";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { RiKakaoTalkFill } from "react-icons/ri";
-import { useEffect, useState } from "react";
-import { User } from "@supabase/supabase-js";
 
 export default function Login() {
   const supabase = createClient();
-  const [error, setError] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const getUser = async function () {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-      if (error) {
-        setError(error.message);
-        return;
-      }
-      if (user) {
-        setUser(user);
-      }
-    };
-    getUser();
-  }, []);
 
   const handleGoogleLogin = async () => {
     supabase.auth.signInWithOAuth({
@@ -51,9 +30,6 @@ export default function Login() {
     });
   };
 
-  if (user) {
-    return <>이미 로그인함</>;
-  }
   return (
     <div className="space-y-2">
       <Button

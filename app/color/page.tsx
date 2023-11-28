@@ -1,9 +1,8 @@
+import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
-import Navbar from "@/components/navbar/navbar";
 
-export default async function Home() {
+export default async function page() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const {
@@ -21,13 +20,23 @@ export default async function Home() {
     throw new Error(sessionError.message);
   }
 
-  if (vet?.license_approved) {
-    redirect("/color");
+  if (!session) {
+    redirect("/login");
+  }
+
+  if (!vet) {
+    redirect("/signup");
+  }
+
+  if (!vet.license_approved) {
+    redirect("/wait");
   }
 
   return (
-    <div>
-      <h1>수의사 전문차트 벳터핸즈입니다.</h1>
+    <div className="container">
+      <h1>이페이지는 로그인사용자만 접근가능함</h1>
+      {vet && <pre>{JSON.stringify(vet, null, 2)}</pre>}
+      <div className="w-10 h-10 bg-muted"></div>
     </div>
   );
 }
