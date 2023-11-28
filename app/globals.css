@@ -10,9 +10,9 @@
     --card-foreground: 20 14.3% 4.1%;
     --popover: 0 0% 100%;
     --popover-foreground: 20 14.3% 4.1%;
-    --primary: 24 9.8% 10%;
+    --primary: 179 100% 34%;
     --primary-foreground: 60 9.1% 97.8%;
-    --secondary: 60 4.8% 95.9%;
+    --secondary: 75 59% 57%;
     --secondary-foreground: 24 9.8% 10%;
     --muted: 60 4.8% 95.9%;
     --muted-foreground: 25 5.3% 44.7%;
@@ -33,9 +33,9 @@
     --card-foreground: 60 9.1% 97.8%;
     --popover: 20 14.3% 4.1%;
     --popover-foreground: 60 9.1% 97.8%;
-    --primary: 60 9.1% 97.8%;
+    --primary: 179 100% 44%;
     --primary-foreground: 24 9.8% 10%;
-    --secondary: 12 6.5% 15.1%;
+    --secondary: 75 59% 43%;
     --secondary-foreground: 60 9.1% 97.8%;
     --muted: 12 6.5% 15.1%;
     --muted-foreground: 24 5.4% 63.9%;
@@ -56,4 +56,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+html {
+  line-height: 1;
 }
