@@ -34,7 +34,7 @@ export default function AvatarDropdown({
         <DropdownMenuItem>그룹설정</DropdownMenuItem>
         <DropdownMenuItem asChild className="p-0">
           <form action={signOut}>
-            <Button variant="destructive" className="w-full h-7">
+            <Button variant="destructive" className="w-full h-7 text-sm">
               로그아웃
             </Button>
           </form>

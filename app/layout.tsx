@@ -35,7 +35,7 @@ export default function RootLayout({
         >
           <Navbar />
 
-          <main className="pt-12 container min-h-screen flex flex-col">
+          <main className="pt-16 container min-h-screen flex flex-col">
             {children}
           </main>
         </ThemeProvider>

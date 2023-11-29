@@ -3,39 +3,38 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function page() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
-  const {
-    data: { session },
-    error: sessionError,
-  } = await supabase.auth.getSession();
+  // const cookieStore = cookies();
+  // const supabase = createClient(cookieStore);
+  // const {
+  //   data: { session },
+  //   error: sessionError,
+  // } = await supabase.auth.getSession();
 
-  const { data: vet } = await supabase
-    .from("vets")
-    .select("*")
-    .eq("vet_id", session?.user.email)
-    .single();
+  // const { data: vet } = await supabase
+  //   .from("vets")
+  //   .select("*")
+  //   .eq("vet_id", session?.user.email)
+  //   .single();
 
-  if (sessionError) {
-    throw new Error(sessionError.message);
-  }
+  // if (sessionError) {
+  //   throw new Error(sessionError.message);
+  // }
 
-  if (!session) {
-    redirect("/login");
-  }
+  // if (!session) {
+  //   redirect("/login");
+  // }
 
-  if (!vet) {
-    redirect("/signup");
-  }
+  // if (!vet) {
+  //   redirect("/signup");
+  // }
 
-  if (!vet.license_approved) {
-    redirect("/wait");
-  }
+  // if (!vet.license_approved) {
+  //   redirect("/wait");
+  // }
 
   return (
     <div className="container">
-      <h1>이페이지는 로그인사용자만 접근가능함</h1>
-      {vet && <pre>{JSON.stringify(vet, null, 2)}</pre>}
+      {/* {vet && <pre>{JSON.stringify(vet, null, 2)}</pre>} */}
       <p className="text-5xl">5xl(67.36px) 크기</p>
       <p className="text-4xl">4xl(50.56px) 크기</p>
       <p className="text-3xl">3xl(37.92px) 크기</p>
