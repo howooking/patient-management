@@ -9,6 +9,7 @@ import { Button } from "../ui/button";
 import logo from "@/public/logo.png";
 import Image from "next/image";
 import LoginDialog from "./login-dialog";
+import SignupDialog from "./signup-dialog";
 
 export default async function Navbar() {
   const cookieStore = cookies();
@@ -61,9 +62,8 @@ export default async function Navbar() {
                   <Link href={page.href}>{page.title}</Link>
                 </Button>
               ))}
-              <LoginDialog />
-
-              <Button className="font-semibold">무료로 시작하세요</Button>
+              <LoginDialog navbar />
+              <SignupDialog navbar />
             </>
           )}
           <ToggleTheme />

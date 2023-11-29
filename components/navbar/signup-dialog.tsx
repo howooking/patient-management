@@ -5,21 +5,12 @@ import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { RiKakaoTalkFill } from "react-icons/ri";
 
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import SignupDialog from "./signup-dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import LoginDialog from "./login-dialog";
+import Link from "next/link";
 
-export default function LoginDialog({ navbar }: { navbar?: boolean }) {
+export default function SignupDialog({ navbar }: { navbar?: boolean }) {
   const supabase = createClient();
 
   const handleGoogleLogin = async () => {
@@ -48,10 +39,10 @@ export default function LoginDialog({ navbar }: { navbar?: boolean }) {
     <Dialog>
       <DialogTrigger asChild>
         <Button
-          variant={navbar ? "outline" : "link"}
-          className={cn(navbar ? "text-base" : "text-sm")}
+          variant={navbar ? "default" : "link"}
+          className={cn(navbar ? "text-base font-semibold" : "text-sm")}
         >
-          로그인
+          {navbar ? "무료로 시작하세요" : "회원가입"}
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[300px] pt-14 flex flex-col gap-2">
@@ -61,7 +52,7 @@ export default function LoginDialog({ navbar }: { navbar?: boolean }) {
           variant="outline"
         >
           <FcGoogle size={20} />
-          <span>구글로 로그인</span>
+          <span>구글로 회원가입</span>
         </Button>
         <div className="text-center">or</div>
         <Button
@@ -70,11 +61,26 @@ export default function LoginDialog({ navbar }: { navbar?: boolean }) {
           variant="outline"
         >
           <RiKakaoTalkFill size={20} />
-          <span>카카오로 로그인</span>
+          <span>카카오로 회원가입</span>
         </Button>
-        <div className="flex items-center mt-4">
-          <span className="text-sm">아직 회원이 아닌가요?</span>
-          <SignupDialog />
+        <div className="flex flex-col mt-4">
+          <p className="text-sm break-keep">
+            <span className="font-semibold">구글로 회원가입</span> 또는{" "}
+            <span className="font-semibold">카카오로 회원가입</span>을 진행할
+            경우 Vetterhands의{" "}
+            <Link href="#" className="text-primary">
+              이용약관
+            </Link>{" "}
+            및{" "}
+            <Link href="#" className="text-primary">
+              개인정보정책
+            </Link>
+            에 동의하게됩니다.
+          </p>
+          <div className="flex items-center mt-2">
+            <span className="text-sm">이미 회원이신가요?</span>
+            <LoginDialog />
+          </div>
         </div>
       </DialogContent>
     </Dialog>
