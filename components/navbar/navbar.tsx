@@ -6,6 +6,9 @@ import { createClient } from "@/utils/supabase/server";
 import AvatarDropdown from "./avatar-dropdown";
 import { ToggleTheme } from "./toggle-theme";
 import { Button } from "../ui/button";
+import logo from "@/public/logo.png";
+import Image from "next/image";
+import LoginDialog from "./login-dialog";
 
 export default async function Navbar() {
   const cookieStore = cookies();
@@ -26,7 +29,7 @@ export default async function Navbar() {
     const cookieStore = cookies();
     const supabase = createClient(cookieStore);
     await supabase.auth.signOut();
-    return redirect("/login");
+    return redirect("/");
   };
 
   if (sessionError) {
@@ -34,10 +37,10 @@ export default async function Navbar() {
   }
 
   return (
-    <header className="bg-muted h-12 fixed w-full">
-      <nav className="container flex items-center justify-between h-12">
-        <Link href="/" className="hover:scale-[0.98] transition">
-          홈
+    <header className="fixed w-full">
+      <nav className="container flex items-center justify-between h-16">
+        <Link href="/">
+          <Image src={logo} alt="vetterhands logo" width={48} />
         </Link>
         <div className="flex items-center gap-2">
           {vet ? (
@@ -58,8 +61,9 @@ export default async function Navbar() {
                   <Link href={page.href}>{page.title}</Link>
                 </Button>
               ))}
-              <Button variant="outline">로그인</Button>
-              <Button>무료로 시작하세요</Button>
+              <LoginDialog />
+
+              <Button className="font-semibold">무료로 시작하세요</Button>
             </>
           )}
           <ToggleTheme />
@@ -70,7 +74,7 @@ export default async function Navbar() {
 }
 
 const NAV_PAGES = [
-  { title: "상품", href: "/product" },
+  { title: "상품", href: "/products" },
   { title: "요금제", href: "/pricing" },
-  { title: "Contact", href: "/CONTACT" },
+  { title: "Contact", href: "/contact" },
 ];
