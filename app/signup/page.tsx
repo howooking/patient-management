@@ -1,3 +1,11 @@
+import Attraction from "./attraction";
+import SignupForm from "./signup-form";
+
 export default function SignupPage() {
-  return <div>회원가입</div>;
+  return (
+    <div className="flex w-full h-screen">
+      <SignupForm />
+      <Attraction />
+    </div>
+  );
 }

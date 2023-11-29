@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/server";
 import AvatarDropdown from "./avatar-dropdown";
 import { ToggleTheme } from "./toggle-theme";
 import { Button } from "../ui/button";
-import logo from "@/public/logo.png";
+import logo from "@/public/logos/logo1.png";
 import Image from "next/image";
 import LoginDialog from "./login-dialog";
 import SignupDialog from "./signup-dialog";
