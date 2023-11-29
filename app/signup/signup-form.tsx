@@ -18,8 +18,6 @@ import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
 import LogoToHome from "@/components/common/logo-to-home";
-import { createClient } from "@/utils/supabase/client";
-import { useEffect } from "react";
 
 const formSchema = z.object({
   vetName: z.string().min(2, {

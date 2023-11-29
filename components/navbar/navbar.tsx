@@ -6,10 +6,7 @@ import { createClient } from "@/utils/supabase/server";
 import AvatarDropdown from "./avatar-dropdown";
 import { ToggleTheme } from "./toggle-theme";
 import { Button } from "../ui/button";
-import logo from "@/public/logos/logo1.png";
-import Image from "next/image";
-import LoginDialog from "./login-dialog";
-import SignupDialog from "./signup-dialog";
+import SigninSignupDialog from "./signin-signup-dialog";
 import LogoToHome from "../common/logo-to-home";
 
 export default async function Navbar() {
@@ -61,8 +58,8 @@ export default async function Navbar() {
                   <Link href={page.href}>{page.title}</Link>
                 </Button>
               ))}
-              <LoginDialog navbar />
-              <SignupDialog navbar />
+              <SigninSignupDialog signin />
+              <SigninSignupDialog />
             </>
           )}
           <ToggleTheme />
