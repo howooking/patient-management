@@ -1,9 +1,9 @@
+import Navbar from "@/components/navbar/navbar";
+import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createClient } from "@/utils/supabase/server";
-import Navbar from "@/components/navbar/navbar";
 
-export default async function Home() {
+export default async function SpacePage() {
   const cookieStore = cookies();
   const supabase = createClient(cookieStore);
   const {
@@ -21,14 +21,22 @@ export default async function Home() {
     throw new Error(sessionError.message);
   }
 
-  if (vet?.license_approved) {
-    redirect("/space");
+  if (!session) {
+    redirect("/");
+  }
+
+  if (!vet) {
+    redirect("/signup");
+  }
+
+  if (!vet.license_approved) {
+    redirect("/wait");
   }
 
   return (
     <>
       <Navbar />
-      <h1 className="text-3xl pt-20">수의사 전문차트 서비스 벳터핸즈입니다.</h1>
+      가입완료된 회원만 보이는 페이지
     </>
   );
 }
