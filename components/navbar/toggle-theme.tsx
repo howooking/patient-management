@@ -25,13 +25,13 @@ export function ToggleTheme() {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+          라이트모드
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+          다크모드
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+          시스템과동일
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
