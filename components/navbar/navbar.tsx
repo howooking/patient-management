@@ -10,6 +10,7 @@ import logo from "@/public/logos/logo1.png";
 import Image from "next/image";
 import LoginDialog from "./login-dialog";
 import SignupDialog from "./signup-dialog";
+import LogoToHome from "../common/logo-to-home";
 
 export default async function Navbar() {
   const cookieStore = cookies();
@@ -40,9 +41,7 @@ export default async function Navbar() {
   return (
     <header className="fixed w-full">
       <nav className="container flex items-center justify-between h-16">
-        <Link href="/">
-          <Image src={logo} alt="vetterhands logo" width={48} />
-        </Link>
+        <LogoToHome />
         <div className="flex items-center gap-2">
           {vet ? (
             <>
