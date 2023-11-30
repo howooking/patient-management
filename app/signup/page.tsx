@@ -1,22 +1,16 @@
-import { cookies } from "next/headers";
-import Attraction from "./attraction";
-import SignupForm from "./signup-form";
-import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 
+import Attraction from "./attraction";
+import SignupForm from "./signup-form";
+import createSupabaseServerClient from "@/lib/supabase/server";
+
 export default async function SignupPage() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createSupabaseServerClient();
   const {
     data: { session },
-    error: sessionError,
   } = await supabase.auth.getSession();
 
-  const { data: vet } = await supabase
-    .from("vets")
-    .select("*")
-    .eq("vet_id", session?.user.email)
-    .single();
+  const { data: vet } = await supabase.from("vets").select("*").single();
 
   if (!session) {
     redirect("/");
@@ -29,9 +23,9 @@ export default async function SignupPage() {
   return (
     <div className="flex w-full h-screen">
       <SignupForm
-        namePlaceholder={session.user.user_metadata.name}
+        namePlaceholder={session?.user.user_metadata.name}
         avatarUrl={session?.user.user_metadata.avatar_url}
-        vetId={session?.user.email}
+        vetId={session?.user.id}
       />
       <Attraction />
     </div>

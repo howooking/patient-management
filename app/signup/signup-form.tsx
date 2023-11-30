@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -15,9 +16,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
-import LogoToHome from "@/components/common/logo-to-home";
+import Logo from "@/components/common/logo";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 const formSchema = z.object({
   vetName: z.string().min(2, {
@@ -51,13 +52,16 @@ export default function SignupForm({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     console.log(values);
-  }
+  };
+
+  const supabase = createSupabaseBrowserClient();
+
   return (
     <section className="w-1/2 p-24 space-y-12">
       <div className="flex items-center gap-2">
-        <LogoToHome />
+        <Logo />
         <h2 className="text-2xl">회원가입</h2>
       </div>
       <Form {...form}>
@@ -139,7 +143,12 @@ export default function SignupForm({
             )}
           />
           <div className="flex gap-2 justify-end">
-            <Button type="button" variant="outline" asChild>
+            <Button
+              type="button"
+              variant="outline"
+              asChild
+              onClick={() => supabase.auth.signOut()}
+            >
               <Link href="/">뒤로가기</Link>
             </Button>
             <Button type="submit" className="font-semibold">

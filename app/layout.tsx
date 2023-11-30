@@ -1,8 +1,8 @@
 import { Nanum_Gothic } from "next/font/google";
+
 import "./globals.css";
-import Navbar from "@/components/navbar/navbar";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/common/theme-provider";
 
 const font = Nanum_Gothic({
   weight: ["400", "700", "800"],
@@ -11,7 +11,7 @@ const font = Nanum_Gothic({
 
 export const metadata = {
   title: "Vetterhands",
-  description: "수의사 전문 웹차트",
+  description: "수의사 전문 웹차트 서비스",
 };
 
 export default function RootLayout({

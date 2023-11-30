@@ -7,20 +7,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
+import Signout from "./signout";
 
 type AvatarDropdownProps = {
   src: string;
   fallback: string;
   email: string;
-  signOut: () => Promise<never>;
 };
 
 export default function AvatarDropdown({
   fallback,
   src,
   email,
-  signOut,
 }: AvatarDropdownProps) {
   return (
     <DropdownMenu>
@@ -33,11 +31,7 @@ export default function AvatarDropdown({
         <DropdownMenuItem>프로필설정</DropdownMenuItem>
         <DropdownMenuItem>그룹설정</DropdownMenuItem>
         <DropdownMenuItem asChild className="p-0">
-          <form action={signOut}>
-            <Button variant="destructive" className="w-full h-7 text-sm">
-              로그아웃
-            </Button>
-          </form>
+          <Signout />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

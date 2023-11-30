@@ -1,11 +1,10 @@
-import Navbar from "@/components/navbar/navbar";
-import { createClient } from "@/utils/supabase/server";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import Navbar from "@/components/navbar/navbar";
+import createSupabaseServerClient from "@/lib/supabase/server";
+
 export default async function SpacePage() {
-  const cookieStore = cookies();
-  const supabase = createClient(cookieStore);
+  const supabase = await createSupabaseServerClient();
   const {
     data: { session },
     error: sessionError,
@@ -13,8 +12,7 @@ export default async function SpacePage() {
 
   const { data: vet } = await supabase
     .from("vets")
-    .select("*")
-    .eq("vet_id", session?.user.email)
+    .select("license_approved")
     .single();
 
   if (sessionError) {

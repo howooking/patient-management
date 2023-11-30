@@ -23,10 +23,10 @@ export default function SigninSignupTab({ signin }: { signin?: boolean }) {
           회원가입
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="signin" className="mt-0 space-y-4">
+      <TabsContent value="signin" className="mt-0 space-y-6">
         <SigninTab setActiveTab={setActiveTab} />
       </TabsContent>
-      <TabsContent value="signup" className="mt-0 space-y-4">
+      <TabsContent value="signup" className="mt-0 space-y-6">
         <SignupTab setActiveTab={setActiveTab} />
       </TabsContent>
     </Tabs>

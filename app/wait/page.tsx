@@ -1,14 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/client";
+import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+
+import { Button } from "@/components/ui/button";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export default function WaitPage() {
   const router = useRouter();
-  const supabae = createClient();
+  const supabae = createSupabaseBrowserClient();
   useEffect(() => {
     supabae.auth.signOut();
     router.refresh();

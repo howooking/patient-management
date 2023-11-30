@@ -1,4 +1,5 @@
 import Image from "next/image";
+
 import logo from "@/public/logos/logo3.jpg";
 
 export default function Attraction() {
