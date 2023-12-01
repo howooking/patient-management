@@ -2,7 +2,7 @@ import { RiKakaoTalkFill } from "react-icons/ri";
 import { Button } from "../ui/button";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-export default function KakaoSignin() {
+export default function KakaoSignin({ signup }: { signup?: boolean }) {
   const supabase = createSupabaseBrowserClient();
 
   const handleKakaoSignin = async () => {
@@ -21,7 +21,7 @@ export default function KakaoSignin() {
       variant="outline"
     >
       <RiKakaoTalkFill size={20} />
-      <span>카카오로 로그인</span>
+      <span>카카오로 {signup ? "회원가입" : "로그인"}</span>
     </Button>
   );
 }

@@ -15,11 +15,11 @@ export default function SignupTab({
   return (
     <>
       <div className="space-y-1">
-        <GoogleSignin />
+        <GoogleSignin signup />
 
         <div className="text-center">or</div>
 
-        <KakaoSignin />
+        <KakaoSignin signup />
       </div>
 
       <div className="text-sm break-keep">

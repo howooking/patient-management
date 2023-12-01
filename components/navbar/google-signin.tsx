@@ -2,7 +2,7 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Button } from "../ui/button";
 import { FcGoogle } from "react-icons/fc";
 
-export default function GoogleSignin() {
+export default function GoogleSignin({ signup }: { signup?: boolean }) {
   const supabase = createSupabaseBrowserClient();
 
   const handleGoogleLogin = async () => {
@@ -25,7 +25,7 @@ export default function GoogleSignin() {
       variant="outline"
     >
       <FcGoogle size={20} />
-      <span>구글로 로그인</span>
+      <span>구글로 {signup ? "회원가입" : "로그인"}</span>
     </Button>
   );
 }
