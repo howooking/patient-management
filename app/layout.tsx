@@ -3,6 +3,7 @@ import { Nanum_Gothic } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/common/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 
 const font = Nanum_Gothic({
   weight: ["400", "700", "800"],
@@ -20,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="ko" suppressHydrationWarning>
       <body
         className={cn(
           "antialiased bg-background text-foreground",
@@ -34,6 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <main className="min-h-screen flex flex-col">{children}</main>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

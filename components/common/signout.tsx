@@ -13,7 +13,7 @@ export default function Signout() {
 
   return (
     <form action={signOut}>
-      <Button variant="destructive" className="w-full h-7 text-sm">
+      <Button variant="destructive" className="w-full rounded-sm">
         로그아웃
       </Button>
     </form>

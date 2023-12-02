@@ -1,4 +1,4 @@
-import UserAvatar from "../common/user-avatar";
+import UserAvatar from "./user-avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,

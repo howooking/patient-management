@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import AvatarDropdown from "./avatar-dropdown";
+import AvatarDropdown from "../common/avatar-dropdown";
 import { ToggleTheme } from "./toggle-theme";
 import { Button } from "../ui/button";
 import SigninSignupDialog from "./signin-signup-dialog";
@@ -20,27 +20,15 @@ export default async function Navbar() {
       <nav className="container flex items-center justify-between h-16">
         <Logo link />
         <div className="flex items-center gap-2">
-          {vet ? (
-            <>
-              {vet.license_approved && (
-                <AvatarDropdown
-                  fallback={vet.vet_name.slice(0, 2)}
-                  src={vet.avatar_url}
-                  email={vet.vet_email}
-                />
-              )}
-            </>
-          ) : (
-            <>
-              {NAV_PAGES.map((page) => (
-                <Button key={page.title} asChild variant="ghost">
-                  <Link href={page.href}>{page.title}</Link>
-                </Button>
-              ))}
-              <SigninSignupDialog signin />
-              <SigninSignupDialog />
-            </>
-          )}
+          <>
+            {NAV_PAGES.map((page) => (
+              <Button key={page.title} asChild variant="ghost">
+                <Link href={page.href}>{page.title}</Link>
+              </Button>
+            ))}
+            <SigninSignupDialog signin />
+            <SigninSignupDialog />
+          </>
           <ToggleTheme />
         </div>
       </nav>
