@@ -19,12 +19,17 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import Logo from "@/components/common/logo";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   vetName: z.string().min(2, {
     message: "2자 이상 실명을 입력해주세요.",
   }),
-  liecenseNumber: z.string().refine((data) => /^\d{5}$/.test(data), {
+  licenseNumber: z.string().refine((data) => /^\d{5}$/.test(data), {
     message: "라이선스 번호는 5자리 숫자입니다.",
   }),
   agree: z
@@ -32,28 +37,58 @@ const formSchema = z.object({
     .refine((data) => data, { message: "약관에 동의해주세요." }),
 });
 
-type Props = {
-  avatarUrl?: string;
-  vetId?: string;
-  namePlaceholder?: string;
-};
-
 export default function SignupForm({
-  avatarUrl,
-  vetId,
   namePlaceholder,
-}: Props) {
+}: {
+  namePlaceholder?: string;
+}) {
+  const router = useRouter();
+
+  const { toast } = useToast();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       vetName: "",
-      liecenseNumber: "",
+      licenseNumber: "",
       agree: false,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch(`${location.origin}/api/signup`, {
+        method: "POST",
+        body: JSON.stringify({
+          vetName: values.vetName,
+          licenseNumber: values.licenseNumber,
+        }),
+      });
+
+      if (response.ok) {
+        toast({
+          title: `${values.vetName}님 반갑습니다!`,
+          description: "담당자 면허증 확인 후 가입이 승인됩니다.",
+        });
+        router.push("/wait");
+        return;
+      }
+
+      const data = await response.json();
+      toast({
+        variant: "destructive",
+        title: data.error,
+        description: "관리자에게 문의하세요",
+      });
+    } catch (error) {
+      console.error(error, "error while signing up");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const supabase = createSupabaseBrowserClient();
@@ -76,6 +111,7 @@ export default function SignupForm({
                 </FormLabel>
                 <FormControl>
                   <Input
+                    required
                     placeholder={namePlaceholder}
                     {...field}
                     className="border-2 h-[52px] px-4"
@@ -88,7 +124,7 @@ export default function SignupForm({
           />
           <FormField
             control={form.control}
-            name="liecenseNumber"
+            name="licenseNumber"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-lg font-semibold">
@@ -96,6 +132,7 @@ export default function SignupForm({
                 </FormLabel>
                 <FormControl>
                   <Input
+                    required
                     placeholder="20124"
                     {...field}
                     className="border-2 h-[52px] px-4"
@@ -151,8 +188,16 @@ export default function SignupForm({
             >
               <Link href="/">뒤로가기</Link>
             </Button>
-            <Button type="submit" className="font-semibold">
+
+            <Button
+              type="submit"
+              className="font-semibold"
+              disabled={isSubmitting}
+            >
               회원가입
+              <AiOutlineLoading3Quarters
+                className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
+              />
             </Button>
           </div>
         </form>

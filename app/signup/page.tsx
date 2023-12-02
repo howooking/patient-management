@@ -16,17 +16,9 @@ export default async function SignupPage() {
     redirect("/");
   }
 
-  if (vet) {
-    redirect("/");
-  }
-
   return (
     <div className="flex w-full h-screen">
-      <SignupForm
-        namePlaceholder={session?.user.user_metadata.name}
-        avatarUrl={session?.user.user_metadata.avatar_url}
-        vetId={session?.user.id}
-      />
+      <SignupForm namePlaceholder={session?.user.user_metadata.name} />
       <Attraction />
     </div>
   );

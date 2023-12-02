@@ -11,7 +11,11 @@ export default async function Home() {
     .select("license_approved")
     .single();
 
-  if (vet?.license_approved) {
+  if (vet && !vet.license_approved) {
+    redirect("/wait");
+  }
+
+  if (vet && vet.license_approved) {
     redirect("/space");
   }
 

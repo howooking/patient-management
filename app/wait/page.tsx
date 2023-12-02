@@ -17,9 +17,10 @@ export default function WaitPage() {
 
   return (
     <div>
-      승인대기중입니다.
+      junsgk@gmail.com으로 관련자료를 보내주세요. 이미 보내셨다면 조그만
+      기다려주세요.
       <Button asChild>
-        <Link href="/">홈으로 돌아가기</Link>
+        <Link href="/">홈으로</Link>
       </Button>
     </div>
   );
