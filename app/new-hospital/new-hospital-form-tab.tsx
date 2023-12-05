@@ -187,13 +187,8 @@ export default function NewHospitalFormTab({
           )}
         />
         <div className="flex gap-2 justify-end">
-          <Button
-            type="button"
-            variant="outline"
-            asChild
-            onClick={() => supabase.auth.signOut()}
-          >
-            <Link href="/">뒤로가기</Link>
+          <Button type="button" variant="outline" onClick={() => router.back()}>
+            뒤로가기
           </Button>
 
           <Button
