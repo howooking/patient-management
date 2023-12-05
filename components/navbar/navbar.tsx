@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import AvatarDropdown from "../common/avatar-dropdown";
 import { ToggleTheme } from "./toggle-theme";
 import { Button } from "../ui/button";
 import SigninSignupDialog from "./signin-signup-dialog";
@@ -8,13 +7,6 @@ import Logo from "../common/logo";
 import createSupabaseServerClient from "@/lib/supabase/server";
 
 export default async function Navbar() {
-  const supabase = await createSupabaseServerClient();
-
-  const { data: vet } = await supabase
-    .from("vets")
-    .select("vet_email, vet_name, license_approved, default_hos_id, avatar_url")
-    .single();
-
   return (
     <header className="fixed w-full">
       <nav className="container flex items-center justify-between h-16">

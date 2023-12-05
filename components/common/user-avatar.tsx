@@ -1,11 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-type UserAvatarProps = {
+type Props = {
   src: string;
   fallback: string;
 };
 
-export default function UserAvatar({ src, fallback }: UserAvatarProps) {
+export default function UserAvatar({ src, fallback }: Props) {
   return (
     <Avatar className="w-8 h-8">
       <AvatarImage src={src} />

@@ -9,17 +9,13 @@ import {
 } from "../ui/dropdown-menu";
 import Signout from "./signout";
 
-type AvatarDropdownProps = {
+type Props = {
   src: string;
   fallback: string;
   email: string;
 };
 
-export default function AvatarDropdown({
-  fallback,
-  src,
-  email,
-}: AvatarDropdownProps) {
+export default function AvatarDropdown({ fallback, src, email }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
