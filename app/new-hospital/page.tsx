@@ -1,10 +1,10 @@
 import { redirect } from "next/navigation";
 
-import SignupForm from "./signup-form";
+import Attraction from "../../components/common/attraction";
 import createSupabaseServerClient from "@/lib/supabase/server";
-import Attraction from "@/components/common/attraction";
+import FormTabs from "./form-tabs";
 
-export default async function SignupPage() {
+export default async function NewHospital() {
   const supabase = await createSupabaseServerClient();
   const {
     data: { session },
@@ -16,8 +16,8 @@ export default async function SignupPage() {
 
   return (
     <div className="flex w-full h-screen">
-      <SignupForm namePlaceholder={session?.user.user_metadata.name} />
       <Attraction />
+      <FormTabs />
     </div>
   );
 }

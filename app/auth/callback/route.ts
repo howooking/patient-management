@@ -9,8 +9,17 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
+    const { data } = await supabase
+      .from("vets")
+      .select(`hospitals (hos_id)`)
+      .single();
+
+    const defaultHospitalId = data?.hospitals?.hos_id ?? "";
+
     if (!error) {
-      return NextResponse.redirect(`${requestUrl.origin}/space`);
+      return NextResponse.redirect(
+        `${requestUrl.origin}/hospital/${defaultHospitalId}`
+      );
     }
   }
   return NextResponse.redirect(`${requestUrl.origin}/auth-error`);

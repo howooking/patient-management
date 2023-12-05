@@ -16,7 +16,7 @@ export default async function Home() {
   }
 
   if (vet && vet.license_approved) {
-    redirect("/space");
+    redirect("/hospital");
   }
 
   return (

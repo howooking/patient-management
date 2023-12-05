@@ -15,7 +15,7 @@ export default function ToggleThemeMenu() {
 
   return (
     <DropdownMenuSub>
-      <DropdownMenuSubTrigger>테마설정</DropdownMenuSubTrigger>
+      <DropdownMenuSubTrigger>테마 설정</DropdownMenuSubTrigger>
       <DropdownMenuPortal>
         <DropdownMenuSubContent>
           <DropdownMenuItem onClick={() => setTheme("light")}>

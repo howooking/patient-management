@@ -1,19 +1,33 @@
+import { FaRegBell } from "react-icons/fa6";
+
 import { Button } from "@/components/ui/button";
 import createSupabaseServerClient from "@/lib/supabase/server";
-import { FaRegBell } from "react-icons/fa6";
 import ProfileDropdown from "./profile-dropdown";
+import { Separator } from "@/components/ui/separator";
+import HospitalSelect from "./hospital-select";
 
 export default async function Sidebar() {
   const supabase = await createSupabaseServerClient();
 
   const { data: vet } = await supabase
     .from("vets")
-    .select("vet_email, vet_name, license_approved, default_hos_id, avatar_url")
+    .select(
+      `vet_email, 
+       vet_name, 
+       avatar_url,
+       hos_vet_mapping (
+        hospitals (
+          hos_id,
+          name
+        )
+       )
+      `
+    )
     .single();
 
   return (
-    <aside className="border-r min-h-screen w-[264px] p-2">
-      <div className="flex items-center justify-between">
+    <aside className="border-r border-input min-h-screen w-[264px]">
+      <div className="flex items-center justify-between p-2">
         <ProfileDropdown
           name={vet?.vet_name}
           src={vet?.avatar_url}
@@ -23,6 +37,12 @@ export default async function Sidebar() {
         <Button size="icon" variant="ghost">
           <FaRegBell />
         </Button>
+      </div>
+
+      <Separator />
+
+      <div className="p-2">
+        <HospitalSelect hospitalList={vet?.hos_vet_mapping} />
       </div>
     </aside>
   );

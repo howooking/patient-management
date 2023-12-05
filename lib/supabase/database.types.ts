@@ -65,6 +65,7 @@ export interface Database {
       }
       hospitals: {
         Row: {
+          address: string | null
           business_approved: boolean
           business_no: string
           created_at: string
@@ -73,10 +74,12 @@ export interface Database {
           master_id: string | null
           memo_list: string[]
           name: string | null
+          personal: boolean
           phone_no: string
           position_list: string[]
         }
         Insert: {
+          address?: string | null
           business_approved?: boolean
           business_no: string
           created_at?: string
@@ -85,10 +88,12 @@ export interface Database {
           master_id?: string | null
           memo_list?: string[]
           name?: string | null
+          personal?: boolean
           phone_no: string
           position_list?: string[]
         }
         Update: {
+          address?: string | null
           business_approved?: boolean
           business_no?: string
           created_at?: string
@@ -97,6 +102,7 @@ export interface Database {
           master_id?: string | null
           memo_list?: string[]
           name?: string | null
+          personal?: boolean
           phone_no?: string
           position_list?: string[]
         }

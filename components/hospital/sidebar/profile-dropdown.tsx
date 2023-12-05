@@ -12,11 +12,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ToggleThemeMenu from "./toggle-theme-menu";
+import Link from "next/link";
 
 type Props = {
-  src: string;
-  name: string;
-  email: string;
+  src?: string | null;
+  name?: string;
+  email?: string;
 };
 
 export default function ProfileDropdown({ email, name, src }: Props) {
@@ -24,7 +25,7 @@ export default function ProfileDropdown({ email, name, src }: Props) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="flex gap-2 p-1 pr-4">
-          <UserAvatar fallback={name.slice(0, 2)} src={src} />
+          <UserAvatar fallback={name?.slice(0, 2) || ""} src={src ?? ""} />
           <div className="flex gap-1 items-center">
             <span>{name}</span>
             <FaAngleDown size={10} />
@@ -35,7 +36,7 @@ export default function ProfileDropdown({ email, name, src }: Props) {
       <DropdownMenuContent className="w-[256px] mx-1">
         <DropdownMenuLabel className="flex flex-col items-center gap-2">
           <div className="flex items-center gap-1">
-            <UserAvatar fallback={name.slice(0, 2)} src={src} />
+            <UserAvatar fallback={name?.slice(0, 2) || ""} src={src ?? ""} />
             <span>{name}</span>
           </div>
           <p className="text-sm">{email}</p>
@@ -43,8 +44,10 @@ export default function ProfileDropdown({ email, name, src }: Props) {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem>프로필설정</DropdownMenuItem>
-        <DropdownMenuItem>그룹설정</DropdownMenuItem>
+        <DropdownMenuItem>프로필 설정</DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/new-hospital">병원 가입</Link>
+        </DropdownMenuItem>
         <ToggleThemeMenu />
 
         <DropdownMenuSeparator />

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import createSupabaseServerClient from "@/lib/supabase/server";
-import Sidebar from "../../components/space/sidebar/sidebar";
+import Sidebar from "@/components/hospital/sidebar/sidebar";
 
 export default async function SpaceLayout({
   children,
@@ -15,7 +15,7 @@ export default async function SpaceLayout({
 
   const { data: vet } = await supabase
     .from("vets")
-    .select("license_approved")
+    .select(`license_approved`)
     .single();
 
   if (sessionError) {
