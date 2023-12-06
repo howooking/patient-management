@@ -23,31 +23,31 @@ export default function HospitalSearchTab() {
     setIsSubmitting(true);
 
     try {
-      // const response = await fetch(`${location.origin}/api/new-hospital`, {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     type: "real",
-      //     name,
-      //     businessNumber,
-      //     address,
-      //     phoneNumber,
-      //   }),
-      // });
-      // if (response.ok) {
-      //   toast({
-      //     title: `${values.name}이 생성되었습니다.`,
-      //     description: "사업자등록증 확인 후 생성이 완료됩니다.",
-      //   });
-      //   router.replace("/");
-      //   router.refresh();
-      //   return;
-      // }
-      // const data = await response.json();
-      // toast({
-      //   variant: "destructive",
-      //   title: data.error,
-      //   description: "관리자에게 문의하세요",
-      // });
+      const response = await fetch(`${location.origin}/api/new-hospital`, {
+        method: "POST",
+        body: JSON.stringify({
+          type: "search",
+          selectedHospitalId: selecteHospital?.hospitalId,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "병원에서 승인 후 병원이 추가됩니다.",
+          description: "병원 관리자에게 문의하세요.",
+        });
+        router.replace(`/hospital/${data.hospitalId}`);
+        router.refresh();
+        return;
+      }
+
+      toast({
+        variant: "destructive",
+        title: data.error,
+        description: "관리자에게 문의하세요",
+      });
     } catch (error) {
       console.error(error, "error while adding a hospital");
     } finally {

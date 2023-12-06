@@ -11,10 +11,10 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     const { data } = await supabase
       .from("vets")
-      .select(`hospitals (hos_id)`)
+      .select("default_hos_id")
       .single();
 
-    const defaultHospitalId = data?.hospitals?.hos_id ?? "";
+    const defaultHospitalId = data?.default_hos_id ?? "";
 
     if (!error) {
       return NextResponse.redirect(

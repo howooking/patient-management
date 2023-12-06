@@ -52,6 +52,7 @@ export default function VirtualHospitalFormTab() {
           name: values.name,
         }),
       });
+
       const data = await response.json();
 
       if (response.ok) {

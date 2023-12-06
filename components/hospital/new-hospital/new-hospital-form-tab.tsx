@@ -69,18 +69,17 @@ export default function NewHospitalFormTab() {
           phoneNumber,
         }),
       });
+      const data = await response.json();
 
       if (response.ok) {
         toast({
           title: `${values.name}이 생성되었습니다.`,
           description: "사업자등록증 확인 후 생성이 완료됩니다.",
         });
-        router.replace("/");
+        router.replace(`/hospital/${data.hospitalId}`);
         router.refresh();
         return;
       }
-
-      const data = await response.json();
 
       toast({
         variant: "destructive",
