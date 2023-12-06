@@ -99,7 +99,7 @@ export default function VirtualHospitalFormTab() {
           )}
         />
 
-        <div className="flex gap-2 justify-end">
+        <div className="flex gap-2">
           <Button type="button" variant="outline" onClick={() => router.back()}>
             뒤로가기
           </Button>
