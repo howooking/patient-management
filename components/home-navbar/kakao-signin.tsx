@@ -9,6 +9,7 @@ export default function KakaoSignin({ signup }: { signup?: boolean }) {
   const supabase = createSupabaseBrowserClient();
 
   const handleKakaoSignin = async () => {
+    // TODO : client component error handling
     supabase.auth.signInWithOAuth({
       provider: "kakao",
       options: {

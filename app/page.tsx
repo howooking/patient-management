@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
-import Navbar from "@/components/navbar/navbar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import Navbar from "@/components/home-navbar/navbar";
 
 export default async function Home() {
   const supabase = await createSupabaseServerClient(true);

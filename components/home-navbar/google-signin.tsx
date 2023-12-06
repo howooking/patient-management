@@ -9,6 +9,7 @@ export default function GoogleSignin({ signup }: { signup?: boolean }) {
   const supabase = createSupabaseBrowserClient();
 
   const handleGoogleLogin = async () => {
+    // TODO : client component error handling
     supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
