@@ -1,5 +1,3 @@
-"use server";
-
 import OptionButton from "@/components/hospital/new-hospital/option-button";
 
 export default async function SpacePage() {
