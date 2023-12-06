@@ -7,7 +7,10 @@ import { FormEvent, useState } from "react";
 import { cn } from "@/lib/utils";
 
 export default function HospitalSearchTab() {
-  const [selecteHospital, setSelectedHospital] = useState("");
+  const [selecteHospital, setSelectedHospital] = useState<{
+    hospitalId: string;
+    value: string | null;
+  }>();
 
   const router = useRouter();
 

@@ -20,8 +20,21 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type Props = {
-  selectedHospital: string;
-  setSelectedHospital: Dispatch<SetStateAction<string>>;
+  selectedHospital:
+    | {
+        hospitalId: string;
+        value: string | null;
+      }
+    | undefined;
+  setSelectedHospital: Dispatch<
+    SetStateAction<
+      | {
+          hospitalId: string;
+          value: string | null;
+        }
+      | undefined
+    >
+  >;
 };
 
 export default function SearchBox({
@@ -31,8 +44,8 @@ export default function SearchBox({
   const [open, setOpen] = useState(false);
   const [hospitals, setHospitals] = useState<
     {
-      value: string;
-      label: string | null;
+      hospitalId: string;
+      value: string | null;
       address: string | null;
     }[]
   >([]);
@@ -50,8 +63,8 @@ export default function SearchBox({
         throw new Error("error while fethcing hospitals");
       }
       const mappedHospital = data.map((item) => ({
-        value: item.hos_id,
-        label: item.name,
+        hospitalId: item.hos_id,
+        value: item.name,
         address: item.address,
       }));
       setHospitals(mappedHospital);
@@ -70,8 +83,10 @@ export default function SearchBox({
           className="w-[400px] justify-between border-input h-[40px] font-normal"
         >
           {selectedHospital
-            ? hospitals.find((hospital) => hospital.value === selectedHospital)
-                ?.label
+            ? hospitals.find(
+                (hospital) =>
+                  hospital.hospitalId === selectedHospital.hospitalId
+              )?.value
             : "병원을 선택해주세요"}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -84,27 +99,21 @@ export default function SearchBox({
           <CommandGroup>
             {hospitals.map((hospital) => (
               <CommandItem
-                key={hospital.value}
-                value={hospital.value}
+                key={hospital.hospitalId}
+                value={hospital.value!}
                 onSelect={(currentValue) => {
                   setSelectedHospital(
-                    currentValue === selectedHospital ? "" : currentValue
+                    currentValue === selectedHospital?.value
+                      ? { hospitalId: "", value: "" }
+                      : { hospitalId: hospital.hospitalId, value: currentValue }
                   );
                   setOpen(false);
                 }}
               >
                 <div className="flex justify-between w-full items-center">
-                  <div>{hospital.label}</div>
+                  <div>{hospital.value}</div>
                   <span className="text-sm">{hospital.address}</span>
                 </div>
-                <CheckIcon
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    selectedHospital === hospital.value
-                      ? "opacity-100"
-                      : "opacity-0"
-                  )}
-                />
               </CommandItem>
             ))}
           </CommandGroup>
