@@ -46,7 +46,7 @@ export default function ProfileDropdown({ email, name, src }: Props) {
 
         <DropdownMenuItem>프로필 설정</DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/new-hospital">병원 가입</Link>
+          <Link href="/new-hospital">병원 추가</Link>
         </DropdownMenuItem>
         <ToggleThemeMenu />
 

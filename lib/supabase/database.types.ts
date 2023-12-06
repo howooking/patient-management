@@ -75,7 +75,7 @@ export interface Database {
           memo_list: string[]
           name: string | null
           personal: boolean
-          phone_no: string
+          phone_no: string | null
           position_list: string[]
         }
         Insert: {
@@ -89,7 +89,7 @@ export interface Database {
           memo_list?: string[]
           name?: string | null
           personal?: boolean
-          phone_no: string
+          phone_no?: string | null
           position_list?: string[]
         }
         Update: {
@@ -103,7 +103,7 @@ export interface Database {
           memo_list?: string[]
           name?: string | null
           personal?: boolean
-          phone_no?: string
+          phone_no?: string | null
           position_list?: string[]
         }
         Relationships: []

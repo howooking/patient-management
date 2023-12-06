@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
   const { error } = await supabase.from("vets").insert({
     vet_id: id,
-    vet_email: email,
+    vet_email: email as string,
     vet_name: vetName,
     license_no: licenseNumber,
     license_approved: false,

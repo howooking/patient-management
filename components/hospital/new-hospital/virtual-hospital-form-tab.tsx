@@ -25,24 +25,12 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string(),
-  businessNumber: z
+  name: z
     .string()
-    .refine((data) => !data.includes("-"), {
-      message: "- 없이 숫자만 입력해주세요",
-    })
-    .refine((data) => /^\d{10}$/.test(data), {
-      message: "사업자 등록번호는 10자리 숫자 입니다.",
-    }),
-  address: z.string(),
-  phone: z.string(),
+    .min(2, { message: "병원 이름은 두글자 이상으로 만들어주세요." }),
 });
 
-export default function VirtualHospitalFormTab({
-  namePlaceholder,
-}: {
-  namePlaceholder?: string;
-}) {
+export default function VirtualHospitalFormTab() {
   const router = useRouter();
 
   const { toast } = useToast();
@@ -53,9 +41,6 @@ export default function VirtualHospitalFormTab({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      businessNumber: "",
-      address: "",
-      phone: "",
     },
   });
 
@@ -63,24 +48,25 @@ export default function VirtualHospitalFormTab({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${location.origin}/api/signup`, {
+      const response = await fetch(`${location.origin}/api/new-hospital`, {
         method: "POST",
         body: JSON.stringify({
-          vetName: values.name,
-          licenseNumber: values.businessNumber,
+          name: values.name,
+          type: "virtual",
         }),
       });
+      const data = await response.json();
+      console.log(data);
 
       if (response.ok) {
         toast({
-          title: `${values.name}님 반갑습니다!`,
-          description: "담당자 면허증 확인 후 가입이 승인됩니다.",
+          title: "가상 병원이 생성되었습니다.",
         });
-        router.push("/wait");
+        router.replace(`/hospital/${data.hospitalId}`);
+        router.refresh();
         return;
       }
 
-      const data = await response.json();
       toast({
         variant: "destructive",
         title: data.error,
@@ -109,25 +95,19 @@ export default function VirtualHospitalFormTab({
               <FormControl>
                 <Input
                   required
-                  placeholder="벳터핸즈 동물메디컬센터"
+                  placeholder="나만의 공간"
                   {...field}
                   className="border-2 h-[40px] px-2"
                 />
               </FormControl>
-              <FormDescription>풀네임 사용이 권장됩니다.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
         <div className="flex gap-2 justify-end">
-          <Button
-            type="button"
-            variant="outline"
-            asChild
-            onClick={() => supabase.auth.signOut()}
-          >
-            <Link href="/">뒤로가기</Link>
+          <Button type="button" variant="outline" onClick={() => router.back()}>
+            뒤로가기
           </Button>
 
           <Button

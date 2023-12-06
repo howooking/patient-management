@@ -29,25 +29,20 @@ export default function HospitalSelect({ hospitalList }: Props) {
     <Select
       onValueChange={(value) => push(`/hospital/${value}`)}
       value={hospitalId}
+      defaultValue={hospitalId}
     >
-      <SelectTrigger>
-        <SelectValue placeholder={"병원선택"} />
+      <SelectTrigger disabled={hospitalList?.length === 0}>
+        <SelectValue placeholder="병원을 등록해주세요" />
       </SelectTrigger>
       <SelectContent>
-        {hospitalList?.length !== 0 ? (
-          <>
-            {hospitalList?.map((hospital) => (
-              <SelectItem
-                key={hospital.hospitals?.hos_id}
-                value={hospital.hospitals?.hos_id!}
-              >
-                {hospital.hospitals?.name}
-              </SelectItem>
-            ))}
-          </>
-        ) : (
-          <SelectItem value="병원추가">+ 병원 추가</SelectItem>
-        )}
+        {hospitalList?.map((hospital) => (
+          <SelectItem
+            key={hospital.hospitals?.hos_id}
+            value={hospital.hospitals?.hos_id!}
+          >
+            {hospital.hospitals?.name}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
