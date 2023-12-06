@@ -7,7 +7,8 @@ export default function Attraction() {
     <section className="relative w-1/2">
       <Image
         src={logo}
-        alt="vetter hands logo"
+        priority
+        alt="vetter hands logo with copy"
         fill
         className="object-cover"
         sizes="50vw"
