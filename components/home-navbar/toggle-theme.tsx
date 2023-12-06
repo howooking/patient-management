@@ -18,8 +18,8 @@ export function ToggleTheme() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
-          <FaRegSun className="h-[1.2rem] w-[1.2rem] scale-100 dark:scale-0" />
-          <FaRegMoon className="absolute h-[1.2rem] w-[1.2rem] scale-0 dark:scale-100" />
+          <FaRegSun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition duration-500 dark:-rotate-90 dark:scale-0" />
+          <FaRegMoon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition duration-500 dark:rotate-0 dark:scale-100" />
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
