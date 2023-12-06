@@ -4,7 +4,6 @@ import { ToggleTheme } from "./toggle-theme";
 import { Button } from "../ui/button";
 import SigninSignupDialog from "./signin-signup-dialog";
 import Logo from "../common/logo";
-import createSupabaseServerClient from "@/lib/supabase/server";
 
 export default async function Navbar() {
   return (

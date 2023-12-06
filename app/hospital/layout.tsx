@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import createSupabaseServerClient from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import HospitalNavbar from "@/components/hospital/hopital-navbar/navbar";
 
 export default async function SpaceLayout({
@@ -7,7 +7,7 @@ export default async function SpaceLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient(true);
   const {
     data: { session },
     error: sessionError,

@@ -1,9 +1,8 @@
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
-import createSupabaseServerClient from "@/lib/supabase/server";
-
 export async function POST(request: NextRequest) {
-  const { name, type } = await request.json();
+  const { name, type, businessNumber, address, phone } = await request.json();
   if (!name) {
     return NextResponse.json(
       { error: "missing required fields" },

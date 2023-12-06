@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import createSupabaseServerClient from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { Button } from "../ui/button";
 
 export default function Signout() {

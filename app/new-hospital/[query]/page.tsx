@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import createSupabaseServerClient from "@/lib/supabase/server";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 import Attraction from "@/components/common/attraction";
 import FormTabs from "@/components/hospital/new-hospital/form-tabs";
 
@@ -9,7 +9,7 @@ export default async function NewHospital({
 }: {
   params: { query: string };
 }) {
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient(true);
   const {
     data: { session },
   } = await supabase.auth.getSession();

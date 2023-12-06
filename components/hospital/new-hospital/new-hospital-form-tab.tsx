@@ -16,7 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
@@ -35,14 +34,12 @@ const formSchema = z.object({
       message: "사업자 등록번호는 10자리 숫자 입니다.",
     }),
   address: z.string(),
-  phone: z.string(),
+  phone: z.string().refine((data) => !data.includes("-"), {
+    message: "- 없이 숫자만 입력해주세요",
+  }),
 });
 
-export default function NewHospitalFormTab({
-  namePlaceholder,
-}: {
-  namePlaceholder?: string;
-}) {
+export default function NewHospitalFormTab() {
   const router = useRouter();
 
   const { toast } = useToast();
@@ -60,14 +57,17 @@ export default function NewHospitalFormTab({
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const { address, businessNumber, name, phone } = values;
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${location.origin}/api/signup`, {
+      const response = await fetch(`${location.origin}/api/new-hospital`, {
         method: "POST",
         body: JSON.stringify({
-          vetName: values.name,
-          licenseNumber: values.businessNumber,
+          name,
+          businessNumber,
+          address,
+          phone,
         }),
       });
 
@@ -76,11 +76,12 @@ export default function NewHospitalFormTab({
           title: `${values.name}님 반갑습니다!`,
           description: "담당자 면허증 확인 후 가입이 승인됩니다.",
         });
-        router.push("/wait");
+        router.replace("/wait");
         return;
       }
 
       const data = await response.json();
+
       toast({
         variant: "destructive",
         title: data.error,
@@ -92,8 +93,6 @@ export default function NewHospitalFormTab({
       setIsSubmitting(false);
     }
   };
-
-  const supabase = createSupabaseBrowserClient();
 
   return (
     <Form {...form}>
@@ -146,6 +145,8 @@ export default function NewHospitalFormTab({
             </FormItem>
           )}
         />
+
+        {/* TODO 주소검색 api */}
         <FormField
           control={form.control}
           name="address"
@@ -160,11 +161,12 @@ export default function NewHospitalFormTab({
                   className="border-2 h-[40px] px-2"
                 />
               </FormControl>
-              <FormDescription>주소 검색 기능 추가</FormDescription>
+              <FormDescription></FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="phone"
