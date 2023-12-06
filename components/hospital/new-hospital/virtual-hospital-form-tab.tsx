@@ -48,8 +48,8 @@ export default function VirtualHospitalFormTab() {
       const response = await fetch(`${location.origin}/api/new-hospital`, {
         method: "POST",
         body: JSON.stringify({
-          name: values.name,
           type: "virtual",
+          name: values.name,
         }),
       });
       const data = await response.json();
@@ -69,7 +69,7 @@ export default function VirtualHospitalFormTab() {
         description: "관리자에게 문의하세요",
       });
     } catch (error) {
-      console.error(error, "error while signing up");
+      console.error(error, "error while adding a hospital");
     } finally {
       setIsSubmitting(false);
     }

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -16,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -34,7 +32,7 @@ const formSchema = z.object({
       message: "사업자 등록번호는 10자리 숫자 입니다.",
     }),
   address: z.string(),
-  phone: z.string().refine((data) => !data.includes("-"), {
+  phoneNumber: z.string().refine((data) => !data.includes("-"), {
     message: "- 없이 숫자만 입력해주세요",
   }),
 });
@@ -52,31 +50,32 @@ export default function NewHospitalFormTab() {
       name: "",
       businessNumber: "",
       address: "",
-      phone: "",
+      phoneNumber: "",
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const { address, businessNumber, name, phone } = values;
+    const { address, businessNumber, name, phoneNumber } = values;
     setIsSubmitting(true);
 
     try {
       const response = await fetch(`${location.origin}/api/new-hospital`, {
         method: "POST",
         body: JSON.stringify({
+          type: "real",
           name,
           businessNumber,
           address,
-          phone,
+          phoneNumber,
         }),
       });
 
       if (response.ok) {
         toast({
-          title: `${values.name}님 반갑습니다!`,
-          description: "담당자 면허증 확인 후 가입이 승인됩니다.",
+          title: `${values.name}이 생성되었습니다.`,
+          description: "사업자등록증 확인 후 생성이 완료됩니다.",
         });
-        router.replace("/wait");
+        router.replace("/");
         return;
       }
 
@@ -88,7 +87,7 @@ export default function NewHospitalFormTab() {
         description: "관리자에게 문의하세요",
       });
     } catch (error) {
-      console.error(error, "error while signing up");
+      console.error(error, "error while adding a hospital");
     } finally {
       setIsSubmitting(false);
     }
@@ -169,7 +168,7 @@ export default function NewHospitalFormTab() {
 
         <FormField
           control={form.control}
-          name="phone"
+          name="phoneNumber"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-lg font-semibold">
