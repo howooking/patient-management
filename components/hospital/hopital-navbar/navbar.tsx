@@ -14,10 +14,12 @@ export default async function HospitalNavbar() {
       `vet_email, 
        vet_name, 
        avatar_url,
+       default_hos_id,
        hos_vet_mapping (
         hospitals (
           hos_id,
-          name
+          name,
+          business_approved
         )
        )
       `
@@ -28,7 +30,10 @@ export default async function HospitalNavbar() {
     <nav className="border-b border-input ">
       <div className="container flex justify-between items-center p-2">
         <div className="min-w-[240px]">
-          <HospitalSelect hospitalList={vet?.hos_vet_mapping} />
+          <HospitalSelect
+            hospitalList={vet?.hos_vet_mapping}
+            defaultHospitalId={vet?.default_hos_id}
+          />
         </div>
 
         <div className="flex items-center justify-between gap-2">

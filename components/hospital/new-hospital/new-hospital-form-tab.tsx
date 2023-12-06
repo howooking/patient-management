@@ -76,6 +76,7 @@ export default function NewHospitalFormTab() {
           description: "사업자등록증 확인 후 생성이 완료됩니다.",
         });
         router.replace("/");
+        router.refresh();
         return;
       }
 

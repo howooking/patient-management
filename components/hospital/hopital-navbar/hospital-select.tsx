@@ -1,5 +1,7 @@
 "use client";
 
+import { FaStar } from "react-icons/fa6";
+
 import {
   Select,
   SelectContent,
@@ -7,7 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { usePathname, useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   hospitalList:
@@ -15,12 +19,18 @@ type Props = {
         hospitals: {
           hos_id: string;
           name: string | null;
+          business_approved: boolean;
         } | null;
       }[]
     | undefined;
+
+  defaultHospitalId?: string | null;
 };
 
-export default function HospitalSelect({ hospitalList }: Props) {
+export default function HospitalSelect({
+  hospitalList,
+  defaultHospitalId,
+}: Props) {
   const pathname = usePathname();
   const { push } = useRouter();
   const hospitalId = pathname.split("/")[2];
@@ -40,7 +50,15 @@ export default function HospitalSelect({ hospitalList }: Props) {
             key={hospital.hospitals?.hos_id}
             value={hospital.hospitals?.hos_id!}
           >
-            {hospital.hospitals?.name}
+            <div className="flex items-center gap-2">
+              {hospital.hospitals?.name}
+              <FaStar
+                className={cn(
+                  defaultHospitalId !== hospital.hospitals?.hos_id && "hidden",
+                  "text-yellow-300"
+                )}
+              />
+            </div>
           </SelectItem>
         ))}
       </SelectContent>

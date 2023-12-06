@@ -84,8 +84,6 @@ export async function POST(request: NextRequest) {
 
   // 실제병원
   if (type === "real") {
-    console.log(1);
-
     const { data: hospital, error: hospitalError } = await supabase
       .from("hospitals")
       .insert({
@@ -121,7 +119,6 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-    console.log(3);
     const { error: defaultHosError } = await supabase
       .from("vets")
       .update({ default_hos_id: hospitalId })
