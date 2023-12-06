@@ -1,11 +1,17 @@
 import Link from "next/link";
 
-import { ToggleTheme } from "./toggle-theme";
 import { Button } from "../ui/button";
+import { ToggleTheme } from "./toggle-theme";
 import SigninSignupDialog from "./signin-signup-dialog";
 import Logo from "../common/logo";
 
-export default async function Navbar() {
+const NAV_PAGES = [
+  { title: "상품", href: "/products" },
+  { title: "요금제", href: "/pricing" },
+  { title: "Contact", href: "/contact" },
+];
+
+export default function Navbar() {
   return (
     <header className="fixed w-full">
       <nav className="container flex items-center justify-between h-16">
@@ -26,9 +32,3 @@ export default async function Navbar() {
     </header>
   );
 }
-
-const NAV_PAGES = [
-  { title: "상품", href: "/products" },
-  { title: "요금제", href: "/pricing" },
-  { title: "Contact", href: "/contact" },
-];

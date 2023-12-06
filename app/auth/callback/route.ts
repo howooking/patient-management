@@ -9,6 +9,7 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
+
     const { data } = await supabase
       .from("vets")
       .select("default_hos_id")

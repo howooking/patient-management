@@ -1,6 +1,9 @@
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { Button } from "../ui/button";
+"use client";
+
 import { FcGoogle } from "react-icons/fc";
+
+import { Button } from "../ui/button";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export default function GoogleSignin({ signup }: { signup?: boolean }) {
   const supabase = createSupabaseBrowserClient();

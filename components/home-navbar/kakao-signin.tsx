@@ -1,4 +1,7 @@
+"use client";
+
 import { RiKakaoTalkFill } from "react-icons/ri";
+
 import { Button } from "../ui/button";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
