@@ -8,7 +8,12 @@ export default async function SignupPage() {
   const supabase = await createSupabaseServerClient(true);
   const {
     data: { session },
+    error: sessionError,
   } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    throw new Error("error while checking session in signup page");
+  }
 
   if (!session) {
     redirect("/");
@@ -16,7 +21,7 @@ export default async function SignupPage() {
 
   return (
     <div className="flex w-full h-screen">
-      <SignupForm namePlaceholder={session?.user.user_metadata.name} />
+      <SignupForm namePlaceholder={session?.user.user_metadata.name ?? ""} />
       <Attraction />
     </div>
   );

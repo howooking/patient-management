@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,10 +23,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Logo from "@/components/common/logo";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
-import { useState } from "react";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   vetName: z.string().min(2, {
@@ -40,7 +40,7 @@ const formSchema = z.object({
 export default function SignupForm({
   namePlaceholder,
 }: {
-  namePlaceholder?: string;
+  namePlaceholder: string;
 }) {
   const router = useRouter();
 
@@ -51,7 +51,7 @@ export default function SignupForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      vetName: "",
+      vetName: namePlaceholder,
       licenseNumber: "",
       agree: false,
     },
@@ -85,6 +85,7 @@ export default function SignupForm({
         description: "관리자에게 문의하세요",
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error, "error while signing up");
     } finally {
       setIsSubmitting(false);
@@ -112,7 +113,7 @@ export default function SignupForm({
                 <FormControl>
                   <Input
                     required
-                    placeholder={namePlaceholder}
+                    placeholder="김머머"
                     {...field}
                     className="border-2 h-[52px] px-4"
                   />
