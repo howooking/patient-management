@@ -12,7 +12,7 @@ export default async function SignupPage() {
   } = await supabase.auth.getSession();
 
   if (sessionError) {
-    throw new Error("error while checking session in signup page");
+    throw new Error(sessionError.message);
   }
 
   if (!session) {

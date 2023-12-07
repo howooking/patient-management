@@ -1,27 +1,33 @@
-"use client";
+import Link from "next/link";
+import { IconType } from "react-icons";
 
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { FaMagnifyingGlass, FaHospital, FaHospitalUser } from "react-icons/fa6";
 
 type Props = {
   title: string;
   desc: string;
-  icon: string;
+  icon: IconType;
   query: string;
 };
 
-export default function OptionButton({ title, desc, icon, query }: Props) {
-  const router = useRouter();
+export default function OptionButton({
+  title,
+  desc,
+  icon: Icon,
+  query,
+}: Props) {
   return (
     <Button
       className="flex flex-col w-[280px] h-[280px] p-8 bg-primary/80 gap-8"
-      onClick={() => router.push(`/new-hospital/${query}`)}
+      asChild
     >
-      <div className="space-y-2">
-        <div className="text-2xl">{title}</div>
-        <div>{desc}</div>
-      </div>
+      <Link href={`/new-hospital/${query}`}>
+        <Icon size={80} />
+        <div className="space-y-2 text-center">
+          <div className="text-2xl">{title}</div>
+          <div>{desc}</div>
+        </div>
+      </Link>
     </Button>
   );
 }

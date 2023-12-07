@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+
 import HospitalNavbar from "@/components/hospital/hopital-navbar/navbar";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function SpaceLayout({
   children,
@@ -13,17 +14,21 @@ export default async function SpaceLayout({
     error: sessionError,
   } = await supabase.auth.getSession();
 
-  const { data: vet } = await supabase
-    .from("vets")
-    .select(`license_approved`)
-    .single();
-
   if (sessionError) {
     throw new Error(sessionError.message);
   }
 
   if (!session) {
     redirect("/");
+  }
+
+  const { data: vet, error: vetError } = await supabase
+    .from("vets")
+    .select(`license_approved`)
+    .single();
+
+  if (vetError) {
+    throw new Error(vetError.message);
   }
 
   if (!vet) {

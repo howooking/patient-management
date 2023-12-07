@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { FaAngleDown } from "react-icons/fa6";
 
 import Signout from "@/components/hospital/hopital-navbar/signout";
@@ -13,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import ToggleThemeMenu from "./toggle-theme-menu";
+import HospitalSettingMenu from "./hospital-setting-menu";
 
 type Props = {
   src?: string | null;
@@ -55,9 +55,7 @@ export default function ProfileDropdown({ email, name, src }: Props) {
 
         <DropdownMenuItem>프로필 설정</DropdownMenuItem>
 
-        <DropdownMenuItem asChild>
-          <Link href="/new-hospital">병원 추가</Link>
-        </DropdownMenuItem>
+        <HospitalSettingMenu />
 
         <ToggleThemeMenu />
 

@@ -10,7 +10,8 @@ export default async function page({ params }: { params: { hos_id: string } }) {
     .single();
 
   if (hospitalError) {
-    throw new Error("error while fetching a single hospital data");
+    throw new Error(hospitalError.message);
   }
+
   return <pre>{JSON.stringify(hospital, null, 2)}</pre>;
 }
