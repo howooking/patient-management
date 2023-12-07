@@ -1,4 +1,5 @@
 "use client";
+
 import { useTheme } from "next-themes";
 
 import {
@@ -16,15 +17,19 @@ export default function ToggleThemeMenu() {
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>테마 설정</DropdownMenuSubTrigger>
+
       <DropdownMenuPortal>
         <DropdownMenuSubContent>
           <DropdownMenuItem onClick={() => setTheme("light")}>
             라이트모드
           </DropdownMenuItem>
+
           <DropdownMenuItem onClick={() => setTheme("dark")}>
             다크모드
           </DropdownMenuItem>
+
           <DropdownMenuSeparator />
+
           <DropdownMenuItem onClick={() => setTheme("system")}>
             시스템과동일
           </DropdownMenuItem>

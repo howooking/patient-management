@@ -1,9 +1,9 @@
 import { FaRegBell } from "react-icons/fa6";
 
 import { Button } from "@/components/ui/button";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
 import ProfileDropdown from "./profile-dropdown";
 import HospitalSelect from "./hospital-select";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function HospitalNavbar() {
   const supabase = await createSupabaseServerClient(true);

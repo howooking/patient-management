@@ -13,6 +13,7 @@ export default function WaitPage() {
   const supabase = createSupabaseBrowserClient();
 
   useEffect(() => {
+    // TODO : client component error handling
     supabase.auth.signOut();
     router.refresh();
   }, [router, supabase.auth]);

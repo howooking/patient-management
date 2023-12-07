@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname, useRouter } from "next/navigation";
 import { FaStar } from "react-icons/fa6";
 
 import {
@@ -10,8 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
 
 type Props = {
   hospitalList:
@@ -32,14 +31,13 @@ export default function HospitalSelect({
   defaultHospitalId,
 }: Props) {
   const pathname = usePathname();
-  const { push } = useRouter();
   const hospitalId = pathname.split("/")[2];
+  const { push } = useRouter();
 
   return (
     <Select
       onValueChange={(value) => push(`/hospital/${value}`)}
       value={hospitalId}
-      defaultValue={hospitalId}
     >
       <SelectTrigger disabled={hospitalList?.length === 0}>
         <SelectValue placeholder="병원을 등록해주세요" />
