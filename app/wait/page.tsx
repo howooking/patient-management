@@ -9,15 +9,17 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 export default function WaitPage() {
   const router = useRouter();
-  const supabae = createSupabaseBrowserClient();
+
+  const supabase = createSupabaseBrowserClient();
+
   useEffect(() => {
-    supabae.auth.signOut();
+    supabase.auth.signOut();
     router.refresh();
-  }, [router, supabae.auth]);
+  }, [router, supabase.auth]);
 
   return (
     <div>
-      junsgk@gmail.com으로 관련자료를 보내주세요. 이미 보내셨다면 조그만
+      junsgk@gmail.com으로 인증자료를 보내주세요. 이미 보내셨다면 조금만
       기다려주세요.
       <Button asChild>
         <Link href="/">홈으로</Link>
