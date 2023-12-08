@@ -3,15 +3,27 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 export default async function page({ params }: { params: { hos_id: string } }) {
   const { hos_id } = params;
   const supabase = await createSupabaseServerClient(true);
-  const { data: hospital, error: hospitalError } = await supabase
-    .from("hospitals")
-    .select("*")
-    .match({ hos_id })
-    .single();
 
-  if (hospitalError) {
-    throw new Error(hospitalError.message);
+  const { data: hospitalVetMapping, error: hospitalVetMappingError } =
+    await supabase
+      .from("hos_vet_mapping")
+      .select(
+        `
+          *,
+          vets (
+            *
+          ),
+          hospitals (
+            *
+          )
+        `
+      )
+      .match({ hos_id })
+      .single();
+
+  if (hospitalVetMappingError) {
+    throw new Error(hospitalVetMappingError.message);
   }
 
-  return <pre>{JSON.stringify(hospital, null, 2)}</pre>;
+  return <pre>{JSON.stringify(hospitalVetMapping, null, 2)}</pre>;
 }
