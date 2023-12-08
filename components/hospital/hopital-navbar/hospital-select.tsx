@@ -99,7 +99,7 @@ export default function HospitalSelect({
                 size="icon"
                 variant="ghost"
                 disabled={isDefault || isChanging}
-                className={cn("w-10 text-yellow-300")}
+                className={"w-10 text-yellow-300 disabled:opacity-100"}
               >
                 <FaRegStar className={cn(isDefault && "hidden")} />
                 <FaStar className={cn(!isDefault && "hidden")} />
