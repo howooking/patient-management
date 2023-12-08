@@ -53,7 +53,9 @@ export default function ProfileDropdown({ email, name, src }: Props) {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem>프로필 설정</DropdownMenuItem>
+        <DropdownMenuItem>사용자 설정</DropdownMenuItem>
+        <DropdownMenuItem>약물 설정</DropdownMenuItem>
+        <DropdownMenuItem>식이 설정</DropdownMenuItem>
 
         <HospitalSettingMenu />
 

@@ -49,6 +49,7 @@ export default function HospitalSearchTab() {
         description: "관리자에게 문의하세요",
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error, "error while adding a hospital");
     } finally {
       setIsSubmitting(false);
@@ -70,7 +71,7 @@ export default function HospitalSearchTab() {
         </Button>
 
         <Button type="submit" className="font-semibold" disabled={isSubmitting}>
-          병원등록
+          병원추가
           <AiOutlineLoading3Quarters
             className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
           />

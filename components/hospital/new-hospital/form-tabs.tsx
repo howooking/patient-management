@@ -1,12 +1,13 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Logo from "@/components/common/logo";
-import VirtualHospitalFormTab from "./virtual-hospital-form-tab";
-import NewHospitalFormTab from "./new-hospital-form-tab";
-import HospitalSearchTab from "./hospital-search-tab";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
+import Logo from "@/components/common/logo";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import HospitalSearchTab from "./hospital-search-tab";
+import NewHospitalFormTab from "./new-hospital-form-tab";
+import VirtualHospitalFormTab from "./virtual-hospital-form-tab";
 
 export default function FormTabs({ query }: { query: string }) {
   const router = useRouter();
@@ -32,10 +33,10 @@ export default function FormTabs({ query }: { query: string }) {
             병원검색
           </TabsTrigger>
           <TabsTrigger className="w-full" value="real">
-            병원추가
+            병원등록
           </TabsTrigger>
           <TabsTrigger className="w-full" value="virtual">
-            가상병원추가
+            가상병원등록
           </TabsTrigger>
         </TabsList>
 
