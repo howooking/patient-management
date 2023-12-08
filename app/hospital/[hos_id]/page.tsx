@@ -25,5 +25,9 @@ export default async function page({ params }: { params: { hos_id: string } }) {
     throw new Error(hospitalVetMappingError.message);
   }
 
+  if (!hospitalVetMapping.vet_approved) {
+    return <>병원 승인 후에 참여가 가능합니다.</>;
+  }
+
   return <pre>{JSON.stringify(hospitalVetMapping, null, 2)}</pre>;
 }
