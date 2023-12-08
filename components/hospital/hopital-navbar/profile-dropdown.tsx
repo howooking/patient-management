@@ -18,9 +18,23 @@ type Props = {
   src?: string | null;
   name?: string;
   email?: string;
+  hospitalList:
+    | {
+        hospitals: {
+          hos_id: string;
+          name: string | null;
+          business_approved: boolean;
+        } | null;
+      }[]
+    | undefined;
 };
 
-export default function ProfileDropdown({ email, name, src }: Props) {
+export default function ProfileDropdown({
+  email,
+  name,
+  src,
+  hospitalList,
+}: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -57,7 +71,7 @@ export default function ProfileDropdown({ email, name, src }: Props) {
         <DropdownMenuItem>약물 설정</DropdownMenuItem>
         <DropdownMenuItem>식이 설정</DropdownMenuItem>
 
-        <HospitalSettingMenu />
+        <HospitalSettingMenu hospitalList={hospitalList} />
 
         <ToggleThemeMenu />
 

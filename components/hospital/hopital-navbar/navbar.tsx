@@ -41,6 +41,7 @@ export default async function HospitalNavbar() {
             name={vet?.vet_name}
             src={vet?.avatar_url}
             email={vet?.vet_email}
+            hospitalList={vet?.hos_vet_mapping}
           />
 
           <Button size="icon" variant="ghost">
