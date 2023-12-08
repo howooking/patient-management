@@ -28,7 +28,9 @@ export default async function SpaceLayout({
     .single();
 
   if (vetError) {
-    throw new Error(vetError.message);
+    if (vetError.code !== "PGRST116") {
+      throw new Error(vetError.message);
+    }
   }
 
   if (!vet) {
