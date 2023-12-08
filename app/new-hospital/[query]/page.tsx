@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 
-import { createSupabaseServerClient } from "@/lib/supabase/server";
 import Attraction from "@/components/common/attraction";
 import FormTabs from "@/components/hospital/new-hospital/form-tabs";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function NewHospital({
   params,
@@ -12,10 +12,15 @@ export default async function NewHospital({
   const supabase = await createSupabaseServerClient(true);
   const {
     data: { session },
+    error: SessionError,
   } = await supabase.auth.getSession();
 
   if (!session) {
     redirect("/");
+  }
+
+  if (SessionError) {
+    throw new Error(SessionError.message);
   }
 
   return (
