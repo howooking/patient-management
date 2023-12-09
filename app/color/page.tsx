@@ -8,7 +8,8 @@ export default async function page() {
       <p className="text-2xl">2xl(28.48px) 크기</p>
       <p className="text-xl">xl(21.28px) 크기</p>
       <p className="text-base">base(16px) 크기</p>
-      <p className="text-sm">sm(12px) 크기</p>
+      <p className="text-sm">sm(14px) 크기</p>
+      <p className="text-xs">xs(12px) 크기</p>
       <div className="flex text-amber-400 gap-6 flex-wrap">
         <div className="border w-28 h-28 bg-background ">background</div>
         <div className="border w-28 h-28 bg-foreground">foreground</div>
