@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import { FaRegSun, FaRegMoon } from "react-icons/fa6";
 
 import {
   DropdownMenuItem,
@@ -12,7 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default function ToggleThemeMenu() {
-  const { setTheme } = useTheme();
+  const { systemTheme, setTheme } = useTheme();
 
   return (
     <DropdownMenuSub>
@@ -21,17 +22,26 @@ export default function ToggleThemeMenu() {
       <DropdownMenuPortal>
         <DropdownMenuSubContent>
           <DropdownMenuItem onClick={() => setTheme("light")}>
-            라이트모드
+            <div className="flex items-center gap-2">
+              <FaRegSun />
+              밝은 테마
+            </div>
           </DropdownMenuItem>
 
           <DropdownMenuItem onClick={() => setTheme("dark")}>
-            다크모드
+            <div className="flex items-center gap-2">
+              <FaRegMoon />
+              어두운 테마
+            </div>
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
 
           <DropdownMenuItem onClick={() => setTheme("system")}>
-            시스템과동일
+            <div className="flex items-center gap-2">
+              {systemTheme === "dark" ? <FaRegMoon /> : <FaRegSun />}
+              기기 기본값
+            </div>
           </DropdownMenuItem>
         </DropdownMenuSubContent>
       </DropdownMenuPortal>
