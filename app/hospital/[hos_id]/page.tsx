@@ -1,4 +1,4 @@
-import HospitalNavbar from "@/components/hospital/hopital-navbar/navbar";
+import HospitalNavbar from "@/components/hospital/hopital-navbar/hospital-navbar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function page({ params }: { params: { hos_id: string } }) {
@@ -30,8 +30,16 @@ export default async function page({ params }: { params: { hos_id: string } }) {
     return <>병원 승인 후에 참여가 가능합니다.</>;
   }
   if (!hospitalVetMapping.hospitals?.business_approved) {
-    return <>사업자 등록증을 junsgk@gmail.com으로 보내주세요.</>;
+    return (
+      <div className="p-2">
+        사업자 등록증을 junsgk@gmail.com으로 보내주세요.
+      </div>
+    );
   }
 
-  return <pre>{JSON.stringify(hospitalVetMapping, null, 2)}</pre>;
+  return (
+    <main className="p-2">
+      <pre>{JSON.stringify(hospitalVetMapping, null, 2)}</pre>
+    </main>
+  );
 }

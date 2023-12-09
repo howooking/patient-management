@@ -21,7 +21,7 @@ export default function ProfileDropdownTrigger({ src, name, email }: Props) {
           collapse ? "p-3" : "p-4"
         )}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           <UserAvatar
             fallback={name?.slice(0, 2) ?? ""}
             src={src ?? "/default-avatar.jpg"}

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import HospitalNavbar from "@/components/hospital/hopital-navbar/navbar";
+import HospitalNavbar from "@/components/hospital/hopital-navbar/hospital-navbar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import Sidebar from "@/components/sidebar/sidebar";
 
@@ -45,10 +45,10 @@ export default async function SpaceLayout({
   return (
     <div className="flex bg-muted">
       <Sidebar />
-      <main className="flex-1 h-screen overflow-y-auto">
+      <div className="flex-1 h-screen overflow-y-auto">
         <HospitalNavbar />
         {children}
-      </main>
+      </div>
     </div>
   );
 }

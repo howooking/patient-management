@@ -1,7 +1,6 @@
 import { FaRegBell } from "react-icons/fa6";
 
 import { Button } from "@/components/ui/button";
-import ProfileDropdown from "./profile-dropdown";
 import HospitalSelect from "./hospital-select";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 

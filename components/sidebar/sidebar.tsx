@@ -1,6 +1,12 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import HospitalSelect from "../hospital/hopital-navbar/hospital-select";
-import { FaApple } from "react-icons/fa6";
+import {
+  FaPlus,
+  FaDog,
+  FaClipboardCheck,
+  FaMaskFace,
+  FaListCheck,
+} from "react-icons/fa6";
 import Profile from "./profile";
 import CollapseButton from "./collapse-button";
 import ToggleSidebar from "./toggle-sidebar";
@@ -35,9 +41,16 @@ export default async function Sidebar() {
         <SidebarLogo defaultHospitalId={vet?.default_hos_id} />
         <Separator />
 
-        <nav className="flex-1">
-          <ul>
-            <SidebarMenu />
+        <nav className="flex-1 py-2">
+          <ul className="flex flex-col gap-2">
+            {SIDEBAR_NAV_MENUS.map((menu) => (
+              <SidebarMenu
+                key={menu.title}
+                title={menu.title}
+                icon={menu.icon}
+                ready={menu.ready}
+              />
+            ))}
           </ul>
         </nav>
 
@@ -55,3 +68,35 @@ export default async function Sidebar() {
     </ToggleSidebar>
   );
 }
+const SIDEBAR_NAV_MENUS = [
+  {
+    title: "환자등록",
+    href: "/icu",
+    icon: <FaPlus size={20} />,
+    ready: true,
+  },
+  {
+    title: "입원실",
+    href: "/icu",
+    icon: <FaClipboardCheck size={20} />,
+    ready: true,
+  },
+  {
+    title: "진료실",
+    href: "/diagnose",
+    icon: <FaDog size={20} />,
+    ready: false,
+  },
+  {
+    title: "수술실",
+    href: "/surgery",
+    icon: <FaMaskFace size={20} />,
+    ready: false,
+  },
+  {
+    title: "건강검진",
+    icon: <FaListCheck size={20} />,
+    href: "/icu",
+    ready: false,
+  },
+];
