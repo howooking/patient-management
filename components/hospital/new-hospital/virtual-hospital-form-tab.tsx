@@ -14,7 +14,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -70,6 +69,7 @@ export default function VirtualHospitalFormTab() {
         description: "관리자에게 문의하세요",
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error, "error while adding a hospital");
     } finally {
       setIsSubmitting(false);

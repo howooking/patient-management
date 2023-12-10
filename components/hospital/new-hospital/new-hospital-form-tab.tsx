@@ -87,6 +87,7 @@ export default function NewHospitalFormTab() {
         description: "관리자에게 문의하세요",
       });
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error, "error while adding a hospital");
     } finally {
       setIsSubmitting(false);
