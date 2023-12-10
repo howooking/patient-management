@@ -78,7 +78,7 @@ export default function HospitalSelect({
 
   return (
     <Select
-      onValueChange={(value) => router.push(`/hospital/${value}`)}
+      onValueChange={(value: string) => router.push(`/hospital/${value}`)}
       value={hospitalId}
     >
       <SelectTrigger disabled={hospitalList?.length === 0}>

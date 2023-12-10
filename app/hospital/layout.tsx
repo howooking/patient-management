@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import HospitalNavbar from "@/components/hospital/hopital-navbar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import Sidebar from "@/components/sidebar/sidebar";
+import Sidebar from "@/components/sidebar";
 
 export default async function SpaceLayout({
   children,

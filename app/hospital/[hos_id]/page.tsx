@@ -1,4 +1,4 @@
-import HospitalNavbar from "@/components/hospital/hopital-navbar/hospital-navbar";
+import HospitalNavbar from "@/components/hospital/hopital-navbar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function page({ params }: { params: { hos_id: string } }) {
