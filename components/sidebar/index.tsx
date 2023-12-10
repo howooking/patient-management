@@ -1,7 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import HospitalSelect from "../hospital/hopital-navbar/hospital-select";
 import {
-  FaPlus,
   FaDog,
   FaClipboardCheck,
   FaMaskFace,
@@ -48,6 +46,7 @@ export default async function Sidebar() {
                 key={menu.title}
                 title={menu.title}
                 icon={menu.icon}
+                path={menu.path}
                 ready={menu.ready}
               />
             ))}
@@ -70,33 +69,27 @@ export default async function Sidebar() {
 }
 const SIDEBAR_NAV_MENUS = [
   {
-    title: "환자등록",
-    href: "/icu",
-    icon: <FaPlus size={20} />,
-    ready: true,
-  },
-  {
     title: "입원실",
-    href: "/icu",
+    path: "icu",
     icon: <FaClipboardCheck size={20} />,
     ready: true,
   },
   {
     title: "진료실",
-    href: "/diagnose",
+    path: "diagnose",
     icon: <FaDog size={20} />,
-    ready: false,
+    ready: true,
   },
   {
     title: "수술실",
-    href: "/surgery",
+    path: "surgery",
     icon: <FaMaskFace size={20} />,
-    ready: false,
+    ready: true,
   },
   {
     title: "건강검진",
     icon: <FaListCheck size={20} />,
-    href: "/icu",
+    path: "icu",
     ready: false,
   },
 ];

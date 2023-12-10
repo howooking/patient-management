@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-import HospitalNavbar from "@/components/hospital/hopital-navbar/hospital-navbar";
+import HospitalNavbar from "@/components/hospital/hopital-navbar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import Sidebar from "@/components/sidebar/sidebar";
 
