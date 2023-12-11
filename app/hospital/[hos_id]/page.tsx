@@ -1,4 +1,3 @@
-import HospitalNavbar from "@/components/hospital/hopital-navbar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function page({ params }: { params: { hos_id: string } }) {
@@ -24,17 +23,6 @@ export default async function page({ params }: { params: { hos_id: string } }) {
 
   if (hospitalVetMappingError) {
     throw new Error(hospitalVetMappingError.message);
-  }
-
-  if (!hospitalVetMapping.vet_approved) {
-    return <>병원 승인 후에 참여가 가능합니다.</>;
-  }
-  if (!hospitalVetMapping.hospitals?.business_approved) {
-    return (
-      <div className="p-2">
-        사업자 등록증을 junsgk@gmail.com으로 보내주세요.
-      </div>
-    );
   }
 
   return (

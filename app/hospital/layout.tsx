@@ -10,6 +10,7 @@ export default async function SpaceLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createSupabaseServerClient(true);
+
   const {
     data: { session },
     error: sessionError,

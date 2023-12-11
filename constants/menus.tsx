@@ -1,4 +1,5 @@
 import {
+  FaHospital,
   FaStethoscope,
   FaClipboardCheck,
   FaMaskFace,
@@ -6,6 +7,12 @@ import {
 } from "react-icons/fa6";
 
 export const SIDEBAR_NAV_MENUS = [
+  {
+    title: "병원홈",
+    path: "/",
+    icon: <FaHospital size={20} />,
+    ready: true,
+  },
   {
     title: "입원실",
     path: "icu",
