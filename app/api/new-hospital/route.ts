@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
         hos_id: hospitalId,
         vet_id: id,
         vet_approved: true,
+        rank: 1,
       });
 
     if (mappingError) {
@@ -123,6 +124,7 @@ export async function POST(request: NextRequest) {
         hos_id: hospitalId,
         vet_id: id,
         vet_approved: true,
+        rank: 1,
       });
 
     if (mappingError) {
