@@ -15,12 +15,13 @@ export async function GET(request: Request) {
       .select("default_hos_id")
       .single();
 
-    const defaultHospitalId = data?.default_hos_id ?? "";
+    const defaultHospitalId = data?.default_hos_id;
+    const redirectURL = defaultHospitalId
+      ? `${requestUrl.origin}/hospital/${defaultHospitalId}`
+      : `${requestUrl.origin}/new-hospital`;
 
     if (!error) {
-      return NextResponse.redirect(
-        `${requestUrl.origin}/hospital/${defaultHospitalId}`
-      );
+      return NextResponse.redirect(redirectURL);
     }
   }
   return NextResponse.redirect(`${requestUrl.origin}/auth-error`);
