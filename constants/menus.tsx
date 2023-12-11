@@ -1,5 +1,5 @@
 import {
-  FaDog,
+  FaStethoscope,
   FaClipboardCheck,
   FaMaskFace,
   FaListCheck,
@@ -15,7 +15,7 @@ export const SIDEBAR_NAV_MENUS = [
   {
     title: "진료실",
     path: "diagnose",
-    icon: <FaDog size={20} />,
+    icon: <FaStethoscope size={20} />,
     ready: true,
   },
   {
