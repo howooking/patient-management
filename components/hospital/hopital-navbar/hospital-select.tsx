@@ -77,37 +77,39 @@ export default function HospitalSelect({
   };
 
   return (
-    <Select
-      onValueChange={(value: string) => router.push(`/hospital/${value}`)}
-      value={hospitalId}
-    >
-      <SelectTrigger disabled={hospitalList?.length === 0}>
-        <SelectValue placeholder="병원을 등록해주세요" />
-      </SelectTrigger>
+    <div className="min-w-[240px]">
+      <Select
+        onValueChange={(value: string) => router.push(`/hospital/${value}`)}
+        value={hospitalId}
+      >
+        <SelectTrigger disabled={hospitalList?.length === 0}>
+          <SelectValue placeholder="병원을 등록해주세요" />
+        </SelectTrigger>
 
-      <SelectContent>
-        {hospitalList?.map((hospital) => {
-          const isDefault = defaultHospitalId === hospital.hospitals?.hos_id;
-          return (
-            <div className="relative flex" key={hospital.hospitals?.hos_id}>
-              <SelectItem value={hospital.hospitals?.hos_id!}>
-                {hospital.hospitals?.name}
-              </SelectItem>
+        <SelectContent>
+          {hospitalList?.map((hospital) => {
+            const isDefault = defaultHospitalId === hospital.hospitals?.hos_id;
+            return (
+              <div className="relative flex" key={hospital.hospitals?.hos_id}>
+                <SelectItem value={hospital.hospitals?.hos_id!}>
+                  {hospital.hospitals?.name}
+                </SelectItem>
 
-              <Button
-                onClick={() => handleClick(hospital.hospitals?.hos_id!)}
-                size="icon"
-                variant="ghost"
-                disabled={isDefault || isChanging}
-                className={"w-10 text-yellow-300 disabled:opacity-100"}
-              >
-                <FaRegStar className={cn(isDefault && "hidden")} />
-                <FaStar className={cn(!isDefault && "hidden")} />
-              </Button>
-            </div>
-          );
-        })}
-      </SelectContent>
-    </Select>
+                <Button
+                  onClick={() => handleClick(hospital.hospitals?.hos_id!)}
+                  size="icon"
+                  variant="ghost"
+                  disabled={isDefault || isChanging}
+                  className={"w-10 text-yellow-300 disabled:opacity-100"}
+                >
+                  <FaRegStar className={cn(isDefault && "hidden")} />
+                  <FaStar className={cn(!isDefault && "hidden")} />
+                </Button>
+              </div>
+            );
+          })}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }

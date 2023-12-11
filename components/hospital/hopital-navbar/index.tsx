@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import HospitalSelect from "./hospital-select";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import AddPatientButton from "./add-patient-button";
+import CurrentPage from "./current-page";
 
 export default async function HospitalNavbar() {
   const supabase = await createSupabaseServerClient(true);
@@ -30,11 +31,12 @@ export default async function HospitalNavbar() {
   return (
     <nav className=" bg-background shadow-sm sticky top-0">
       <div className="flex justify-between items-center px-6 py-2">
-        <div className="min-w-[240px]">
+        <div className="flex items-center gap-4">
           <HospitalSelect
             hospitalList={vet?.hos_vet_mapping}
             defaultHospitalId={vet?.default_hos_id}
           />
+          <CurrentPage />
         </div>
 
         <div className="flex items-center gap-2">
