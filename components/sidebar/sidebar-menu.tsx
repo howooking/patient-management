@@ -1,6 +1,7 @@
 "use client";
 
-import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
+import { usePathname, useRouter } from "next/navigation";
+
 import { Button } from "../ui/button";
 import {
   Tooltip,
@@ -9,8 +10,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 
 type Props = {
   title: string;
@@ -24,9 +24,10 @@ export default function SidebarMenu({ icon, ready, title, path }: Props) {
 
   const pathname = usePathname();
   const hospitalId = pathname.split("/")[2];
+  const router = useRouter();
 
   return (
-    <li className="flex items-center">
+    <li>
       <TooltipProvider delayDuration={0}>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -34,26 +35,23 @@ export default function SidebarMenu({ icon, ready, title, path }: Props) {
               disabled={!ready}
               variant="ghost"
               className={cn(
-                collapse
-                  ? "w-[40px] justify-center"
-                  : "w-[240px] justify-start px-2"
+                collapse ? "w-[40px] justify-center" : "w-[240px] justify-start"
               )}
+              onClick={() => router.push(`/hospital/${hospitalId}/${path}`)}
             >
-              <Link
-                href={`/hospital/${hospitalId}/${path}`}
-                className={cn("flex items-center gap-4")}
-              >
+              <div className="flex items-center gap-4">
                 {icon}
                 <span className={collapse ? "hidden" : "block"}>{title}</span>
-              </Link>
-              <TooltipContent
-                className={cn(collapse ? "block" : "hidden", "ml-3")}
-                side="right"
-              >
-                <p>{title}</p>
-              </TooltipContent>
+              </div>
             </Button>
           </TooltipTrigger>
+
+          <TooltipContent
+            className={cn(collapse ? "block" : "hidden", "ml-3")}
+            side="right"
+          >
+            <p>{title}</p>
+          </TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </li>

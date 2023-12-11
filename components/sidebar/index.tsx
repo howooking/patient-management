@@ -1,16 +1,12 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import {
-  FaDog,
-  FaClipboardCheck,
-  FaMaskFace,
-  FaListCheck,
-} from "react-icons/fa6";
+
 import Profile from "./profile";
 import CollapseButton from "./collapse-button";
 import ToggleSidebar from "./toggle-sidebar";
 import SidebarMenu from "./sidebar-menu";
 import { Separator } from "../ui/separator";
 import SidebarLogo from "./sidebar-logo";
+import { SIDEBAR_NAV_MENUS } from "@/constants/menus";
 
 export default async function Sidebar() {
   const supabase = await createSupabaseServerClient(true);
@@ -35,11 +31,12 @@ export default async function Sidebar() {
 
   return (
     <ToggleSidebar>
-      <div className="bg-background border-r border-input flex flex-col items-center h-screen">
+      <div className="bg-background border-r border-input flex flex-col h-screen">
         <SidebarLogo defaultHospitalId={vet?.default_hos_id} />
+
         <Separator />
 
-        <nav className="flex-1 py-2">
+        <nav className="flex-1 p-2">
           <ul className="flex flex-col gap-2">
             {SIDEBAR_NAV_MENUS.map((menu) => (
               <SidebarMenu
@@ -53,8 +50,6 @@ export default async function Sidebar() {
           </ul>
         </nav>
 
-        <Separator />
-
         <CollapseButton />
 
         <Profile
@@ -67,29 +62,3 @@ export default async function Sidebar() {
     </ToggleSidebar>
   );
 }
-const SIDEBAR_NAV_MENUS = [
-  {
-    title: "입원실",
-    path: "icu",
-    icon: <FaClipboardCheck size={20} />,
-    ready: true,
-  },
-  {
-    title: "진료실",
-    path: "diagnose",
-    icon: <FaDog size={20} />,
-    ready: true,
-  },
-  {
-    title: "수술실",
-    path: "surgery",
-    icon: <FaMaskFace size={20} />,
-    ready: true,
-  },
-  {
-    title: "건강검진",
-    icon: <FaListCheck size={20} />,
-    path: "icu",
-    ready: false,
-  },
-];
