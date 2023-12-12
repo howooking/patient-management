@@ -11,6 +11,10 @@ import { Separator } from "@/components/ui/separator";
 export default async function Sidebar() {
   const supabase = await createSupabaseServerClient(true);
 
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
   const { data: vet } = await supabase
     .from("vets")
     .select(
@@ -27,6 +31,7 @@ export default async function Sidebar() {
        )
       `
     )
+    .match({ vet_id: session?.user.id })
     .single();
 
   return (

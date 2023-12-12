@@ -8,18 +8,19 @@ export async function GET(request: Request) {
 
   if (code) {
     const supabase = await createSupabaseServerClient();
-    const { error: sessionError } = await supabase.auth.exchangeCodeForSession(
-      code
-    );
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.exchangeCodeForSession(code);
 
     if (sessionError) {
       return NextResponse.redirect(`${requestUrl.origin}/auth-error`);
     }
 
-    // RLS : authenticated, auth.uid() = vet_id
     const { data: vet, error: vetError } = await supabase
       .from("vets")
-      .select("default_hos_id")
+      .select("*")
+      .match({ vet_id: session?.user.id })
       .single();
 
     // supabase 에러
@@ -32,6 +33,11 @@ export async function GET(request: Request) {
     // 회원이 아닌경우, vet === null
     if (!vet) {
       return NextResponse.redirect(`${requestUrl.origin}/signup`);
+    }
+
+    // 회원 승인이 안된 경우
+    if (!vet.license_approved) {
+      return NextResponse.redirect(`${requestUrl.origin}/wait`);
     }
 
     // 기본 병원 설정이 안된 경우, vet.default_hos_id === null

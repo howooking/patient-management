@@ -185,7 +185,10 @@ export default function SignupForm({
               type="button"
               variant="outline"
               asChild
-              onClick={() => supabase.auth.signOut()}
+              onClick={() => {
+                supabase.auth.signOut();
+                router.refresh();
+              }}
             >
               <Link href="/">뒤로가기</Link>
             </Button>

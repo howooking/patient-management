@@ -27,6 +27,7 @@ export default async function SpaceLayout({
   const { data: vet, error: vetError } = await supabase
     .from("vets")
     .select(`license_approved`)
+    .match({ vet_id: session.user.id })
     .single();
 
   if (vetError) {

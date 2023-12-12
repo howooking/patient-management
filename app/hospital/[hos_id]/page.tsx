@@ -6,14 +6,11 @@ export default async function page({ params }: { params: { hos_id: string } }) {
 
   const { data: hospitalVetMapping, error: hospitalVetMappingError } =
     await supabase
-      .from("hos_vet_mapping")
+      .from("hospitals")
       .select(
         `
           *,
-          vets (
-            *
-          ),
-          hospitals (
+          master: vets!hospitals_master_id_fkey (
             *
           )
         `

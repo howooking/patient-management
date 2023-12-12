@@ -13,6 +13,15 @@ export default async function layout({
   const { hos_id } = params;
   const supabase = await createSupabaseServerClient(true);
 
+  const {
+    data: { session },
+    error: sessionError,
+  } = await supabase.auth.getSession();
+
+  if (sessionError) {
+    throw new Error(sessionError.message);
+  }
+
   const { data: hospitalVetMapping, error: hospitalVetMappingError } =
     await supabase
       .from("hos_vet_mapping")
@@ -25,15 +34,11 @@ export default async function layout({
         `
       )
       .match({ hos_id })
+      .match({ vet_id: session?.user.id })
       .single();
-  console.log(hospitalVetMapping);
 
   if (hospitalVetMappingError) {
     throw new Error(hospitalVetMappingError.message);
-  }
-
-  if (!hospitalVetMapping.vet_approved) {
-    return <>병원 승인 후 참여가 가능합니다.</>;
   }
 
   if (!hospitalVetMapping.hospitals?.business_approved) {
@@ -42,6 +47,10 @@ export default async function layout({
         사업자 등록증을 junsgk@gmail.com으로 보내주세요.
       </div>
     );
+  }
+
+  if (!hospitalVetMapping.vet_approved) {
+    return <div className="p-2">병원 승인 후 참여가 가능합니다.</div>;
   }
 
   return <>{children}</>;
