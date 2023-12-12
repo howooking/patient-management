@@ -111,7 +111,9 @@ export default function SearchBox({
               >
                 <div className="flex justify-between w-full items-center">
                   <div>{hospital.value}</div>
-                  <span className="text-sm">{hospital.address}</span>
+                  <span className="text-sm">
+                    {hospital.address?.split(" ").slice(0, 2).join(" ")}
+                  </span>
                 </div>
               </CommandItem>
             ))}
