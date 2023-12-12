@@ -1,13 +1,13 @@
-import Signout from "@/components/hospital/hopital-navbar/signout";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import HospitalSettingMenu from "../hospital/hopital-navbar/hospital-setting-menu";
-import ToggleThemeMenu from "../hospital/hopital-navbar/toggle-theme-menu";
+import HospitalSettingMenu from "./hospital-setting-menu";
 import ProfileDropdownTrigger from "./profile-dropdown-trigger";
+import ToggleThemeMenu from "./toggle-theme-menu";
+import Signout from "./signout";
 
 type Props = {
   src?: string | null;
@@ -24,7 +24,12 @@ type Props = {
     | undefined;
 };
 
-export default function Profile({ email, name, src, hospitalList }: Props) {
+export default function ProfileDropdown({
+  email,
+  name,
+  src,
+  hospitalList,
+}: Props) {
   return (
     <DropdownMenu>
       {/* client component */}
@@ -32,8 +37,6 @@ export default function Profile({ email, name, src, hospitalList }: Props) {
 
       <DropdownMenuContent className="w-[240px] ml-2 border-input shadow-lg">
         <DropdownMenuItem>사용자 설정</DropdownMenuItem>
-        <DropdownMenuItem>약물 설정</DropdownMenuItem>
-        <DropdownMenuItem>식이 설정</DropdownMenuItem>
 
         <HospitalSettingMenu hospitalList={hospitalList} />
 

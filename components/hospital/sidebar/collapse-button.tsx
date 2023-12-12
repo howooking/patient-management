@@ -2,9 +2,9 @@
 
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa6";
 
-import { Button } from "../ui/button";
 import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export default function CollapseButton() {
   const { collapse, setCollapse } = useSidebarCollapse();

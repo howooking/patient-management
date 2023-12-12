@@ -4,7 +4,7 @@ import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 import { cn } from "@/lib/utils";
 import React from "react";
 
-export default function ToggleSidebar({
+export default function ToggleProvider({
   children,
 }: {
   children: React.ReactNode;

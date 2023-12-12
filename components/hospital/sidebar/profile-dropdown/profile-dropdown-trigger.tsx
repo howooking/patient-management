@@ -2,12 +2,12 @@
 
 import { HiDotsVertical } from "react-icons/hi";
 import React from "react";
-import { Button } from "../ui/button";
-import UserAvatar from "../common/user-avatar";
 import { FaAngleUp } from "react-icons/fa6";
 import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 import { cn } from "@/lib/utils";
-import { DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import UserAvatar from "@/components/common/user-avatar";
 
 type Props = { src?: string | null; name?: string; email?: string };
 

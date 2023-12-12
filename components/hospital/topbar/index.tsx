@@ -1,4 +1,4 @@
-import { FaRegBell, FaDog } from "react-icons/fa6";
+import { FaRegBell } from "react-icons/fa6";
 import { FaRegStickyNote } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 
@@ -8,7 +8,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import AddPatientButton from "./add-patient-button";
 import CurrentPage from "./current-page";
 
-export default async function HospitalNavbar() {
+export default async function TopBar() {
   const supabase = await createSupabaseServerClient(true);
 
   const { data: vet } = await supabase

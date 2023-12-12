@@ -1,12 +1,12 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-import Profile from "./profile";
+import ProfileDropdown from "./profile-dropdown";
 import CollapseButton from "./collapse-button";
-import ToggleSidebar from "./toggle-sidebar";
+import ToggleProvider from "./toggle-provider";
 import SidebarMenu from "./sidebar-menu";
-import { Separator } from "../ui/separator";
 import SidebarLogo from "./sidebar-logo";
 import { SIDEBAR_NAV_MENUS } from "@/constants/menus";
+import { Separator } from "@/components/ui/separator";
 
 export default async function Sidebar() {
   const supabase = await createSupabaseServerClient(true);
@@ -30,7 +30,7 @@ export default async function Sidebar() {
     .single();
 
   return (
-    <ToggleSidebar>
+    <ToggleProvider>
       <div className="bg-background border-r border-input flex flex-col h-screen">
         <SidebarLogo defaultHospitalId={vet?.default_hos_id} />
 
@@ -52,13 +52,13 @@ export default async function Sidebar() {
 
         <CollapseButton />
 
-        <Profile
+        <ProfileDropdown
           name={vet?.vet_name}
           src={vet?.avatar_url}
           email={vet?.vet_email}
           hospitalList={vet?.hos_vet_mapping}
         />
       </div>
-    </ToggleSidebar>
+    </ToggleProvider>
   );
 }

@@ -2,7 +2,6 @@
 
 import { usePathname, useRouter } from "next/navigation";
 
-import { Button } from "../ui/button";
 import {
   Tooltip,
   TooltipContent,
@@ -11,6 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   title: string;
