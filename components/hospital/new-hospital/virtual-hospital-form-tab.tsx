@@ -57,6 +57,7 @@ export default function VirtualHospitalFormTab() {
       if (response.ok) {
         toast({
           title: "가상 병원이 생성되었습니다.",
+          description: "잠시 후 페이지가 이동합니다.",
         });
         router.replace(`/hospital/${data.hospitalId}`);
         router.refresh();

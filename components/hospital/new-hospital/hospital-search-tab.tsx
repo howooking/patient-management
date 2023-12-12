@@ -36,7 +36,7 @@ export default function HospitalSearchTab() {
       if (response.ok) {
         toast({
           title: "병원에서 승인 후 병원이 추가됩니다.",
-          description: "병원 관리자에게 문의하세요.",
+          description: "잠시 후 페이지가 이동합니다.",
         });
         router.replace(`/hospital/${data.hospitalId}`);
         router.refresh();

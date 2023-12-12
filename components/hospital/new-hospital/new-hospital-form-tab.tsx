@@ -73,8 +73,8 @@ export default function NewHospitalFormTab() {
 
       if (response.ok) {
         toast({
-          title: `${values.name}이 생성되었습니다.`,
-          description: "사업자등록증 확인 후 생성이 완료됩니다.",
+          title: "사업자등록증 확인 후 생성이 완료됩니다",
+          description: "잠시 후 페이지가 이동합니다.",
         });
         router.replace(`/hospital/${data.hospitalId}`);
         router.refresh();
