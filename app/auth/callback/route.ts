@@ -22,8 +22,9 @@ export async function GET(request: Request) {
       .select("default_hos_id")
       .single();
 
+    // supabase 에러
     if (vetError) {
-      // 회원이 아닌 경우 vetError.code === "PGRST116"가 발생
+      // 회원이 아닌 경우 vetError.code === "PGRST116" 제외
       if (vetError.code !== "PGRST116")
         return NextResponse.redirect(`${requestUrl.origin}/auth-error`);
     }
