@@ -1,4 +1,5 @@
-import { FaRegBell } from "react-icons/fa6";
+import { FaRegBell, FaDog } from "react-icons/fa6";
+import { FaRegStickyNote } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,10 @@ export default async function HospitalNavbar() {
 
           <Button size="icon" variant="ghost" className="rounded-full">
             <IoSearch size={20} />
+          </Button>
+
+          <Button size="icon" variant="ghost" className="rounded-full">
+            <FaRegStickyNote size={20} />
           </Button>
 
           <Button size="icon" variant="ghost" className="rounded-full">
