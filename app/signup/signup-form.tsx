@@ -30,7 +30,7 @@ const formSchema = z.object({
     message: "2자 이상 실명을 입력해주세요.",
   }),
   licenseNumber: z.string().refine((data) => /^\d{5}$/.test(data), {
-    message: "라이선스 번호는 5자리 숫자입니다.",
+    message: "면허번호는 5자리 숫자입니다.",
   }),
   agree: z
     .boolean()
