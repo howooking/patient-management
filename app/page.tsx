@@ -7,10 +7,10 @@ export default async function Home() {
   const supabase = await createSupabaseServerClient(true);
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     return (
       <>
         <Navbar />
@@ -22,7 +22,7 @@ export default async function Home() {
   const { data: vet, error: vetError } = await supabase
     .from("vets")
     .select("license_approved, default_hos_id")
-    .match({ vet_id: session?.user.id })
+    .match({ vet_id: user.id })
     .single();
 
   // supabase 에러

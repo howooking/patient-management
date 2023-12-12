@@ -14,19 +14,15 @@ export async function POST(request: NextRequest) {
 
   const supabase = await createSupabaseServerClient();
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-  if (!session) {
-    return NextResponse.json(
-      { error: "session not existing" },
-      { status: 401 }
-    );
+  if (!user || !userError) {
+    return NextResponse.json({ error: "session error" }, { status: 401 });
   }
 
-  const {
-    user: { user_metadata, id, email },
-  } = session;
+  const { user_metadata, id, email } = user;
 
   const { error } = await supabase.from("vets").insert({
     vet_id: id,

@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 import React from "react";
 
 export default async function layout({
@@ -14,9 +15,13 @@ export default async function layout({
   const supabase = await createSupabaseServerClient(true);
 
   const {
-    data: { session },
+    data: { user },
     error: sessionError,
-  } = await supabase.auth.getSession();
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/");
+  }
 
   if (sessionError) {
     throw new Error(sessionError.message);
@@ -34,7 +39,7 @@ export default async function layout({
         `
       )
       .match({ hos_id })
-      .match({ vet_id: session?.user.id })
+      .match({ vet_id: user?.id })
       .single();
 
   if (hospitalVetMappingError) {

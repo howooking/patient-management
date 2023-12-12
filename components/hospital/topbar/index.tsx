@@ -1,26 +1,24 @@
 import { FaRegBell } from "react-icons/fa6";
 import { FaRegStickyNote } from "react-icons/fa";
-import { IoSearch } from "react-icons/io5";
 
 import { Button } from "@/components/ui/button";
 import HospitalSelect from "./hospital-select";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import AddPatientButton from "./add-patient-button";
 import CurrentPage from "./current-page";
+import SearchDialog from "./seach-dialog";
 
 export default async function TopBar() {
   const supabase = await createSupabaseServerClient(true);
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const { data: vet } = await supabase
     .from("vets")
     .select(
-      `vet_email, 
-       vet_name, 
-       avatar_url,
+      `
        default_hos_id,
        hos_vet_mapping (
         hospitals (
@@ -31,7 +29,7 @@ export default async function TopBar() {
        )
       `
     )
-    .match({ vet_id: session?.user.id })
+    .match({ vet_id: user?.id })
     .single();
 
   return (
@@ -48,9 +46,7 @@ export default async function TopBar() {
         <div className="flex items-center gap-2">
           <AddPatientButton />
 
-          <Button size="icon" variant="ghost" className="rounded-full">
-            <IoSearch size={20} />
-          </Button>
+          <SearchDialog />
 
           <Button size="icon" variant="ghost" className="rounded-full">
             <FaRegStickyNote size={20} />

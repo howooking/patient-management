@@ -12,22 +12,22 @@ export default async function SpaceLayout({
   const supabase = await createSupabaseServerClient(true);
 
   const {
-    data: { session },
-    error: sessionError,
-  } = await supabase.auth.getSession();
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-  if (sessionError) {
-    throw new Error(sessionError.message);
+  if (userError) {
+    throw new Error(userError.message);
   }
 
-  if (!session) {
+  if (!user) {
     redirect("/");
   }
 
   const { data: vet, error: vetError } = await supabase
     .from("vets")
     .select(`license_approved`)
-    .match({ vet_id: session.user.id })
+    .match({ vet_id: user.id })
     .single();
 
   if (vetError) {

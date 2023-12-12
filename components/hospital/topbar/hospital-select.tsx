@@ -21,7 +21,6 @@ type Props = {
         hospitals: {
           hos_id: string;
           name: string | null;
-          business_approved: boolean;
         } | null;
       }[]
     | undefined;

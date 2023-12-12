@@ -11,16 +11,16 @@ export default async function NewHospital({
 }) {
   const supabase = await createSupabaseServerClient(true);
   const {
-    data: { session },
-    error: SessionError,
-  } = await supabase.auth.getSession();
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-  if (!session) {
+  if (!user) {
     redirect("/");
   }
 
-  if (SessionError) {
-    throw new Error(SessionError.message);
+  if (userError) {
+    throw new Error(userError.message);
   }
 
   return (

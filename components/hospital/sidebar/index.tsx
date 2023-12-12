@@ -12,8 +12,8 @@ export default async function Sidebar() {
   const supabase = await createSupabaseServerClient(true);
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const { data: vet } = await supabase
     .from("vets")
@@ -31,7 +31,7 @@ export default async function Sidebar() {
        )
       `
     )
-    .match({ vet_id: session?.user.id })
+    .match({ vet_id: user?.id })
     .single();
 
   return (

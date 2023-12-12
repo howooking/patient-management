@@ -13,17 +13,15 @@ export async function POST(request: NextRequest) {
 
   const supabase = await createSupabaseServerClient();
   const {
-    data: { session },
-    error: sessionError,
-  } = await supabase.auth.getSession();
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
 
-  if (!session || sessionError) {
+  if (!user || userError) {
     return NextResponse.json({ error: "session error" }, { status: 401 });
   }
 
-  const {
-    user: { id },
-  } = session;
+  const { id } = user;
 
   // 가상병원
   if (type === "virtual") {
