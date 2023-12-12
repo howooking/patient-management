@@ -6,7 +6,7 @@ import HospitalSelect from "./hospital-select";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import AddPatientButton from "./add-patient-button";
 import CurrentPage from "./current-page";
-import SearchDialog from "./seach-dialog";
+import PetDialog from "./pet-dialog";
 
 export default async function TopBar() {
   const supabase = await createSupabaseServerClient(true);
@@ -44,9 +44,9 @@ export default async function TopBar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <AddPatientButton />
+          <PetDialog />
 
-          <SearchDialog />
+          <PetDialog search />
 
           <Button size="icon" variant="ghost" className="rounded-full">
             <FaRegStickyNote size={20} />
