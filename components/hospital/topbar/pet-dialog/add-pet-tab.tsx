@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -63,7 +63,11 @@ const formSchema = z.object({
   microchipNumber: z.string().optional(),
 });
 
-export default function AddPetTab() {
+export default function AddPetTab({
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}) {
   const [breedOpen, setBreedOpen] = useState(false);
 
   const [selectiedSpecies, setSelectedSpecies] = useState<string | undefined>(
@@ -77,6 +81,9 @@ export default function AddPetTab() {
   const { toast } = useToast();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const path = usePathname();
+  const hospitalId = path.split("/")[2];
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -104,42 +111,35 @@ export default function AddPetTab() {
       microchipNumber,
     } = values;
 
-    // setIsSubmitting(true);
+    setIsSubmitting(true);
 
-    // try {
-    //   const response = await fetch(`${location.origin}/api/new-hospital`, {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       type: "real",
-    //       name,
-    //       businessNumber,
-    //       address,
-    //       phoneNumber,
-    //     }),
-    //   });
-    //   const data = await response.json();
+    try {
+      const response = await fetch(`${location.origin}/api/new-pet`, {
+        method: "POST",
+        body: JSON.stringify({ ...values, hospitalId }),
+      });
+      const data = await response.json();
 
-    //   if (response.ok) {
-    //     toast({
-    //       title: "사업자등록증 확인 후 생성이 완료됩니다",
-    //       description: "잠시 후 페이지가 이동합니다.",
-    //     });
-    //     router.replace(`/hospital/${data.hospitalId}`);
-    //     router.refresh();
-    //     return;
-    //   }
+      if (response.ok) {
+        toast({
+          title: "환자가 등록되었습니다.",
+        });
+        router.refresh();
+        setOpen(false);
+        return;
+      }
 
-    //   toast({
-    //     variant: "destructive",
-    //     title: data.error,
-    //     description: "관리자에게 문의하세요",
-    //   });
-    // } catch (error) {
-    //   // eslint-disable-next-line no-console
-    //   console.error(error, "error while adding a hospital");
-    // } finally {
-    //   setIsSubmitting(false);
-    // }
+      toast({
+        variant: "destructive",
+        title: data.error,
+        description: "관리자에게 문의하세요",
+      });
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error, "error while adding a hospital");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

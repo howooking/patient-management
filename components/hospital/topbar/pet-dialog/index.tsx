@@ -1,13 +1,17 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { IoSearch } from "react-icons/io5";
 import PetTab from "./pet-tab";
 import Image from "next/image";
 import addDogIcon from "@/public/icons/add-dog.svg";
+import { useState } from "react";
 
 export default function PetDialog({ search }: { search?: boolean }) {
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           size="icon"
@@ -28,7 +32,7 @@ export default function PetDialog({ search }: { search?: boolean }) {
       </DialogTrigger>
 
       <DialogContent>
-        <PetTab search={search} />
+        <PetTab search={search} setOpen={setOpen} />
       </DialogContent>
     </Dialog>
   );

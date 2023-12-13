@@ -1,17 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AddPetTab from "./add-pet-tab";
 import SearchTab from "./search-tab";
 
-export default function Pettab({ search }: { search?: boolean }) {
+type Props = {
+  search?: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+export default function PetTab({ search, setOpen }: Props) {
   const [activeTab, setActiveTab] = useState(search ? "search" : "add");
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="w-full absolute left-0 -top-14 bg-background">
+      <TabsList className="w-full absolute left-0 -top-14 bg-background flex gap-4">
         <TabsTrigger
           value="add"
           className="w-full data-[state=active]:font-semibold data-[state=active]:border-2"
@@ -27,7 +32,7 @@ export default function Pettab({ search }: { search?: boolean }) {
       </TabsList>
 
       <TabsContent value="add" className="mt-0">
-        <AddPetTab />
+        <AddPetTab setOpen={setOpen} />
       </TabsContent>
 
       <TabsContent value="search" className="mt-0">
