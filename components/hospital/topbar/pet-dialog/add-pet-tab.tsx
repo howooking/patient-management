@@ -51,6 +51,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   name: z.string(),
@@ -61,6 +62,7 @@ const formSchema = z.object({
   birth: z.date({ required_error: "출생일을 선택해주세요." }),
   color: z.string().optional(),
   microchipNumber: z.string().optional(),
+  memo: z.string().optional(),
 });
 
 export default function AddPetTab({
@@ -68,49 +70,38 @@ export default function AddPetTab({
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const router = useRouter();
+
+  const path = usePathname();
+  const hospitalId = path.split("/")[2];
+
+  const { toast } = useToast();
+
   const [breedOpen, setBreedOpen] = useState(false);
 
   const [selectiedSpecies, setSelectedSpecies] = useState<string | undefined>(
     undefined
   );
-
   const BREEDS = selectiedSpecies === "canine" ? CANINE_BREEDS : FELINE_BREEDS;
 
-  const router = useRouter();
-
-  const { toast } = useToast();
-
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const path = usePathname();
-  const hospitalId = path.split("/")[2];
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      hospitalPetId: "",
+      name: undefined,
+      hospitalPetId: undefined,
       species: undefined,
       breed: undefined,
       gender: undefined,
       birth: undefined,
       color: undefined,
       microchipNumber: undefined,
+      memo: undefined,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const {
-      name,
-      hospitalPetId,
-      species,
-      breed,
-      gender,
-      birth,
-      color,
-      microchipNumber,
-    } = values;
-
     setIsSubmitting(true);
 
     try {
@@ -118,7 +109,6 @@ export default function AddPetTab({
         method: "POST",
         body: JSON.stringify({ ...values, hospitalId }),
       });
-      const data = await response.json();
 
       if (response.ok) {
         toast({
@@ -129,6 +119,7 @@ export default function AddPetTab({
         return;
       }
 
+      const data = await response.json();
       toast({
         variant: "destructive",
         title: data.error,
@@ -136,7 +127,7 @@ export default function AddPetTab({
       });
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error(error, "error while adding a hospital");
+      console.error(error, "error while adding a new pet");
     } finally {
       setIsSubmitting(false);
     }
@@ -173,7 +164,7 @@ export default function AddPetTab({
                 환자 번호*
                 <TooltipProvider delayDuration={100}>
                   <Tooltip>
-                    <TooltipTrigger tabIndex={-1}>
+                    <TooltipTrigger tabIndex={-1} type="button">
                       <FaRegCircleQuestion className="opacity-50" />
                     </TooltipTrigger>
                     <TooltipContent>
@@ -424,7 +415,7 @@ export default function AddPetTab({
                                   )})`,
                           }}
                         />
-                        <div>{color.value}</div>
+                        <div>{color.label}</div>
                       </div>
                     </SelectItem>
                   ))}
@@ -452,6 +443,23 @@ export default function AddPetTab({
             </FormItem>
           )}
         />
+
+        {/* 메모 */}
+        <div className="col-span-2">
+          <FormField
+            control={form.control}
+            name="memo"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm font-semibold">메모</FormLabel>
+                <FormControl>
+                  <Textarea className="resize-none" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         <Button
           type="submit"
