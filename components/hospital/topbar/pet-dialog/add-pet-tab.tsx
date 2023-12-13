@@ -160,7 +160,7 @@ export default function AddPetTab({
           name="hospitalPetId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-sm font-semibold flex items-center gap-2">
+              <FormLabel className="text-sm font-semibold flex items-center gap-2 my-[2px]">
                 환자 번호*
                 <TooltipProvider delayDuration={100}>
                   <Tooltip>
