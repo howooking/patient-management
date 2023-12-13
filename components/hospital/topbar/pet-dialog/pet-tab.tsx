@@ -26,11 +26,11 @@ export default function Pettab({ search }: { search?: boolean }) {
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value="add" className="mt-0 space-y-6">
-        <AddPetTab setActiveTab={setActiveTab} />
+      <TabsContent value="add" className="mt-0">
+        <AddPetTab />
       </TabsContent>
 
-      <TabsContent value="search" className="mt-0 space-y-6">
+      <TabsContent value="search" className="mt-0">
         <SearchTab setActiveTab={setActiveTab} />
       </TabsContent>
     </Tabs>
