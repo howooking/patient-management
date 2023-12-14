@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import { useSelectedPet } from "@/lib/store/pets";
 
 type Props = {
   hospitalList:
@@ -35,6 +36,8 @@ export default function HospitalSelect({
   const pathname = usePathname();
   const hospitalId = pathname.split("/")[2];
   const router = useRouter();
+
+  const { setSelectedPet } = useSelectedPet();
 
   const { toast } = useToast();
   const [isChanging, setIsChanging] = useState(false);
@@ -78,7 +81,10 @@ export default function HospitalSelect({
   return (
     <div className="min-w-[240px]">
       <Select
-        onValueChange={(value: string) => router.push(`/hospital/${value}`)}
+        onValueChange={(value: string) => {
+          router.push(`/hospital/${value}`);
+          setSelectedPet(null);
+        }}
         value={hospitalId}
       >
         <SelectTrigger disabled={hospitalList?.length === 0}>
