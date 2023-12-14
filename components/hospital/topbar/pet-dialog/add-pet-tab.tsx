@@ -52,6 +52,7 @@ import {
 } from "@/components/ui/tooltip";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
+import { useSelectedPet } from "@/lib/store/pets";
 
 const formSchema = z.object({
   name: z.string(),
@@ -70,6 +71,8 @@ export default function AddPetTab({
 }: {
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const { setSelectedPet } = useSelectedPet();
+
   const router = useRouter();
 
   const path = usePathname();
@@ -110,16 +113,17 @@ export default function AddPetTab({
         body: JSON.stringify({ ...values, hospitalId }),
       });
 
+      const data = await response.json();
       if (response.ok) {
         toast({
           title: "환자가 등록되었습니다.",
         });
+        setSelectedPet(data.pet);
         router.refresh();
         setDialogOpen(false);
         return;
       }
 
-      const data = await response.json();
       toast({
         variant: "destructive",
         title: data.error,

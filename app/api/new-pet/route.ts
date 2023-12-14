@@ -40,25 +40,29 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { data: pet, error: petError } = await supabase.from("pets").insert({
-    hos_pet_id: hospitalPetId,
-    hos_id: hospitalId,
-    birth,
-    species,
-    breed,
-    gender,
-    name,
-    color,
-    memo,
-    microchip_no: microchipNumber,
-  });
+  const { data: pet, error: petError } = await supabase
+    .from("pets")
+    .insert({
+      hos_pet_id: hospitalPetId,
+      hos_id: hospitalId,
+      birth,
+      species,
+      breed,
+      gender,
+      name,
+      color,
+      memo,
+      microchip_no: microchipNumber,
+    })
+    .select()
+    .single();
 
   if (petError) {
     return NextResponse.json({ error: petError.message }, { status: 500 });
   }
 
   return NextResponse.json(
-    { success: "successfully inserted hospital" },
+    { success: "successfully inserted hospital", pet },
     { status: 200 }
   );
 }
