@@ -9,9 +9,9 @@ import addDogIcon from "@/public/icons/add-dog.svg";
 import { useState } from "react";
 
 export default function PetDialog({ search }: { search?: boolean }) {
-  const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <Button
           size="icon"
@@ -32,7 +32,7 @@ export default function PetDialog({ search }: { search?: boolean }) {
       </DialogTrigger>
 
       <DialogContent className="h-[530px]">
-        <PetTab search={search} setOpen={setOpen} />
+        <PetTab search={search} setDialogOpen={setDialogOpen} />
       </DialogContent>
     </Dialog>
   );

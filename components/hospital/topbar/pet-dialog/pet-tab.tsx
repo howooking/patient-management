@@ -8,10 +8,10 @@ import SearchTab from "./search-tab";
 
 type Props = {
   search?: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  setDialogOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function PetTab({ search, setOpen }: Props) {
+export default function PetTab({ search, setDialogOpen }: Props) {
   const [activeTab, setActiveTab] = useState(search ? "search" : "add");
 
   return (
@@ -32,11 +32,11 @@ export default function PetTab({ search, setOpen }: Props) {
       </TabsList>
 
       <TabsContent value="add" className="mt-0">
-        <AddPetTab setOpen={setOpen} />
+        <AddPetTab setDialogOpen={setDialogOpen} />
       </TabsContent>
 
       <TabsContent value="search" className="mt-0 h-full">
-        <SearchTab setActiveTab={setActiveTab} />
+        <SearchTab setActiveTab={setActiveTab} setDialogOpen={setDialogOpen} />
       </TabsContent>
     </Tabs>
   );

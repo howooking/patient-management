@@ -7,6 +7,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import AddPetButton from "./add-pet-button";
 import CurrentPage from "./current-page";
 import PetDialog from "./pet-dialog";
+import SelectedPet from "./selected-pet";
 
 export default async function TopBar() {
   const supabase = await createSupabaseServerClient(true);
@@ -44,6 +45,8 @@ export default async function TopBar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <SelectedPet />
+
           <PetDialog />
 
           <PetDialog search />

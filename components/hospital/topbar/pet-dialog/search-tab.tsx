@@ -20,22 +20,24 @@ import NoResult from "./no-result";
 import LoadingSpinner from "@/components/common/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useSelectedPet } from "@/lib/store/pets";
 
-export default function SearchTab({
-  setActiveTab,
-}: {
+type Props = {
   setActiveTab: Dispatch<SetStateAction<string>>;
-}) {
+  setDialogOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
+  const { setSelectedPet } = useSelectedPet();
+
   const path = usePathname();
   const hospitalId = path.split("/")[2];
   const { data, error, isFetching, isLoading } = useTanstackPets(hospitalId);
 
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
-    if (data) {
-      inputRef.current?.focus();
-    }
-  }, [data, isFetching]);
+    inputRef.current?.focus();
+  }, [isFetching]);
 
   const [filteredPets, setFilteredPets] = useState<Pet[]>([]);
   const [noResult, setNoResult] = useState(false);
@@ -135,7 +137,14 @@ export default function SearchTab({
                     </Button>
                   </TableCell>
                   <TableCell className="text-center text-xs">
-                    <Button className="px-2 py-0.5 h-6" size="sm">
+                    <Button
+                      className="px-2 py-0.5 h-6"
+                      size="sm"
+                      onClick={() => {
+                        setSelectedPet(pet);
+                        setDialogOpen(false);
+                      }}
+                    >
                       선택
                     </Button>
                   </TableCell>

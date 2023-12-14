@@ -66,9 +66,9 @@ const formSchema = z.object({
 });
 
 export default function AddPetTab({
-  setOpen,
+  setDialogOpen,
 }: {
-  setOpen: Dispatch<SetStateAction<boolean>>;
+  setDialogOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const router = useRouter();
 
@@ -115,7 +115,7 @@ export default function AddPetTab({
           title: "환자가 등록되었습니다.",
         });
         router.refresh();
-        setOpen(false);
+        setDialogOpen(false);
         return;
       }
 
