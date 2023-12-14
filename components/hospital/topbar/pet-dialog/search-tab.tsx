@@ -26,16 +26,17 @@ export default function SearchTab({
 }: {
   setActiveTab: Dispatch<SetStateAction<string>>;
 }) {
-  const inputRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 200);
-  }, []);
-
   const path = usePathname();
   const hospitalId = path.split("/")[2];
   const { data, error, isFetching, isLoading } = useTanstackPets(hospitalId);
+
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (data) {
+      inputRef.current?.focus();
+    }
+  }, [data, isFetching]);
+
   const [filteredPets, setFilteredPets] = useState<Pet[]>([]);
   const [noResult, setNoResult] = useState(false);
 
@@ -62,11 +63,13 @@ export default function SearchTab({
   }, 300);
 
   if (data?.petsError) {
+    // eslint-disable-next-line no-console
     console.error("supabse error", data?.petsError);
     return "supabase 에러가 발생했습니다.";
   }
 
   if (error) {
+    // eslint-disable-next-line no-console
     console.error("tanstack error", error);
     return "에러가 발생했습니다.";
   }
