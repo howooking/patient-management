@@ -9,7 +9,8 @@ export default function useTanstackPets(hospitalId: string) {
     const { data: pets, error: petsError } = await supabase
       .from("pets")
       .select("*")
-      .match({ hos_id: hospitalId });
+      .match({ hos_id: hospitalId })
+      .order("created_at", { ascending: false });
     return { pets, petsError };
   };
 
