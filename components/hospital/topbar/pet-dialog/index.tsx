@@ -31,7 +31,7 @@ export default function PetDialog({ search }: { search?: boolean }) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent>
+      <DialogContent className="h-[530px]">
         <PetTab search={search} setOpen={setOpen} />
       </DialogContent>
     </Dialog>

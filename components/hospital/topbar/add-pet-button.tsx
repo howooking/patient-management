@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import addDogIcon from "@/public/icons/add-dog.svg";
 import Image from "next/image";
 
-export default function AddPatientButton() {
+export default function AddPetButton() {
   const pathname = usePathname();
   const hospitalId = pathname.split("/")[2];
   return (

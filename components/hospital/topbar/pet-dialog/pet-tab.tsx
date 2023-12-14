@@ -15,7 +15,7 @@ export default function PetTab({ search, setOpen }: Props) {
   const [activeTab, setActiveTab] = useState(search ? "search" : "add");
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab}>
+    <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
       <TabsList className="w-full absolute left-0 -top-14 bg-background flex gap-4">
         <TabsTrigger
           value="add"
@@ -35,7 +35,7 @@ export default function PetTab({ search, setOpen }: Props) {
         <AddPetTab setOpen={setOpen} />
       </TabsContent>
 
-      <TabsContent value="search" className="mt-0">
+      <TabsContent value="search" className="mt-0 h-full">
         <SearchTab setActiveTab={setActiveTab} />
       </TabsContent>
     </Tabs>

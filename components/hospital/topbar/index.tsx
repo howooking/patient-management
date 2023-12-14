@@ -4,7 +4,7 @@ import { FaRegStickyNote } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import HospitalSelect from "./hospital-select";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import AddPatientButton from "./add-patient-button";
+import AddPetButton from "./add-pet-button";
 import CurrentPage from "./current-page";
 import PetDialog from "./pet-dialog";
 
