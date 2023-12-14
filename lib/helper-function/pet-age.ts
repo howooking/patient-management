@@ -17,7 +17,7 @@ export default function calculateAge(inputDate: string) {
 
   months += months < 0 ? 12 : 0;
 
-  const ageString = `${years}년 ${months}개월`;
+  const ageString = `${years}년${months > 0 ? ` ${months}개월` : ""}`;
 
   return ageString;
 }
