@@ -15,7 +15,6 @@ export interface Database {
           created_at: string
           group: string
           hos_id: string
-          hos_vet_id: number
           nickname: string | null
           position: string
           rank: number
@@ -27,7 +26,6 @@ export interface Database {
           created_at?: string
           group?: string
           hos_id: string
-          hos_vet_id?: number
           nickname?: string | null
           position?: string
           rank?: number
@@ -39,7 +37,6 @@ export interface Database {
           created_at?: string
           group?: string
           hos_id?: string
-          hos_vet_id?: number
           nickname?: string | null
           position?: string
           rank?: number
@@ -106,7 +103,77 @@ export interface Database {
           phone_no?: string | null
           position_list?: string[]
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "hospitals_master_id_fkey"
+            columns: ["master_id"]
+            isOneToOne: false
+            referencedRelation: "vets"
+            referencedColumns: ["vet_id"]
+          }
+        ]
+      }
+      pets: {
+        Row: {
+          birth: string
+          breed: string
+          color: string | null
+          created_at: string
+          gender: string
+          hos_id: string
+          hos_owner_id: string | null
+          hos_pet_id: string
+          memo: string | null
+          microchip_no: string | null
+          name: string
+          pet_id: number
+          register_no: string | null
+          species: string
+          state: string | null
+        }
+        Insert: {
+          birth: string
+          breed: string
+          color?: string | null
+          created_at?: string
+          gender: string
+          hos_id: string
+          hos_owner_id?: string | null
+          hos_pet_id: string
+          memo?: string | null
+          microchip_no?: string | null
+          name: string
+          pet_id?: number
+          register_no?: string | null
+          species: string
+          state?: string | null
+        }
+        Update: {
+          birth?: string
+          breed?: string
+          color?: string | null
+          created_at?: string
+          gender?: string
+          hos_id?: string
+          hos_owner_id?: string | null
+          hos_pet_id?: string
+          memo?: string | null
+          microchip_no?: string | null
+          name?: string
+          pet_id?: number
+          register_no?: string | null
+          species?: string
+          state?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pets_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          }
+        ]
       }
       vets: {
         Row: {
