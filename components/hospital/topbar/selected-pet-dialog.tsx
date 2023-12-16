@@ -281,7 +281,7 @@ export default function SelectedPetDialog({
                   name="breed"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel className="text-sm font-semibold w-[70px]">
+                      <FormLabel className="text-sm font-semibold w-[70px] my-[2px]">
                         품종 *
                       </FormLabel>
                       <Popover open={breedOpen} onOpenChange={setBreedOpen}>
@@ -305,7 +305,7 @@ export default function SelectedPetDialog({
                           </FormControl>
                         </PopoverTrigger>
 
-                        <PopoverContent className="w-[224px] p-0">
+                        <PopoverContent className="w-[352px] p-0">
                           <Command>
                             <CommandInput
                               placeholder="품종 검색"
@@ -395,7 +395,7 @@ export default function SelectedPetDialog({
                   name="birth"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel className="text-sm font-semibold w-[70px]">
+                      <FormLabel className="text-sm font-semibold w-[70px] my-[2px]">
                         출생일 *
                       </FormLabel>
                       <Popover>

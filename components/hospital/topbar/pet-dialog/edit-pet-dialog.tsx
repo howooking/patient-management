@@ -291,7 +291,7 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
                           </FormControl>
                         </PopoverTrigger>
 
-                        <PopoverContent className="w-[224px] p-0">
+                        <PopoverContent className="w-[352px] p-0">
                           <Command>
                             <CommandInput
                               placeholder="품종 검색"

@@ -93,7 +93,7 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
         placeholder="환자이름, 환자번호로 검색해주세요"
         onChange={(e) => handleSearch(e.target.value)}
       />
-      <ScrollArea className="h-[440px]">
+      <ScrollArea className="h-[440px] pt-1">
         {noResult ? (
           <NoResult setActiveTab={setActiveTab} />
         ) : (
