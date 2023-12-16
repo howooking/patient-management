@@ -55,11 +55,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { useSelectedPet } from "@/lib/store/pets";
 
 const formSchema = z.object({
-  name: z.string(),
-  hospitalPetId: z.string(),
-  species: z.enum(["canine", "feline"]),
+  name: z.string({ required_error: "이름을 입력해주세요." }),
+  hospitalPetId: z.string({ required_error: "환자 번호를 입력해주세요." }),
+  species: z.enum(["canine", "feline"], {
+    required_error: "종을 선택해주세요.",
+  }),
   breed: z.string({ required_error: "품종을 선택해주세요." }),
-  gender: z.enum(["cm", "sf", "im", "if", "un"]),
+  gender: z.enum(["cm", "sf", "im", "if", "un"], {
+    required_error: "성별을 선택헤주세요.",
+  }),
   birth: z.date({ required_error: "출생일을 선택해주세요." }),
   color: z.string().optional(),
   microchipNumber: z.string().optional(),
@@ -82,10 +86,10 @@ export default function AddPetTab({
 
   const [breedOpen, setBreedOpen] = useState(false);
 
-  const [selectiedSpecies, setSelectedSpecies] = useState<string | undefined>(
+  const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>(
     undefined
   );
-  const BREEDS = selectiedSpecies === "canine" ? CANINE_BREEDS : FELINE_BREEDS;
+  const BREEDS = selectedSpecies === "canine" ? CANINE_BREEDS : FELINE_BREEDS;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -108,7 +112,7 @@ export default function AddPetTab({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${location.origin}/api/new-pet`, {
+      const response = await fetch(`${location.origin}/api/pet`, {
         method: "POST",
         body: JSON.stringify({ ...values, hospitalId }),
       });
@@ -151,7 +155,7 @@ export default function AddPetTab({
             <FormItem>
               <FormLabel className="text-sm font-semibold">이름*</FormLabel>
               <FormControl>
-                <Input required {...field} className="h-8 text-sm" />
+                <Input {...field} className="h-8 text-sm" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
@@ -178,7 +182,7 @@ export default function AddPetTab({
                 </TooltipProvider>
               </FormLabel>
               <FormControl>
-                <Input required {...field} className="h-8 text-sm" />
+                <Input {...field} className="h-8 text-sm" />
               </FormControl>
 
               <FormMessage className="text-xs" />
@@ -199,7 +203,6 @@ export default function AddPetTab({
                   setSelectedSpecies(selectd);
                 }}
                 defaultValue={field.value}
-                required
               >
                 <FormControl>
                   <SelectTrigger className="h-8 text-sm">
@@ -226,21 +229,23 @@ export default function AddPetTab({
           name="breed"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <label className="text-sm font-semibold my-[2px]">품종 *</label>
+              <FormLabel className="text-sm font-semibold my-[2px] w-[70px]">
+                품종 *
+              </FormLabel>
               <Popover open={breedOpen} onOpenChange={setBreedOpen}>
-                <PopoverTrigger asChild disabled={!selectiedSpecies}>
+                <PopoverTrigger asChild disabled={!selectedSpecies}>
                   <FormControl>
                     <Button
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "justify-start text-sm font-normal h-8 border-input border relative",
+                        "justify-start text-sm font-normal px-3 h-8 border-input border relative",
                         !field.value && "text-muted-foreground"
                       )}
                     >
                       {field.value
                         ? BREEDS.find((breed) => breed === field.value)
-                        : selectiedSpecies
+                        : selectedSpecies
                         ? "품종을 선택해주세요."
                         : "종을 먼저선택해주세요."}
                       <CaretSortIcon className="h-4 w-4 shrink-0 opacity-50 absolute right-3" />
@@ -248,7 +253,7 @@ export default function AddPetTab({
                   </FormControl>
                 </PopoverTrigger>
 
-                <PopoverContent className="w-[224px] p-0">
+                <PopoverContent className="w-[352px] p-0">
                   <Command>
                     <CommandInput
                       placeholder="품종 검색"
@@ -295,11 +300,7 @@ export default function AddPetTab({
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-semibold">성별*</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                required
-              >
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="h-8 text-sm">
                     <SelectValue placeholder="성별을 선택해주세요." />
@@ -335,7 +336,9 @@ export default function AddPetTab({
           name="birth"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <label className="text-sm font-semibold my-[2px]">출생일 *</label>
+              <FormLabel className="text-sm font-semibold my-[2px] w-[70px]">
+                출생일 *
+              </FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -357,17 +360,13 @@ export default function AddPetTab({
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
-                    className="text-sm"
                     styles={{
                       caption_label: { display: "none" },
-                      dropdown_month: {},
-                      dropdown_year: {},
                       button: { fontSize: 14 },
                     }}
                     captionLayout="dropdown-buttons"
                     fromYear={1990}
                     toYear={2023}
-                    required
                     showOutsideDays
                     fixedWeeks
                     locale={ko}

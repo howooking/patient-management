@@ -21,6 +21,7 @@ import LoadingSpinner from "@/components/common/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSelectedPet } from "@/lib/store/pets";
+import EditPetDialog from "./edit-pet-dialog";
 
 type Props = {
   setActiveTab: Dispatch<SetStateAction<string>>;
@@ -60,6 +61,7 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
       setFilteredPets([]);
       return;
     }
+
     setNoResult(false);
     setFilteredPets(filtered ?? []);
   }, 300);
@@ -77,7 +79,11 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
   }
 
   if (isLoading || isFetching) {
-    return <LoadingSpinner />;
+    return (
+      <div className="h-[480px]">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
@@ -88,16 +94,15 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
         placeholder="환자이름, 환자번호로 검색해주세요"
         onChange={(e) => handleSearch(e.target.value)}
       />
-
-      {noResult ? (
-        <NoResult setActiveTab={setActiveTab} />
-      ) : (
-        <Table className="mt-4">
-          <ScrollArea className="h-[430px]">
+      <ScrollArea className="h-[440px]">
+        {noResult ? (
+          <NoResult setActiveTab={setActiveTab} />
+        ) : (
+          <Table className="mt-4">
             <TableHeader>
               <TableRow>
-                <TableHead className="text-center">이름</TableHead>
                 <TableHead className="text-center">번호</TableHead>
+                <TableHead className="text-center">이름</TableHead>
                 <TableHead className="text-center">종</TableHead>
                 <TableHead className="text-center">품종</TableHead>
                 <TableHead className="text-center">성별</TableHead>
@@ -106,14 +111,14 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
                 <TableHead className="text-center">선택</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
-              {filteredPets?.map((pet) => (
+            <TableBody className="overflow-auto h-[200px]">
+              {filteredPets.map((pet) => (
                 <TableRow key={pet.pet_id}>
                   <TableCell className="text-center text-xs">
-                    {pet.name}
+                    {pet.hos_pet_id}
                   </TableCell>
                   <TableCell className="text-center text-xs">
-                    {pet.hos_pet_id}
+                    {pet.name}
                   </TableCell>
                   <TableCell className="text-center text-xs">
                     {pet.species}
@@ -128,13 +133,7 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
                     {pet.birth}
                   </TableCell>
                   <TableCell className="text-center text-xs">
-                    <Button
-                      className="px-2 py-0.5 h-6"
-                      size="sm"
-                      variant="ghost"
-                    >
-                      선택
-                    </Button>
+                    <EditPetDialog pet={pet} setDialogOpen={setDialogOpen} />
                   </TableCell>
                   <TableCell className="text-center text-xs">
                     <Button
@@ -151,9 +150,9 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
                 </TableRow>
               ))}
             </TableBody>
-          </ScrollArea>
-        </Table>
-      )}
+          </Table>
+        )}
+      </ScrollArea>
     </div>
   );
 }

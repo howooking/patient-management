@@ -35,7 +35,7 @@ export default function PetTab({ search, setDialogOpen }: Props) {
         <AddPetTab setDialogOpen={setDialogOpen} />
       </TabsContent>
 
-      <TabsContent value="search" className="mt-0 h-full">
+      <TabsContent value="search" className="mt-0">
         <SearchTab setActiveTab={setActiveTab} setDialogOpen={setDialogOpen} />
       </TabsContent>
     </Tabs>
