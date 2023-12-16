@@ -1,10 +1,11 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
@@ -16,6 +17,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import type { Pet } from "@/types/type";
+import { PiCat, PiDog } from "react-icons/pi";
+
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -60,6 +63,7 @@ import { FaTrash } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useSelectedPet } from "@/lib/store/pets";
+import calculateAge from "@/lib/helper-function/pet-age";
 
 const formSchema = z.object({
   name: z.string({ required_error: "이름을 입력해주세요." }),
@@ -78,11 +82,16 @@ const formSchema = z.object({
 });
 
 type Props = {
+  selectedPetDialog?: boolean;
   pet: Pet;
-  setDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setDialogOpen?: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function EditPetDialog({ pet, setDialogOpen }: Props) {
+export default function EditPetDialog({
+  pet,
+  setDialogOpen,
+  selectedPetDialog,
+}: Props) {
   const [breedOpen, setBreedOpen] = useState(false);
   const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>(
     pet.species
@@ -129,7 +138,9 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
         });
         setSelectedPet(data.pet);
         router.refresh();
-        setDialogOpen(false);
+        if (setDialogOpen) {
+          setDialogOpen(false);
+        }
         return;
       }
 
@@ -149,9 +160,25 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="px-2 py-0.5 h-6" size="sm" variant="ghost">
-          선택
-        </Button>
+        {selectedPetDialog ? (
+          <div className="flex items-center gap-3 px-2 py-1 rounded-md border-2 text-xs cursor-pointer">
+            <div className="flex items-center gap-1">
+              {pet.species === "canine" ? (
+                <PiDog size={20} />
+              ) : (
+                <PiCat size={20} />
+              )}
+              <span>{pet.name}</span>
+            </div>
+            <span>{pet.breed}</span>
+            <span>{pet.gender.toUpperCase()}</span>
+            <span>{calculateAge(pet?.birth)}</span>
+          </div>
+        ) : (
+          <Button className="px-2 py-0.5 h-6" size="sm" variant="ghost">
+            선택
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

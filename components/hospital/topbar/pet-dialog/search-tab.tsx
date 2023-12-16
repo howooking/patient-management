@@ -111,7 +111,7 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
                 <TableHead className="text-center">선택</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="overflow-auto h-[200px]">
+            <TableBody>
               {filteredPets.map((pet) => (
                 <TableRow key={pet.pet_id}>
                   <TableCell className="text-center text-xs">
