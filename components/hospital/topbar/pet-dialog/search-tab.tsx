@@ -3,7 +3,6 @@
 import { Input } from "@/components/ui/input";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import { IoSearch } from "react-icons/io5";
 
 import {
   Table,

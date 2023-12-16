@@ -3,7 +3,7 @@
 import React from "react";
 
 import { useSelectedPet } from "@/lib/store/pets";
-import EditPetDialog from "./pet-dialog/edit-pet-dialog";
+import SelectedPetDialog from "./selected-pet-dialog";
 
 export default function SelectedPet() {
   const { selectedPet } = useSelectedPet();
@@ -11,5 +11,5 @@ export default function SelectedPet() {
   if (!selectedPet) {
     return;
   }
-  return <EditPetDialog selectedPetDialog pet={selectedPet} />;
+  return <SelectedPetDialog selectedPet={selectedPet} />;
 }
