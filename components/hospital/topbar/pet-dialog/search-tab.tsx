@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import useTanstackPets from "@/hooks/useTanstackPet";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Pet } from "@/types/type";
 import NoResult from "./no-result";
 import LoadingSpinner from "@/components/common/loading-spinner";
@@ -39,13 +39,13 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
     inputRef.current?.focus();
   }, [isFetching]);
 
-  const [filteredPets, setFilteredPets] = useState<Pet[]>([]);
+  const [filteredPets, setFilteredPets] = useState<Pet[]>(data?.pets ?? []);
   const [noResult, setNoResult] = useState(false);
 
   const handleSearch = useDebouncedCallback((searchTerm: string) => {
     if (searchTerm === "") {
       setNoResult(false);
-      setFilteredPets([]);
+      setFilteredPets(data?.pets ?? []);
       return;
     }
 
@@ -91,7 +91,7 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
         ref={inputRef}
         className="border-foreground"
         placeholder="환자이름, 환자번호로 검색해주세요"
-        onChange={(e) => handleSearch(e.target.value)}
+        onChange={(e) => handleSearch(e.target.value ?? "")}
       />
       <ScrollArea className="h-[440px] pt-1">
         {noResult ? (

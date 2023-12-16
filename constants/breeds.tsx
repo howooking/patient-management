@@ -52,6 +52,7 @@ export const CANINE_BREEDS = [
   "Berger Picard",
   "Berner Laufhund",
   "Bernese Mountain Dog",
+  "Bichon Frize",
   "Billy",
   "Black and Tan Coonhound",
   "Black and Tan Virginia Foxhound",

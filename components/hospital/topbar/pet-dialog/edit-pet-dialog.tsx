@@ -252,7 +252,7 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
                   name="breed"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel className="text-sm font-semibold w-[70px]">
+                      <FormLabel className="text-sm font-semibold w-[70px] my-[2px]">
                         품종 *
                       </FormLabel>
                       <Popover open={breedOpen} onOpenChange={setBreedOpen}>
@@ -366,7 +366,7 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
                   name="birth"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel className="text-sm font-semibold w-[70px]">
+                      <FormLabel className="text-sm font-semibold w-[70px] my-[2px]">
                         출생일 *
                       </FormLabel>
                       <Popover>
