@@ -72,6 +72,11 @@
   background-color: #aaa;
 } */
 
+.sidebar_hieght {
+  height: 100svh;
+  height: 100vh;
+}
+
 /* CALENDAR */
 
 .rdp-caption_dropdowns {

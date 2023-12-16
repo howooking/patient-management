@@ -36,7 +36,7 @@ export default async function Sidebar() {
 
   return (
     <ToggleProvider>
-      <div className="bg-background border-r border-input flex flex-col h-screen">
+      <div className="bg-background border-r border-input flex flex-col sidebar_hieght">
         <SidebarLogo defaultHospitalId={vet?.default_hos_id} />
 
         <Separator />

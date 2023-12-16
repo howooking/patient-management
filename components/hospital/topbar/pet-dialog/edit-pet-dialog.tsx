@@ -64,6 +64,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useSelectedPet } from "@/lib/store/pets";
 import calculateAge from "@/lib/helper-function/pet-age";
+import DeletePet from "./delete-pet";
 
 const formSchema = z.object({
   name: z.string({ required_error: "이름을 입력해주세요." }),
@@ -118,7 +119,7 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
       const response = await fetch(`${location.origin}/api/pet`, {
@@ -153,32 +154,16 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {/* {selectedPetDialog ? (
-          <div className="flex items-center gap-3 px-2 py-1 rounded-md border-2 text-xs cursor-pointer">
-            <div className="flex items-center gap-1">
-              {pet.species === "canine" ? (
-                <PiDog size={20} />
-              ) : (
-                <PiCat size={20} />
-              )}
-              <span>{pet.name}</span>
-            </div>
-            <span>{pet.breed}</span>
-            <span>{pet.gender.toUpperCase()}</span>
-            <span>{calculateAge(pet?.birth)}</span>
-          </div>
-        ) : ( */}
         <Button className="px-2 py-0.5 h-6" size="sm" variant="ghost">
           선택
         </Button>
-        {/* )} */}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogDescription asChild>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(handleSubmit)}
                 className="grid grid-cols-2 gap-4"
               >
                 {/* 이름 */}
@@ -533,9 +518,7 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
                       )}
                     />
                   </Button>
-                  <Button size="icon" variant="outline" type="button">
-                    <FaTrash />
-                  </Button>
+                  <DeletePet petId={pet.pet_id} setDialogOpen={setDialogOpen} />
                 </div>
               </form>
             </Form>

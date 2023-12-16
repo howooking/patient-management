@@ -133,3 +133,31 @@ export async function PUT(request: NextRequest) {
     { status: 200 }
   );
 }
+
+export async function DELETE(request: NextRequest) {
+  const { petId } = await request.json();
+
+  const supabase = await createSupabaseServerClient();
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (!user || userError) {
+    return NextResponse.json({ error: "session error" }, { status: 401 });
+  }
+
+  const { data: pet, error: petError } = await supabase
+    .from("pets")
+    .delete()
+    .match({ pet_id: petId });
+
+  if (petError) {
+    return NextResponse.json({ error: petError.message }, { status: 500 });
+  }
+
+  return NextResponse.json(
+    { success: "successfully deleted pet", pet },
+    { status: 200 }
+  );
+}

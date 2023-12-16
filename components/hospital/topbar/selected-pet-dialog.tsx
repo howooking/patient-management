@@ -133,7 +133,7 @@ export default function SelectedPetDialog({
     });
   }, [selectedPet, form]);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
       const response = await fetch(`${location.origin}/api/pet`, {
@@ -192,7 +192,7 @@ export default function SelectedPetDialog({
           <DialogDescription asChild>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(handleSubmit)}
                 className="grid grid-cols-2 gap-4"
               >
                 {/* 이름 */}
@@ -533,24 +533,19 @@ export default function SelectedPetDialog({
                   />
                 </div>
 
-                <div className="flex items-center gap-4 col-span-2">
-                  <Button
-                    type="submit"
-                    className="font-semibold flex-1"
-                    disabled={isSubmitting}
-                  >
-                    환자 정보 수정
-                    <AiOutlineLoading3Quarters
-                      className={cn(
-                        "ml-2",
-                        isSubmitting ? "animate-spin" : "hidden"
-                      )}
-                    />
-                  </Button>
-                  <Button size="icon" variant="outline" type="button">
-                    <FaTrash />
-                  </Button>
-                </div>
+                <Button
+                  type="submit"
+                  className="font-semibold col-span-2"
+                  disabled={isSubmitting}
+                >
+                  환자 정보 수정
+                  <AiOutlineLoading3Quarters
+                    className={cn(
+                      "ml-2",
+                      isSubmitting ? "animate-spin" : "hidden"
+                    )}
+                  />
+                </Button>
               </form>
             </Form>
           </DialogDescription>
