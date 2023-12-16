@@ -46,7 +46,7 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  await supabase.auth.getSession();
+  // await supabase.auth.getSession();
 
   return response;
 }
