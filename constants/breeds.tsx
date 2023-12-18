@@ -561,6 +561,7 @@ export const COLORS = [
   { label: "Gray", value: "gray", hex: ["#85838F"] },
   { label: "Black & White", value: "black-white", hex: ["#000000", "#ffffff"] },
   { label: "Black & Brown", value: "black-brown", hex: ["#000000", "#552F1A"] },
+  { label: "Gold & white", value: "gold-white", hex: ["#F5E1B3", "#ffffff"] },
   { label: "Brown & White", value: "brown-white", hex: ["#552F1A", "#ffffff"] },
   { label: "Chaos", value: "chaos", hex: ["#000000", "#E2BA7F", "#ffffff"] },
 ] as const;

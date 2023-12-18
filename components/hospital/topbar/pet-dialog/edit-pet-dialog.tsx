@@ -59,11 +59,9 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Textarea } from "@/components/ui/textarea";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { FaTrash } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useSelectedPet } from "@/lib/store/pets";
-import calculateAge from "@/lib/helper-function/pet-age";
 import DeletePet from "./delete-pet";
 
 const formSchema = z.object({

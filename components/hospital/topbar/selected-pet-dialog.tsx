@@ -18,8 +18,7 @@ import {
 } from "@/components/ui/form";
 import type { Pet } from "@/types/type";
 import { PiCat, PiDog } from "react-icons/pi";
-
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -59,7 +58,6 @@ import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Textarea } from "@/components/ui/textarea";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { FaTrash } from "react-icons/fa6";
 import { usePathname, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useSelectedPet } from "@/lib/store/pets";
@@ -87,9 +85,7 @@ export default function SelectedPetDialog({
   selectedPet: Pet;
 }) {
   const [breedOpen, setBreedOpen] = useState(false);
-  const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>(
-    () => selectedPet.species
-  );
+  const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -131,6 +127,7 @@ export default function SelectedPetDialog({
       microchipNumber: selectedPet.microchip_no ?? undefined,
       memo: selectedPet.memo ?? undefined,
     });
+    setSelectedSpecies(selectedPet.species);
   }, [selectedPet, form]);
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -172,8 +169,8 @@ export default function SelectedPetDialog({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <div className="flex items-center gap-3 px-2 py-1 rounded-md border-2 text-xs cursor-pointer">
-          <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2 px-2 py-1 rounded-md border-2 text-xs cursor-pointer">
+          <div className="flex items-center gap-1 font-semibold">
             {selectedPet.species === "canine" ? (
               <PiDog size={20} />
             ) : (
@@ -206,9 +203,9 @@ export default function SelectedPetDialog({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          {...field}
-                          className="h-8 text-sm"
                           autoFocus={false}
+                          {...field}
+                          className="h-8 text-sm name"
                         />
                       </FormControl>
                       <FormMessage className="text-xs" />
@@ -236,7 +233,11 @@ export default function SelectedPetDialog({
                         </TooltipProvider>
                       </FormLabel>
                       <FormControl>
-                        <Input {...field} className="h-8 text-sm" />
+                        <Input
+                          autoFocus={false}
+                          {...field}
+                          className="h-8 text-sm"
+                        />
                       </FormControl>
 
                       <FormMessage className="text-xs" />
@@ -510,7 +511,11 @@ export default function SelectedPetDialog({
                         마이크로칩 번호
                       </FormLabel>
                       <FormControl>
-                        <Input {...field} className="h-8 text-sm" />
+                        <Input
+                          autoFocus={false}
+                          {...field}
+                          className="h-8 text-sm"
+                        />
                       </FormControl>
 
                       <FormMessage />
