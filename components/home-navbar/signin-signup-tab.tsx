@@ -11,7 +11,7 @@ export default function SigninSignupTab({ signin }: { signin?: boolean }) {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab}>
-      <TabsList className="w-full absolute left-0 -top-14 bg-background">
+      <TabsList className="w-full absolute left-0 -top-14 bg-background space-x-2">
         <TabsTrigger
           value="signin"
           className="w-full data-[state=active]:font-semibold data-[state=active]:border-2"

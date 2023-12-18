@@ -1,9 +1,8 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Input } from "@/components/ui/input";
 import { useDebouncedCallback } from "use-debounce";
-
 import {
   Table,
   TableBody,
@@ -14,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import useTanstackPets from "@/hooks/useTanstackPet";
 import { usePathname } from "next/navigation";
-import { Pet } from "@/types/type";
+import type { Pet } from "@/types/type";
 import NoResult from "./no-result";
 import LoadingSpinner from "@/components/common/loading-spinner";
 import { Button } from "@/components/ui/button";
@@ -91,7 +90,7 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
         ref={inputRef}
         className="border-foreground"
         placeholder="환자이름, 환자번호로 검색해주세요"
-        onChange={(e) => handleSearch(e.target.value ?? "")}
+        onChange={(e) => handleSearch(e.target.value)}
       />
       <ScrollArea className="h-[440px] pt-1">
         {noResult ? (

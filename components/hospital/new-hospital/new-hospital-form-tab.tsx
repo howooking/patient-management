@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -20,42 +19,45 @@ import { useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useSelectedPet } from "@/lib/store/pets";
 
 const formSchema = z.object({
-  name: z.string(),
+  name: z.string({ required_error: "병원 이름을 입력해주세요." }),
   businessNumber: z
-    .string()
+    .string({ required_error: "사업자 번호를 입력해주세요." })
     .refine((data) => !data.includes("-"), {
       message: "- 없이 숫자만 입력해주세요",
     })
     .refine((data) => /^\d{10}$/.test(data), {
       message: "사업자 등록번호는 10자리 숫자 입니다.",
     }),
-  address: z.string(),
-  phoneNumber: z.string().refine((data) => !data.includes("-"), {
-    message: "- 없이 숫자만 입력해주세요",
-  }),
+  address: z.string({ required_error: "병원 주소를 입력해주세요." }),
+  phoneNumber: z
+    .string({ required_error: "병원 전호번호를 입력해주세요." })
+    .refine((data) => !data.includes("-"), {
+      message: "- 없이 숫자만 입력해주세요",
+    }),
 });
 
 export default function NewHospitalFormTab() {
   const router = useRouter();
-
   const { toast } = useToast();
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setSelectedPet } = useSelectedPet();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      businessNumber: "",
-      address: "",
-      phoneNumber: "",
+      name: undefined,
+      businessNumber: undefined,
+      address: undefined,
+      phoneNumber: undefined,
     },
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { address, businessNumber, name, phoneNumber } = values;
+
     setIsSubmitting(true);
 
     try {
@@ -76,6 +78,7 @@ export default function NewHospitalFormTab() {
           title: "사업자등록증 확인 후 생성이 완료됩니다",
           description: "잠시 후 페이지가 이동합니다.",
         });
+        setSelectedPet(null);
         router.replace(`/hospital/${data.hospitalId}`);
         router.refresh();
         return;
@@ -105,13 +108,11 @@ export default function NewHospitalFormTab() {
               <FormLabel className="text-lg font-semibold">병원 이름</FormLabel>
               <FormControl>
                 <Input
-                  required
                   placeholder="벳터핸즈 동물메디컬센터"
                   {...field}
                   className="border-2 h-[40px] px-2"
                 />
               </FormControl>
-              <FormDescription>풀네임 사용이 권장됩니다.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -126,7 +127,6 @@ export default function NewHospitalFormTab() {
               </FormLabel>
               <FormControl>
                 <Input
-                  required
                   placeholder="5303601377"
                   {...field}
                   className="border-2 h-[40px] px-2"
@@ -138,8 +138,6 @@ export default function NewHospitalFormTab() {
                   junsgk@gmail.com
                 </span>
                 으로 보내주세요.
-                <br />
-                사진은 확인 후 바로 폐기됩니다.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -155,7 +153,6 @@ export default function NewHospitalFormTab() {
               <FormLabel className="text-lg font-semibold">병원 주소</FormLabel>
               <FormControl>
                 <Input
-                  required
                   placeholder="서울특별시 송파구 삼전로 56"
                   {...field}
                   className="border-2 h-[40px] px-2"
@@ -177,7 +174,6 @@ export default function NewHospitalFormTab() {
               </FormLabel>
               <FormControl>
                 <Input
-                  required
                   placeholder="0226514187"
                   {...field}
                   className="border-2 h-[40px] px-2"

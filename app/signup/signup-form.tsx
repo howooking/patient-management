@@ -7,7 +7,6 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useRouter } from "next/navigation";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -43,10 +42,8 @@ export default function SignupForm({
   namePlaceholder: string;
 }) {
   const router = useRouter();
-
   const { toast } = useToast();
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const supabase = createSupabaseBrowserClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,6 +54,12 @@ export default function SignupForm({
     },
   });
 
+  const onGoBack = async () => {
+    await supabase.auth.signOut();
+    router.push("/");
+  };
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
 
@@ -72,7 +75,7 @@ export default function SignupForm({
       if (response.ok) {
         toast({
           title: `${values.vetName}님 반갑습니다!`,
-          description: "담당자 면허증 확인 후 가입이 승인됩니다.",
+          description: "담당자가 면허증 확인 후 가입이 승인됩니다.",
         });
         router.push("/wait");
         return;
@@ -92,8 +95,6 @@ export default function SignupForm({
     }
   };
 
-  const supabase = createSupabaseBrowserClient();
-
   return (
     <section className="w-1/2 p-24 space-y-12">
       <div className="flex items-center gap-2">
@@ -112,13 +113,11 @@ export default function SignupForm({
                 </FormLabel>
                 <FormControl>
                   <Input
-                    required
                     placeholder="김머머"
                     {...field}
                     className="border-2 h-[52px] px-4"
                   />
                 </FormControl>
-                <FormDescription>실명 사용이 권장됩니다.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -133,7 +132,6 @@ export default function SignupForm({
                 </FormLabel>
                 <FormControl>
                   <Input
-                    required
                     placeholder="20124"
                     {...field}
                     className="border-2 h-[52px] px-4"
@@ -181,16 +179,8 @@ export default function SignupForm({
             )}
           />
           <div className="flex gap-2 justify-end">
-            <Button
-              type="button"
-              variant="outline"
-              asChild
-              onClick={() => {
-                supabase.auth.signOut();
-                router.refresh();
-              }}
-            >
-              <Link href="/">뒤로가기</Link>
+            <Button type="button" variant="outline" onClick={onGoBack}>
+              뒤로가기
             </Button>
 
             <Button

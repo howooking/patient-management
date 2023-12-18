@@ -8,10 +8,10 @@ export default function Logo({ link }: { link?: boolean }) {
     <>
       {link ? (
         <Link href="/">
-          <Image src={logo} alt="vetterhands logo" width={48} />
+          <Image src={logo} alt="vetterhands logo" width={48} priority />
         </Link>
       ) : (
-        <Image src={logo} alt="vetterhands logo" width={48} />
+        <Image src={logo} alt="vetterhands logo" width={48} priority />
       )}
     </>
   );

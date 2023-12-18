@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-import Logo from "@/components/common/logo";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import HospitalSearchTab from "./hospital-search-tab";
 import NewHospitalFormTab from "./new-hospital-form-tab";
@@ -18,17 +16,14 @@ export default function FormTabs({ query }: { query: string }) {
   }, [activeTab, router]);
 
   return (
-    <section className="w-1/2 p-6">
-      <div className="flex items-center gap-2 mb-2">
-        <Logo />
-        <h2 className="text-2xl">병원 추가</h2>
-      </div>
+    <section className="w-1/2 p-6 overflow-y-auto">
+      <h2 className="text-2xl mb-2">병원 추가</h2>
       <Tabs
         defaultValue="search"
         value={activeTab}
         onValueChange={setActiveTab}
       >
-        <TabsList className="w-full">
+        <TabsList className="w-full gap-2">
           <TabsTrigger className="w-full" value="search">
             병원검색
           </TabsTrigger>

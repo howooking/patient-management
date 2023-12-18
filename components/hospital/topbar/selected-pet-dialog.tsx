@@ -88,7 +88,7 @@ export default function SelectedPetDialog({
 }) {
   const [breedOpen, setBreedOpen] = useState(false);
   const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>(
-    selectedPet.species
+    () => selectedPet.species
   );
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -205,7 +205,11 @@ export default function SelectedPetDialog({
                         이름*
                       </FormLabel>
                       <FormControl>
-                        <Input {...field} className="h-8 text-sm" />
+                        <Input
+                          {...field}
+                          className="h-8 text-sm"
+                          autoFocus={false}
+                        />
                       </FormControl>
                       <FormMessage className="text-xs" />
                     </FormItem>

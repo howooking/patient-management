@@ -13,7 +13,7 @@ export default function SidebarLogo({
 }) {
   const { collapse } = useSidebarCollapse();
   return (
-    <section>
+    <>
       <Link
         href={`/hospital/${defaultHospitalId}`}
         className="p-2 flex items-center gap-1"
@@ -34,6 +34,6 @@ export default function SidebarLogo({
           priority
         />
       </Link>
-    </section>
+    </>
   );
 }

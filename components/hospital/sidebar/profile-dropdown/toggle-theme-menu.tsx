@@ -2,7 +2,6 @@
 
 import { useTheme } from "next-themes";
 import { FaRegSun, FaRegMoon } from "react-icons/fa6";
-
 import {
   DropdownMenuItem,
   DropdownMenuPortal,

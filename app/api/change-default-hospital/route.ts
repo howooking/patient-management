@@ -33,7 +33,7 @@ export async function PATCH(request: NextRequest) {
   }
 
   return NextResponse.json(
-    { success: "successfully inserted hospital", hospitalId },
+    { success: "successfully changed hospital", hospitalId },
     { status: 200 }
   );
 }

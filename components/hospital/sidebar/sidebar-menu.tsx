@@ -1,7 +1,6 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-
 import {
   Tooltip,
   TooltipContent,
@@ -16,10 +15,10 @@ type Props = {
   title: string;
   icon: JSX.Element;
   ready: boolean;
-  path: string;
+  href: string;
 };
 
-export default function SidebarMenu({ icon, ready, title, path }: Props) {
+export default function SidebarMenu({ icon, ready, title, href }: Props) {
   const { collapse } = useSidebarCollapse();
 
   const pathname = usePathname();
@@ -35,9 +34,9 @@ export default function SidebarMenu({ icon, ready, title, path }: Props) {
               disabled={!ready}
               variant="ghost"
               className={cn(
-                collapse ? "w-[40px] justify-center" : "w-[240px] justify-start"
+                collapse ? "w-[40px] justify-center" : "w-[224px] justify-start"
               )}
-              onClick={() => router.push(`/hospital/${hospitalId}/${path}`)}
+              onClick={() => router.push(`/hospital/${hospitalId}/${href}`)}
             >
               <div className="flex items-center gap-4">
                 {icon}

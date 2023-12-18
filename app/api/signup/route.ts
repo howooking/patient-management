@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
     error: userError,
   } = await supabase.auth.getUser();
 
-  if (!user || !userError) {
+  if (!user || userError) {
     return NextResponse.json({ error: "session error" }, { status: 401 });
   }
 

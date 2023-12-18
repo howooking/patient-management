@@ -3,7 +3,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -19,6 +18,7 @@ import { useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { useSelectedPet } from "@/lib/store/pets";
 
 const formSchema = z.object({
   name: z
@@ -28,8 +28,8 @@ const formSchema = z.object({
 
 export default function VirtualHospitalFormTab() {
   const router = useRouter();
-
   const { toast } = useToast();
+  const { setSelectedPet } = useSelectedPet();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -59,6 +59,7 @@ export default function VirtualHospitalFormTab() {
           title: "가상 병원이 생성되었습니다.",
           description: "잠시 후 페이지가 이동합니다.",
         });
+        setSelectedPet(null);
         router.replace(`/hospital/${data.hospitalId}`);
         router.refresh();
         return;
@@ -90,7 +91,6 @@ export default function VirtualHospitalFormTab() {
               </FormLabel>
               <FormControl>
                 <Input
-                  required
                   placeholder="나만의 공간"
                   {...field}
                   className="border-2 h-[40px] px-2"

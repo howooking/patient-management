@@ -13,7 +13,7 @@ export default function ToggleProvider({
   return (
     <aside
       className={cn(
-        collapse ? "w-[56px]" : "w-[256px]",
+        collapse ? "w-[56px]" : "w-[240px]",
         "transition-all",
         "shadow-sm"
       )}

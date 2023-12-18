@@ -1,12 +1,11 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-
-import ProfileDropdown from "./profile-dropdown";
-import CollapseButton from "./collapse-button";
 import ToggleProvider from "./toggle-provider";
-import SidebarMenu from "./sidebar-menu";
 import SidebarLogo from "./sidebar-logo";
-import { SIDEBAR_NAV_MENUS } from "@/constants/menus";
 import { Separator } from "@/components/ui/separator";
+import { SIDEBAR_NAV_MENUS } from "@/constants/menus";
+import SidebarMenu from "./sidebar-menu";
+import CollapseButton from "./collapse-button";
+import ProfileDropdown from "./profile-dropdown";
 
 export default async function Sidebar() {
   const supabase = await createSupabaseServerClient(true);
@@ -48,7 +47,7 @@ export default async function Sidebar() {
                 key={menu.title}
                 title={menu.title}
                 icon={menu.icon}
-                path={menu.path}
+                href={menu.href}
                 ready={menu.ready}
               />
             ))}

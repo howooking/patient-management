@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { FormEvent, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useSelectedPet } from "@/lib/store/pets";
 
 export default function HospitalSearchTab() {
   const [selecteHospital, setSelectedHospital] = useState<{
@@ -13,11 +14,10 @@ export default function HospitalSearchTab() {
   }>();
 
   const router = useRouter();
-
   const { toast } = useToast();
+  const { setSelectedPet } = useSelectedPet();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -38,6 +38,7 @@ export default function HospitalSearchTab() {
           title: "병원에서 승인 후 병원이 추가됩니다.",
           description: "잠시 후 페이지가 이동합니다.",
         });
+        setSelectedPet(null);
         router.replace(`/hospital/${data.hospitalId}`);
         router.refresh();
         return;

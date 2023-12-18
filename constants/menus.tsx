@@ -1,3 +1,9 @@
+export const NAV_MENUS = [
+  { title: "상품", href: "/products" },
+  { title: "요금제", href: "/pricing" },
+  { title: "Contact", href: "/contact" },
+];
+
 import {
   FaHospital,
   FaStethoscope,
@@ -9,32 +15,32 @@ import {
 export const SIDEBAR_NAV_MENUS = [
   {
     title: "병원홈",
-    path: "/",
+    href: "/",
     icon: <FaHospital size={20} />,
     ready: true,
   },
   {
     title: "입원실",
-    path: "icu",
+    href: "icu",
     icon: <FaClipboardCheck size={20} />,
     ready: true,
   },
   {
     title: "진료실",
-    path: "diagnose",
+    href: "diagnose",
     icon: <FaStethoscope size={20} />,
     ready: true,
   },
   {
     title: "수술실",
-    path: "surgery",
+    href: "surgery",
     icon: <FaMaskFace size={20} />,
     ready: true,
   },
   {
     title: "건강검진",
     icon: <FaListCheck size={20} />,
-    path: "healthCheck",
+    href: "healthCheck",
     ready: false,
   },
 ];

@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-
 import SignupForm from "./signup-form";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import Attraction from "@/components/common/attraction";

@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
-
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import Navbar from "@/components/home-navbar/navbar";
+import HomeNavbar from "@/components/home-navbar";
 
 export default async function Home() {
   const supabase = await createSupabaseServerClient(true);
@@ -13,7 +12,7 @@ export default async function Home() {
   if (!user) {
     return (
       <>
-        <Navbar />
+        <HomeNavbar />
         <h1 className="pt-16">안녕하세요</h1>
       </>
     );
@@ -27,7 +26,7 @@ export default async function Home() {
 
   // supabase 에러
   if (vetError) {
-    // 회원이 아닌 경우 vetError.code === "PGRST116" 제외
+    // 회원이 아닌 경우 vet === null이 되는데 이 떄 vetError.code === "PGRST116" 가 발생
     if (vetError.code !== "PGRST116") throw new Error(vetError.message);
   }
 

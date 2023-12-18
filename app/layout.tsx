@@ -1,5 +1,4 @@
 import { Nanum_Gothic } from "next/font/google";
-
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/common/theme-provider";
@@ -31,7 +30,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TanstackProvider>
-            <main className="min-h-screen flex flex-col">{children}</main>
+            <div className="min-h-screen flex flex-col">{children}</div>
           </TanstackProvider>
           <Toaster />
         </ThemeProvider>

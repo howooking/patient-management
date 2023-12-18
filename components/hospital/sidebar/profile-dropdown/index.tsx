@@ -32,7 +32,6 @@ export default function ProfileDropdown({
 }: Props) {
   return (
     <DropdownMenu>
-      {/* client component */}
       <ProfileDropdownTrigger name={name} src={src} email={email} />
 
       <DropdownMenuContent className="w-[240px] ml-2 border-input shadow-lg">

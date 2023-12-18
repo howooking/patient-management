@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import Sidebar from "@/components/hospital/sidebar";
 import TopBar from "@/components/hospital/topbar";
@@ -31,9 +30,7 @@ export default async function SpaceLayout({
     .single();
 
   if (vetError) {
-    if (vetError.code !== "PGRST116") {
-      throw new Error(vetError.message);
-    }
+    if (vetError.code !== "PGRST116") throw new Error(vetError.message);
   }
 
   if (!vet) {
@@ -49,7 +46,7 @@ export default async function SpaceLayout({
       <Sidebar />
       <div className="flex-1 h-screen overflow-y-auto">
         <TopBar />
-        {children}
+        <main className="p-2">{children}</main>
       </div>
     </div>
   );

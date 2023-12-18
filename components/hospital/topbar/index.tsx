@@ -1,10 +1,8 @@
 import { FaRegBell } from "react-icons/fa6";
 import { FaRegStickyNote } from "react-icons/fa";
-
 import { Button } from "@/components/ui/button";
 import HospitalSelect from "./hospital-select";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import AddPetButton from "./add-pet-button";
 import CurrentPage from "./current-page";
 import PetDialog from "./pet-dialog";
 import SelectedPet from "./selected-pet";

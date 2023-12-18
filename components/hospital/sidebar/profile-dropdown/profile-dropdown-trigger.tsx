@@ -2,7 +2,6 @@
 
 import { HiDotsVertical } from "react-icons/hi";
 import React from "react";
-import { FaAngleUp } from "react-icons/fa6";
 import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 import { cn } from "@/lib/utils";
 import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";

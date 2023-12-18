@@ -14,7 +14,8 @@ export async function GET(request: Request) {
     } = await supabase.auth.exchangeCodeForSession(code);
 
     if (sessionError) {
-      return NextResponse.redirect(`${requestUrl.origin}/auth-error`);
+      // return NextResponse.redirect(`${requestUrl.origin}/auth-error`);
+      throw new Error(sessionError.message);
     }
 
     const { data: vet, error: vetError } = await supabase

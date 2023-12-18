@@ -2,7 +2,6 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { FaStar, FaRegStar } from "react-icons/fa6";
-
 import {
   Select,
   SelectContent,

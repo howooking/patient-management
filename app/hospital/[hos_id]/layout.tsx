@@ -1,6 +1,4 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
-import React from "react";
 
 export default async function layout({
   children,
@@ -19,10 +17,6 @@ export default async function layout({
     error: sessionError,
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    redirect("/");
-  }
-
   if (sessionError) {
     throw new Error(sessionError.message);
   }
@@ -38,8 +32,7 @@ export default async function layout({
           )
         `
       )
-      .match({ hos_id })
-      .match({ vet_id: user?.id })
+      .match({ vet_id: user?.id, hos_id })
       .single();
 
   if (hospitalVetMappingError) {
@@ -47,16 +40,12 @@ export default async function layout({
   }
 
   if (!hospitalVetMapping.hospitals?.business_approved) {
-    return (
-      <div className="p-2">
-        사업자 등록증을 junsgk@gmail.com으로 보내주세요.
-      </div>
-    );
+    return "사업자 등록증을 junsgk@gmail.com으로 보내주세요.";
   }
 
   if (!hospitalVetMapping.vet_approved) {
-    return <div className="p-2">병원 승인 후 참여가 가능합니다.</div>;
+    return "병원 승인 후 참여가 가능합니다.";
   }
 
-  return <>{children}</>;
+  return <main className="p-4">{children}</main>;
 }

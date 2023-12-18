@@ -12,7 +12,7 @@ export default function SigninSignupDialog({ signin }: { signin?: boolean }) {
       </DialogTrigger>
 
       <DialogContent className="w-[320px] p-4 rounded-md">
-        <SigninSignupTab signin={signin} />
+        <SigninSignupTab signin />
       </DialogContent>
     </Dialog>
   );
