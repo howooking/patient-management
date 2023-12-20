@@ -22,7 +22,11 @@ export default function SidebarMenu({ icon, ready, title, href }: Props) {
   const { collapse } = useSidebarCollapse();
 
   const pathname = usePathname();
+
   const hospitalId = pathname.split("/")[2];
+  const currnetRoute = pathname.split("/")[3] ?? "/";
+  console.log(currnetRoute, href);
+
   const router = useRouter();
 
   return (
@@ -34,7 +38,10 @@ export default function SidebarMenu({ icon, ready, title, href }: Props) {
               disabled={!ready}
               variant="ghost"
               className={cn(
-                collapse ? "w-[40px] justify-center" : "w-[224px] justify-start"
+                collapse
+                  ? "w-[40px] justify-center"
+                  : "w-[224px] justify-start",
+                currnetRoute === href && "bg-primary/10"
               )}
               onClick={() => router.push(`/hospital/${hospitalId}/${href}`)}
             >
