@@ -127,7 +127,6 @@ export interface Database {
           microchip_no: string | null
           name: string
           pet_id: number
-          register_no: string | null
           species: string
           state: string | null
         }
@@ -144,7 +143,6 @@ export interface Database {
           microchip_no?: string | null
           name: string
           pet_id?: number
-          register_no?: string | null
           species: string
           state?: string | null
         }
@@ -161,13 +159,179 @@ export interface Database {
           microchip_no?: string | null
           name?: string
           pet_id?: number
-          register_no?: string | null
           species?: string
           state?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "pets_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          }
+        ]
+      }
+      test_results: {
+        Row: {
+          created_at: string | null
+          hos_id: string | null
+          memo: string | null
+          pet_id: number | null
+          result: string
+          test_result_id: number
+          test_set_id: number | null
+          tested_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          hos_id?: string | null
+          memo?: string | null
+          pet_id?: number | null
+          result: string
+          test_result_id?: number
+          test_set_id?: number | null
+          tested_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          hos_id?: string | null
+          memo?: string | null
+          pet_id?: number | null
+          result?: string
+          test_result_id?: number
+          test_set_id?: number | null
+          tested_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_results_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "test_results_pet_id_fkey"
+            columns: ["pet_id"]
+            isOneToOne: false
+            referencedRelation: "pets"
+            referencedColumns: ["pet_id"]
+          },
+          {
+            foreignKeyName: "test_results_test_set_id_fkey"
+            columns: ["test_set_id"]
+            isOneToOne: false
+            referencedRelation: "test_set"
+            referencedColumns: ["test_set_id"]
+          }
+        ]
+      }
+      test_set: {
+        Row: {
+          created_at: string
+          description_1: string | null
+          description_3: string | null
+          description2: string | null
+          diagnosis: string | null
+          ge: string | null
+          gt: string | null
+          le: string | null
+          lt: string | null
+          order: number | null
+          select_value: string | null
+          species: string | null
+          test_id: string
+          test_set_id: number
+        }
+        Insert: {
+          created_at?: string
+          description_1?: string | null
+          description_3?: string | null
+          description2?: string | null
+          diagnosis?: string | null
+          ge?: string | null
+          gt?: string | null
+          le?: string | null
+          lt?: string | null
+          order?: number | null
+          select_value?: string | null
+          species?: string | null
+          test_id: string
+          test_set_id?: number
+        }
+        Update: {
+          created_at?: string
+          description_1?: string | null
+          description_3?: string | null
+          description2?: string | null
+          diagnosis?: string | null
+          ge?: string | null
+          gt?: string | null
+          le?: string | null
+          lt?: string | null
+          order?: number | null
+          select_value?: string | null
+          species?: string | null
+          test_id?: string
+          test_set_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "test_set_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "tests"
+            referencedColumns: ["test_id"]
+          }
+        ]
+      }
+      tests: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          general_name: string
+          group: string | null
+          hos_id: string
+          name: string
+          original_name: string
+          tag: string | null
+          test_id: string
+          type: string | null
+          unit: string | null
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          general_name: string
+          group?: string | null
+          hos_id: string
+          name: string
+          original_name: string
+          tag?: string | null
+          test_id?: string
+          type?: string | null
+          unit?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          general_name?: string
+          group?: string | null
+          hos_id?: string
+          name?: string
+          original_name?: string
+          tag?: string | null
+          test_id?: string
+          type?: string | null
+          unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tests_hos_id_fkey"
             columns: ["hos_id"]
             isOneToOne: false
             referencedRelation: "hospitals"
