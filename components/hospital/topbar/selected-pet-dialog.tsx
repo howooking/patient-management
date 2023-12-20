@@ -49,7 +49,7 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
+import { calculateAge, cn } from "@/lib/utils";
 import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { CANINE_BREEDS, COLORS, FELINE_BREEDS } from "@/constants/breeds";
@@ -61,23 +61,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { usePathname, useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useSelectedPet } from "@/lib/store/pets";
-import calculateAge from "@/lib/helper-function/pet-age";
-
-const formSchema = z.object({
-  name: z.string({ required_error: "이름을 입력해주세요." }),
-  hospitalPetId: z.string({ required_error: "환자 번호를 입력해주세요." }),
-  species: z.enum(["canine", "feline"], {
-    required_error: "종을 선택해주세요.",
-  }),
-  breed: z.string({ required_error: "품종을 선택해주세요." }),
-  gender: z.enum(["cm", "sf", "im", "if", "un"], {
-    required_error: "성별을 선택헤주세요.",
-  }),
-  birth: z.date({ required_error: "출생일을 선택해주세요." }),
-  color: z.string().optional(),
-  microchipNumber: z.string().optional(),
-  memo: z.string().optional(),
-});
+import { addAndEditPetFormSchema } from "@/lib/zod/form-schemas";
 
 export default function SelectedPetDialog({
   selectedPet,
@@ -100,8 +84,8 @@ export default function SelectedPetDialog({
 
   const BREEDS = selectedSpecies === "canine" ? CANINE_BREEDS : FELINE_BREEDS;
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof addAndEditPetFormSchema>>({
+    resolver: zodResolver(addAndEditPetFormSchema),
     defaultValues: {
       name: selectedPet.name,
       hospitalPetId: selectedPet.hos_pet_id,
@@ -130,7 +114,9 @@ export default function SelectedPetDialog({
     setSelectedSpecies(selectedPet.species);
   }, [selectedPet, form]);
 
-  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (
+    values: z.infer<typeof addAndEditPetFormSchema>
+  ) => {
     setIsSubmitting(true);
     try {
       const response = await fetch(`${location.origin}/api/pet`, {

@@ -19,12 +19,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useSelectedPet } from "@/lib/store/pets";
-
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(2, { message: "병원 이름은 두글자 이상으로 만들어주세요." }),
-});
+import { virtualHospitalFormSchema } from "@/lib/zod/form-schemas";
 
 export default function VirtualHospitalFormTab() {
   const router = useRouter();
@@ -33,14 +28,16 @@ export default function VirtualHospitalFormTab() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof virtualHospitalFormSchema>>({
+    resolver: zodResolver(virtualHospitalFormSchema),
     defaultValues: {
       name: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (
+    values: z.infer<typeof virtualHospitalFormSchema>
+  ) => {
     setIsSubmitting(true);
 
     try {

@@ -17,32 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import type { Pet } from "@/types/type";
-import { PiCat, PiDog } from "react-icons/pi";
-
-import { Dispatch, SetStateAction, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { FaRegCircleQuestion } from "react-icons/fa6";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Command,
   CommandEmpty,
@@ -50,35 +25,43 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { cn } from "@/lib/utils";
-import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useToast } from "@/components/ui/use-toast";
 import { CANINE_BREEDS, COLORS, FELINE_BREEDS } from "@/constants/breeds";
-import { Calendar } from "@/components/ui/calendar";
+import { useSelectedPet } from "@/lib/store/pets";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { Textarea } from "@/components/ui/textarea";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { usePathname, useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
-import { useSelectedPet } from "@/lib/store/pets";
+import { Dispatch, SetStateAction, useState } from "react";
+import { useForm } from "react-hook-form";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { FaRegCircleQuestion } from "react-icons/fa6";
+import * as z from "zod";
 import DeletePet from "./delete-pet";
-
-const formSchema = z.object({
-  name: z.string({ required_error: "이름을 입력해주세요." }),
-  hospitalPetId: z.string({ required_error: "환자 번호를 입력해주세요." }),
-  species: z.enum(["canine", "feline"], {
-    required_error: "종을 선택해주세요.",
-  }),
-  breed: z.string({ required_error: "품종을 선택해주세요." }),
-  gender: z.enum(["cm", "sf", "im", "if", "un"], {
-    required_error: "성별을 선택헤주세요.",
-  }),
-  birth: z.date({ required_error: "출생일을 선택해주세요." }),
-  color: z.string().optional(),
-  microchipNumber: z.string().optional(),
-  memo: z.string().optional(),
-});
+import { addAndEditPetFormSchema } from "@/lib/zod/form-schemas";
 
 type Props = {
   pet: Pet;
@@ -102,8 +85,8 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
 
   const BREEDS = selectedSpecies === "canine" ? CANINE_BREEDS : FELINE_BREEDS;
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof addAndEditPetFormSchema>>({
+    resolver: zodResolver(addAndEditPetFormSchema),
     defaultValues: {
       name: pet.name,
       hospitalPetId: pet.hos_pet_id,
@@ -117,7 +100,9 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
     },
   });
 
-  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+  const handleSubmit = async (
+    values: z.infer<typeof addAndEditPetFormSchema>
+  ) => {
     setIsSubmitting(true);
     try {
       const response = await fetch(`${location.origin}/api/pet`, {

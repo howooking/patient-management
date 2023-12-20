@@ -52,22 +52,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useSelectedPet } from "@/lib/store/pets";
-
-const formSchema = z.object({
-  name: z.string({ required_error: "이름을 입력해주세요." }),
-  hospitalPetId: z.string({ required_error: "환자 번호를 입력해주세요." }),
-  species: z.enum(["canine", "feline"], {
-    required_error: "종을 선택해주세요.",
-  }),
-  breed: z.string({ required_error: "품종을 선택해주세요." }),
-  gender: z.enum(["cm", "sf", "im", "if", "un"], {
-    required_error: "성별을 선택헤주세요.",
-  }),
-  birth: z.date({ required_error: "출생일을 선택해주세요." }),
-  color: z.string().optional(),
-  microchipNumber: z.string().optional(),
-  memo: z.string().optional(),
-});
+import { addAndEditPetFormSchema } from "@/lib/zod/form-schemas";
 
 export default function AddPetTab({
   setDialogOpen,
@@ -92,8 +77,8 @@ export default function AddPetTab({
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof addAndEditPetFormSchema>>({
+    resolver: zodResolver(addAndEditPetFormSchema),
     defaultValues: {
       name: undefined,
       hospitalPetId: undefined,
@@ -107,7 +92,7 @@ export default function AddPetTab({
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof addAndEditPetFormSchema>) => {
     setIsSubmitting(true);
 
     try {

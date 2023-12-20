@@ -20,32 +20,15 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useSelectedPet } from "@/lib/store/pets";
-
-const formSchema = z.object({
-  name: z.string({ required_error: "병원 이름을 입력해주세요." }),
-  businessNumber: z
-    .string({ required_error: "사업자 번호를 입력해주세요." })
-    .refine((data) => !data.includes("-"), {
-      message: "- 없이 숫자만 입력해주세요",
-    })
-    .refine((data) => /^\d{10}$/.test(data), {
-      message: "사업자 등록번호는 10자리 숫자 입니다.",
-    }),
-  address: z.string({ required_error: "병원 주소를 입력해주세요." }),
-  phoneNumber: z
-    .string({ required_error: "병원 전호번호를 입력해주세요." })
-    .refine((data) => !data.includes("-"), {
-      message: "- 없이 숫자만 입력해주세요",
-    }),
-});
+import { newHospitalFormSchema } from "@/lib/zod/form-schemas";
 
 export default function NewHospitalFormTab() {
   const router = useRouter();
   const { toast } = useToast();
   const { setSelectedPet } = useSelectedPet();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof newHospitalFormSchema>>({
+    resolver: zodResolver(newHospitalFormSchema),
     defaultValues: {
       name: undefined,
       businessNumber: undefined,
@@ -55,7 +38,7 @@ export default function NewHospitalFormTab() {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof newHospitalFormSchema>) => {
     const { address, businessNumber, name, phoneNumber } = values;
 
     setIsSubmitting(true);

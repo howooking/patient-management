@@ -23,18 +23,7 @@ import Logo from "@/components/common/logo";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
-
-const formSchema = z.object({
-  vetName: z.string().min(2, {
-    message: "2자 이상 실명을 입력해주세요.",
-  }),
-  licenseNumber: z.string().refine((data) => /^\d{5}$/.test(data), {
-    message: "면허번호는 5자리 숫자입니다.",
-  }),
-  agree: z
-    .boolean()
-    .refine((data) => data, { message: "약관에 동의해주세요." }),
-});
+import { signupFormSchema } from "@/lib/zod/form-schemas";
 
 export default function SignupForm({
   namePlaceholder,
@@ -45,8 +34,8 @@ export default function SignupForm({
   const { toast } = useToast();
   const supabase = createSupabaseBrowserClient();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof signupFormSchema>>({
+    resolver: zodResolver(signupFormSchema),
     defaultValues: {
       vetName: namePlaceholder,
       licenseNumber: "",
@@ -60,7 +49,7 @@ export default function SignupForm({
   };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
     setIsSubmitting(true);
 
     try {

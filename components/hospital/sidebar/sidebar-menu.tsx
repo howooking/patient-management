@@ -25,7 +25,6 @@ export default function SidebarMenu({ icon, ready, title, href }: Props) {
 
   const hospitalId = pathname.split("/")[2];
   const currnetRoute = pathname.split("/")[3] ?? "/";
-  console.log(currnetRoute, href);
 
   const router = useRouter();
 
