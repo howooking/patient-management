@@ -231,8 +231,8 @@ export interface Database {
         Row: {
           created_at: string
           description_1: string | null
+          description_2: string | null
           description_3: string | null
-          description2: string | null
           diagnosis: string | null
           ge: string | null
           gt: string | null
@@ -247,8 +247,8 @@ export interface Database {
         Insert: {
           created_at?: string
           description_1?: string | null
+          description_2?: string | null
           description_3?: string | null
-          description2?: string | null
           diagnosis?: string | null
           ge?: string | null
           gt?: string | null
@@ -263,8 +263,8 @@ export interface Database {
         Update: {
           created_at?: string
           description_1?: string | null
+          description_2?: string | null
           description_3?: string | null
-          description2?: string | null
           diagnosis?: string | null
           ge?: string | null
           gt?: string | null
