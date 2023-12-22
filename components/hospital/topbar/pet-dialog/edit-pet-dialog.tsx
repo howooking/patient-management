@@ -1,6 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import {
   Dialog,
   DialogContent,
@@ -16,15 +24,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import type { Pet } from "@/types/type";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
@@ -46,22 +45,24 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import { CANINE_BREEDS, COLORS, FELINE_BREEDS } from "@/constants/breeds";
 import { useSelectedPet } from "@/lib/store/pets";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { addAndEditPetFormSchema } from "@/lib/zod/form-schemas";
+import type { Pet } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import * as z from "zod";
 import DeletePet from "./delete-pet";
-import { addAndEditPetFormSchema } from "@/lib/zod/form-schemas";
 
 type Props = {
   pet: Pet;
@@ -69,19 +70,15 @@ type Props = {
 };
 
 export default function EditPetDialog({ pet, setDialogOpen }: Props) {
+  const supabase = createSupabaseBrowserClient();
+
   const [breedOpen, setBreedOpen] = useState(false);
   const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>(
     pet.species
   );
 
-  const { toast } = useToast();
   const router = useRouter();
   const { setSelectedPet } = useSelectedPet();
-
-  const path = usePathname();
-  const hospitalId = path.split("/")[2];
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const BREEDS = selectedSpecies === "canine" ? CANINE_BREEDS : FELINE_BREEDS;
 
@@ -100,32 +97,63 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
     },
   });
 
-  const handleSubmit = async (
-    values: z.infer<typeof addAndEditPetFormSchema>
-  ) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const onSubmit = async (values: z.infer<typeof addAndEditPetFormSchema>) => {
+    const {
+      birth,
+      breed,
+      gender,
+      hospitalPetId,
+      name,
+      species,
+      color,
+      memo,
+      microchipNumber,
+    } = values;
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${location.origin}/api/pet`, {
-        method: "PUT",
-        body: JSON.stringify({ ...values, hospitalId, petId: pet.pet_id }),
-      });
+      const { data, error: petError } = await supabase
+        .from("pets")
+        .update({
+          hos_pet_id: hospitalPetId,
+          birth: format(birth, "yyyy-MM-dd"),
+          species,
+          breed,
+          gender,
+          name,
+          color,
+          memo,
+          microchip_no: microchipNumber,
+        })
+        .match({ pet_id: pet?.pet_id })
+        .select()
+        .single();
 
-      const data = await response.json();
-      if (response.ok) {
+      if (petError) {
         toast({
-          title: "환자정보가 수정되었습니다.",
+          variant: "destructive",
+          title: petError.message,
+          description: "관리자에게 문의하세요",
         });
-        setSelectedPet(data.pet);
-        router.refresh();
-        setDialogOpen(false);
         return;
       }
 
       toast({
-        variant: "destructive",
-        title: data.error,
-        description: "관리자에게 문의하세요",
+        title: "환자정보가 수정되었습니다.",
       });
+      setSelectedPet(data);
+      router.refresh();
+      setDialogOpen(false);
+      return;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error, "error while updating a pet");
@@ -146,7 +174,7 @@ export default function EditPetDialog({ pet, setDialogOpen }: Props) {
           <DialogDescription asChild>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(handleSubmit)}
+                onSubmit={form.handleSubmit(onSubmit)}
                 className="grid grid-cols-2 gap-4"
               >
                 {/* 이름 */}

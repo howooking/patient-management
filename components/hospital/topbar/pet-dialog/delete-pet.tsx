@@ -1,8 +1,9 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import { useSelectedPet } from "@/lib/store/pets";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -15,37 +16,47 @@ export default function DeletePet({
   petId: number;
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
 }) {
-  const [isDeleting, setIsDeleting] = useState(false);
-  const { toast } = useToast();
+  const supabase = createSupabaseBrowserClient();
+
   const { selectedPet, setSelectedPet } = useSelectedPet();
   const { refresh } = useRouter();
 
+  const [isDeleting, setIsDeleting] = useState(false);
   const handleDelete = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
     setIsDeleting(true);
     try {
-      const response = await fetch(`${location.origin}/api/pet`, {
-        method: "DELETE",
-        body: JSON.stringify({ petId }),
-      });
+      const { data, error: petError } = await supabase
+        .from("pets")
+        .delete()
+        .match({ pet_id: petId });
 
-      const data = await response.json();
-      if (response.ok) {
+      if (petError) {
         toast({
-          title: "환자가 삭제되었습니다.",
+          variant: "destructive",
+          title: petError.message,
+          description: "관리자에게 문의하세요",
         });
-        if (selectedPet?.pet_id === petId) {
-          setSelectedPet(null);
-        }
-        refresh();
-        setDialogOpen(false);
         return;
       }
 
       toast({
-        variant: "destructive",
-        title: data.error,
-        description: "관리자에게 문의하세요",
+        title: "환자가 삭제되었습니다.",
       });
+
+      if (selectedPet?.pet_id === petId) {
+        setSelectedPet(null);
+      }
+      refresh();
+      setDialogOpen(false);
+      return;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error, "error while deleting a pet");

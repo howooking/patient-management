@@ -122,7 +122,7 @@ export default function AddPetTab({
         .insert({
           hos_pet_id: hospitalPetId,
           hos_id: hospitalId,
-          birth: birth.toString(),
+          birth: format(birth, "yyyy-MM-dd"),
           species,
           breed,
           gender,
