@@ -1,8 +1,5 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,17 +11,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
-import { useState } from "react";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 import { useSelectedPet } from "@/lib/store/pets";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
 import { newHospitalFormSchema } from "@/lib/zod/form-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import * as z from "zod";
 
 export default function NewHospitalFormTab() {
+  const supabase = createSupabaseBrowserClient();
+
   const router = useRouter();
-  const { toast } = useToast();
   const { setSelectedPet } = useSelectedPet();
 
   const form = useForm<z.infer<typeof newHospitalFormSchema>>({
@@ -41,37 +43,64 @@ export default function NewHospitalFormTab() {
   const onSubmit = async (values: z.infer<typeof newHospitalFormSchema>) => {
     const { address, businessNumber, name, phoneNumber } = values;
 
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${location.origin}/api/new-hospital`, {
-        method: "POST",
-        body: JSON.stringify({
-          type: "real",
+      const { data, error: hospitalError } = await supabase
+        .from("hospitals")
+        .insert({
+          business_no: businessNumber,
+          master_id: user.id,
           name,
-          businessNumber,
           address,
-          phoneNumber,
-        }),
-      });
-      const data = await response.json();
+          phone_no: phoneNumber,
+        })
+        .select("hos_id")
+        .single();
 
-      if (response.ok) {
+      if (hospitalError) {
         toast({
-          title: "사업자등록증 확인 후 생성이 완료됩니다",
-          description: "잠시 후 페이지가 이동합니다.",
+          variant: "destructive",
+          title: hospitalError.message,
+          description: "관리자에게 문의하세요",
         });
-        setSelectedPet(null);
-        router.replace(`/hospital/${data.hospitalId}`);
-        router.refresh();
+        return;
+      }
+
+      const { error: mappingError } = await supabase
+        .from("hos_vet_mapping")
+        .insert({
+          hos_id: data.hos_id,
+          vet_id: user.id,
+          vet_approved: true,
+          rank: 1,
+        });
+
+      if (mappingError) {
+        toast({
+          variant: "destructive",
+          title: mappingError.message,
+          description: "관리자에게 문의하세요",
+        });
         return;
       }
 
       toast({
-        variant: "destructive",
-        title: data.error,
-        description: "관리자에게 문의하세요",
+        title: "사업자등록증 확인 후 생성이 완료됩니다",
+        description: "잠시 후 페이지가 이동합니다.",
       });
+      setSelectedPet(null);
+      router.replace(`/hospital/${data.hos_id}`);
+      router.refresh();
+      return;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error, "error while adding a hospital");

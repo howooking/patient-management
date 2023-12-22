@@ -23,10 +23,8 @@ export default function HospitalSearchTab() {
   const { setSelectedPet } = useSelectedPet();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    setIsSubmitting(true);
 
     const {
       data: { user },
@@ -35,6 +33,8 @@ export default function HospitalSearchTab() {
     if (!user) {
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       const { data, error } = await supabase
@@ -87,7 +87,7 @@ export default function HospitalSearchTab() {
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit}>
+    <form className="space-y-6" onSubmit={onSubmit}>
       <div>
         <div className="text-lg font-semibold mb-2">병원 이름</div>
         <SearchBox

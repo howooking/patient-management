@@ -42,7 +42,7 @@ export default async function layout({
   }
 
   // TODO : 안내 메세지 별도 컴포넌트로
-  if (!hospitalVetMapping.hospitals) {
+  if (!hospitalVetMapping.hospitals?.business_approved) {
     return "사업자 등록증을 junsgk@gmail.com으로 보내주세요.";
   }
 

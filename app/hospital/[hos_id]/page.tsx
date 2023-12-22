@@ -17,7 +17,7 @@ export default async function page({ params }: { params: { hos_id: string } }) {
   return (
     <>
       <Howoo />
-      <pre>{JSON.stringify(pets, null, 2)}</pre>;
+      <pre>{JSON.stringify(pets, null, 2)}</pre>
     </>
   );
 }

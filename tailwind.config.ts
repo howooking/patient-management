@@ -18,6 +18,19 @@ module.exports = {
 
     extend: {
       colors: {
+        primaryTeal: {
+          "50": "#effefc",
+          "100": "#c7fff8",
+          "200": "#90fff2",
+          "300": "#51f7ea",
+          "400": "#1de4da",
+          "500": "#04c8c1",
+          "600": "#00adab",
+          "700": "#058080",
+          "800": "#0a6465",
+          "900": "#0d5454",
+          "950": "#003033",
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
