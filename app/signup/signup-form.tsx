@@ -1,13 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useRouter } from "next/navigation";
+import Logo from "@/components/common/logo";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -18,12 +13,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import Logo from "@/components/common/logo";
+import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { signupFormSchema } from "@/lib/zod/form-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import * as z from "zod";
 
 export default function SignupForm({
   namePlaceholder,
@@ -31,19 +31,19 @@ export default function SignupForm({
   namePlaceholder: string;
 }) {
   const router = useRouter();
-  const { toast } = useToast();
+
   const supabase = createSupabaseBrowserClient();
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
       vetName: namePlaceholder,
-      licenseNumber: "",
+      licenseNumber: undefined,
       agree: false,
     },
   });
 
-  const onGoBack = async () => {
+  const handleGoBack = async () => {
     await supabase.auth.signOut();
     router.push("/");
   };
@@ -52,33 +52,44 @@ export default function SignupForm({
   const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
     setIsSubmitting(true);
 
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
     try {
-      const response = await fetch(`${location.origin}/api/signup`, {
-        method: "POST",
-        body: JSON.stringify({
-          vetName: values.vetName,
-          licenseNumber: values.licenseNumber,
-        }),
+      const { error } = await supabase.from("vets").insert({
+        vet_id: user.id,
+        vet_email: user.email as string,
+        vet_name: values.vetName,
+        license_no: Number(values.licenseNumber),
+        avatar_url: user.user_metadata.avatar_url as string,
       });
 
-      if (response.ok) {
+      if (error) {
         toast({
-          title: `${values.vetName}님 반갑습니다!`,
-          description: "담당자가 면허증 확인 후 가입이 승인됩니다.",
+          variant: "destructive",
+          title: error.message,
+          description: "관리자에게 문의하세요",
         });
-        router.push("/wait");
         return;
       }
 
-      const data = await response.json();
+      toast({
+        title: `${values.vetName}님 반갑습니다!`,
+        description: "담당자가 면허증 확인 후 가입이 승인됩니다.",
+      });
+      router.push("/wait");
+      return;
+    } catch (error) {
       toast({
         variant: "destructive",
-        title: data.error,
+        title: "error while signing up",
         description: "관리자에게 문의하세요",
       });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error, "error while signing up");
     } finally {
       setIsSubmitting(false);
     }
@@ -168,7 +179,7 @@ export default function SignupForm({
             )}
           />
           <div className="flex gap-2 justify-end">
-            <Button type="button" variant="outline" onClick={onGoBack}>
+            <Button type="button" variant="outline" onClick={handleGoBack}>
               뒤로가기
             </Button>
 
