@@ -15,6 +15,7 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useSelectedPet } from "@/lib/store/pets";
 import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type Props = {
   hospitalList:
@@ -33,6 +34,8 @@ export default function HospitalSelect({
   hospitalList,
   defaultHospitalId,
 }: Props) {
+  const supabase = createSupabaseBrowserClient();
+
   const pathname = usePathname();
   const hospitalId = pathname.split("/")[2];
   const router = useRouter();
@@ -43,36 +46,38 @@ export default function HospitalSelect({
   const [isChanging, setIsChanging] = useState(false);
 
   const handleClick = async (hospitalId: string) => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
     setIsChanging(true);
 
     try {
-      const response = await fetch(
-        `${location.origin}/api/change-default-hospital`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            hospitalId,
-          }),
-        }
-      );
+      const { error: vetError } = await supabase
+        .from("vets")
+        .update({ default_hos_id: hospitalId })
+        .match({ vet_id: user.id });
 
-      if (response.ok) {
+      if (vetError) {
         toast({
-          title: "기본 병원이 변경되었습니다.",
+          variant: "destructive",
+          title: vetError.message,
+          description: "관리자에게 문의하세요",
         });
-        router.refresh();
         return;
       }
-
-      const data = await response.json();
       toast({
-        variant: "destructive",
-        title: data.error,
-        description: "관리자에게 문의하세요",
+        title: "기본 병원이 변경되었습니다.",
       });
+      router.refresh();
+      return;
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error(error, "error while signing up");
+      console.error(error, "error while changing default hospital");
     } finally {
       setIsChanging(false);
     }
