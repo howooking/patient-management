@@ -1,16 +1,14 @@
 "use client";
 
-import { Dispatch, SetStateAction, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { format } from "date-fns";
-import { ko } from "date-fns/locale";
-import { FaRegCircleQuestion } from "react-icons/fa6";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import {
   Form,
   FormControl,
@@ -20,8 +18,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
-import { cn } from "@/lib/utils";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -29,44 +31,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import { CANINE_BREEDS, COLORS, FELINE_BREEDS } from "@/constants/breeds";
-import { Calendar } from "@/components/ui/calendar";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/use-toast";
+import { CANINE_BREEDS, COLORS, FELINE_BREEDS } from "@/constants/breeds";
 import { useSelectedPet } from "@/lib/store/pets";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
 import { addAndEditPetFormSchema } from "@/lib/zod/form-schemas";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
+import { ko } from "date-fns/locale";
+import { usePathname, useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useState } from "react";
+import { useForm } from "react-hook-form";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { FaRegCircleQuestion } from "react-icons/fa6";
+import * as z from "zod";
 
 export default function AddPetTab({
   setDialogOpen,
 }: {
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const supabase = createSupabaseBrowserClient();
+
   const { setSelectedPet } = useSelectedPet();
 
   const router = useRouter();
 
   const path = usePathname();
   const hospitalId = path.split("/")[2];
-
-  const { toast } = useToast();
 
   const [breedOpen, setBreedOpen] = useState(false);
 
@@ -93,30 +94,62 @@ export default function AddPetTab({
   });
 
   const onSubmit = async (values: z.infer<typeof addAndEditPetFormSchema>) => {
+    const {
+      birth,
+      breed,
+      gender,
+      hospitalPetId,
+      name,
+      species,
+      color,
+      memo,
+      microchipNumber,
+    } = values;
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`${location.origin}/api/pet`, {
-        method: "POST",
-        body: JSON.stringify({ ...values, hospitalId }),
-      });
+      const { data: pet, error: petError } = await supabase
+        .from("pets")
+        .insert({
+          hos_pet_id: hospitalPetId,
+          hos_id: hospitalId,
+          birth: birth.toString(),
+          species,
+          breed,
+          gender,
+          name,
+          color,
+          memo,
+          microchip_no: microchipNumber,
+        })
+        .select()
+        .single();
 
-      const data = await response.json();
-      if (response.ok) {
+      if (petError) {
         toast({
-          title: "환자가 등록되었습니다.",
+          variant: "destructive",
+          title: petError.message,
+          description: "관리자에게 문의하세요",
         });
-        setSelectedPet(data.pet);
-        router.refresh();
-        setDialogOpen(false);
         return;
       }
 
       toast({
-        variant: "destructive",
-        title: data.error,
-        description: "관리자에게 문의하세요",
+        title: "환자가 등록되었습니다.",
       });
+      setSelectedPet(pet);
+      router.refresh();
+      setDialogOpen(false);
+      return;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error, "error while adding a new pet");
