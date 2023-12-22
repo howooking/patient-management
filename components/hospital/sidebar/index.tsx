@@ -1,11 +1,11 @@
-import { createSupabaseServerClient } from "@/lib/supabase/server";
-import ToggleProvider from "./toggle-provider";
-import SidebarLogo from "./sidebar-logo";
 import { Separator } from "@/components/ui/separator";
 import { SIDEBAR_NAV_MENUS } from "@/constants/menus";
-import SidebarMenu from "./sidebar-menu";
+import { createSupabaseServerClient } from "@/lib/supabase/server";
+import HospitalSelect from "./hospital-select";
 import CollapseButton from "./collapse-button";
 import ProfileDropdown from "./profile-dropdown";
+import SidebarMenu from "./sidebar-menu";
+import ToggleProvider from "./toggle-provider";
 
 export default async function Sidebar() {
   const supabase = await createSupabaseServerClient(true);
@@ -36,8 +36,10 @@ export default async function Sidebar() {
   return (
     <ToggleProvider>
       <div className="bg-background border-r border-input flex flex-col sidebar_hieght">
-        <SidebarLogo defaultHospitalId={vet?.default_hos_id} />
-
+        <HospitalSelect
+          defaultHospitalId={vet?.default_hos_id}
+          hospitalList={vet?.hos_vet_mapping}
+        />
         <Separator />
 
         <nav className="flex-1 p-2">

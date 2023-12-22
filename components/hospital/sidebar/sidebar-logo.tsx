@@ -1,5 +1,7 @@
 "use client";
 
+console.log("미사용");
+
 import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 import Image from "next/image";
 import logo from "@/public/logos/logo1.png";

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { useSelectedPet } from "@/lib/store/pets";
+import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 
 type Props = {
   hospitalList:
@@ -77,9 +78,12 @@ export default function HospitalSelect({
     }
   };
 
+  const { collapse } = useSidebarCollapse();
+
   return (
-    <div className="min-w-[240px]">
+    <div className="p-2">
       <Select
+        disabled={collapse}
         onValueChange={(value: string) => {
           router.push(`/hospital/${value}`);
           setSelectedPet(null);

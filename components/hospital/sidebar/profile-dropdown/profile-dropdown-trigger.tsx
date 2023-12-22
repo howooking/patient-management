@@ -16,8 +16,7 @@ export default function ProfileDropdownTrigger({ src, name, email }: Props) {
     <DropdownMenuTrigger asChild>
       <Button
         className={cn(
-          "flex gap-4 w-full bg-background rounded-none border-input text-foreground h-16 hover:bg-muted border-t justify-between shadow-none",
-          collapse ? "p-3" : "p-4"
+          "flex gap-4 w-full bg-background rounded-none border-input text-foreground h-13 hover:bg-muted border-t justify-between shadow-none p-3"
         )}
       >
         <div className="flex items-center gap-4">

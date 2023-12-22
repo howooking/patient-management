@@ -43,7 +43,7 @@ export async function GET(request: Request) {
 
     // 기본 병원 설정이 안된 경우, vet.default_hos_id === null
     if (!vet.default_hos_id) {
-      return NextResponse.redirect(`${requestUrl.origin}/new-hospital`);
+      return NextResponse.redirect(`${requestUrl.origin}/new-hospital/search`);
     }
 
     // 기본 병원 설정이 된 경우, vet.default_hos_id !== null

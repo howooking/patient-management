@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import Howoo from "./howoo";
 
 export default async function page({ params }: { params: { hos_id: string } }) {
   const { hos_id } = params;
@@ -13,5 +14,10 @@ export default async function page({ params }: { params: { hos_id: string } }) {
     throw new Error(petsError.message);
   }
 
-  return <pre>{JSON.stringify(pets, null, 2)}</pre>;
+  return (
+    <>
+      <Howoo />
+      <pre>{JSON.stringify(pets, null, 2)}</pre>;
+    </>
+  );
 }
