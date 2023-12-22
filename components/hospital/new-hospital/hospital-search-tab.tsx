@@ -1,13 +1,18 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
-import SearchBox from "./search-box";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { FormEvent, useState } from "react";
-import { cn } from "@/lib/utils";
 import { useSelectedPet } from "@/lib/store/pets";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import SearchBox from "./search-box";
 
 export default function HospitalSearchTab() {
+  const supabase = createSupabaseBrowserClient();
+
   const [selecteHospital, setSelectedHospital] = useState<{
     hospitalId: string;
     value: string | null;
@@ -20,38 +25,62 @@ export default function HospitalSearchTab() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     setIsSubmitting(true);
 
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
     try {
-      const response = await fetch(`${location.origin}/api/new-hospital`, {
-        method: "POST",
-        body: JSON.stringify({
-          type: "search",
-          selectedHospitalId: selecteHospital?.hospitalId,
-        }),
-      });
+      const { data, error } = await supabase
+        .from("hos_vet_mapping")
+        .insert({ hos_id: selecteHospital?.hospitalId!, vet_id: user.id })
+        .select("*")
+        .single();
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (error) {
         toast({
-          title: "병원에서 승인 후 병원이 추가됩니다.",
-          description: "잠시 후 페이지가 이동합니다.",
+          variant: "destructive",
+          title: error.message,
+          description: "관리자에게 문의하세요",
         });
-        setSelectedPet(null);
-        router.replace(`/hospital/${data.hospitalId}`);
-        router.refresh();
+        return;
+      }
+
+      const { error: defaultHosError } = await supabase
+        .from("vets")
+        .update({ default_hos_id: data.hos_id })
+        .eq("vet_id", user.id)
+        .is("default_hos_id", null);
+
+      if (defaultHosError) {
+        toast({
+          variant: "destructive",
+          title: defaultHosError.message,
+          description: "관리자에게 문의하세요",
+        });
         return;
       }
 
       toast({
+        title: "병원에서 승인 후 병원이 추가됩니다.",
+        description: "잠시 후 페이지가 이동합니다.",
+      });
+      setSelectedPet(null);
+      router.replace(`/hospital/${data.hos_id}`);
+      router.refresh();
+      return;
+    } catch (error) {
+      toast({
         variant: "destructive",
-        title: data.error,
+        title: "병원 검색 추가 중 오류 발생",
         description: "관리자에게 문의하세요",
       });
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error, "error while adding a hospital");
     } finally {
       setIsSubmitting(false);
     }
@@ -71,7 +100,11 @@ export default function HospitalSearchTab() {
           뒤로가기
         </Button>
 
-        <Button type="submit" className="font-semibold" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          className="font-semibold"
+          disabled={isSubmitting || !selecteHospital}
+        >
           병원추가
           <AiOutlineLoading3Quarters
             className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
