@@ -93,6 +93,21 @@ export default function NewHospitalFormTab() {
         return;
       }
 
+      const { error: defaultHosError } = await supabase
+        .from("vets")
+        .update({ default_hos_id: data.hos_id })
+        .eq("vet_id", user.id)
+        .is("default_hos_id", null);
+
+      if (defaultHosError) {
+        toast({
+          variant: "destructive",
+          title: defaultHosError.message,
+          description: "관리자에게 문의하세요",
+        });
+        return;
+      }
+
       toast({
         title: "사업자등록증 확인 후 생성이 완료됩니다",
         description: "잠시 후 페이지가 이동합니다.",

@@ -76,11 +76,8 @@ export default function HospitalSearchTab() {
       router.refresh();
       return;
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "병원 검색 추가 중 오류 발생",
-        description: "관리자에게 문의하세요",
-      });
+      // eslint-disable-next-line no-console
+      console.error(error, "error while adding a hospital");
     } finally {
       setIsSubmitting(false);
     }
