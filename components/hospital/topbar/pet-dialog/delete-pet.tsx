@@ -33,7 +33,7 @@ export default function DeletePet({
 
     setIsDeleting(true);
     try {
-      const { data, error: petError } = await supabase
+      const { error: petError } = await supabase
         .from("pets")
         .delete()
         .match({ pet_id: petId });

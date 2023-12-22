@@ -15,17 +15,11 @@ export default function PetTab({ search, setDialogOpen }: Props) {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full">
-      <TabsList className="w-full absolute left-0 -top-14 bg-background flex gap-4">
-        <TabsTrigger
-          value="add"
-          className="w-full data-[state=active]:font-semibold data-[state=active]:border-2"
-        >
+      <TabsList className="w-full absolute left-0 -top-14 bg-muted flex gap-4">
+        <TabsTrigger value="add" className="w-full">
           환자 등록
         </TabsTrigger>
-        <TabsTrigger
-          value="search"
-          className="w-full data-[state=active]:font-semibold data-[state=active]:border-2"
-        >
+        <TabsTrigger value="search" className="w-full">
           환자 검색
         </TabsTrigger>
       </TabsList>

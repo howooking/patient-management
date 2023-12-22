@@ -1,6 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
 import {
   Dialog,
   DialogContent,
@@ -16,20 +24,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import type { Pet } from "@/types/type";
-import { PiCat, PiDog } from "react-icons/pi";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { FaRegCircleQuestion } from "react-icons/fa6";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -37,50 +38,46 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import { calculateAge, cn } from "@/lib/utils";
-import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
-import { ScrollArea } from "@/components/ui/scroll-area";
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { toast } from "@/components/ui/use-toast";
 import { CANINE_BREEDS, COLORS, FELINE_BREEDS } from "@/constants/breeds";
-import { Calendar } from "@/components/ui/calendar";
+import { useSelectedPet } from "@/lib/store/pets";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { calculateAge, cn } from "@/lib/utils";
+import { addAndEditPetFormSchema } from "@/lib/zod/form-schemas";
+import type { Pet } from "@/types/type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { Textarea } from "@/components/ui/textarea";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { usePathname, useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
-import { useSelectedPet } from "@/lib/store/pets";
-import { addAndEditPetFormSchema } from "@/lib/zod/form-schemas";
+import { FaRegCircleQuestion } from "react-icons/fa6";
+import { PiCat, PiDog } from "react-icons/pi";
+import * as z from "zod";
 
 export default function SelectedPetDialog({
   selectedPet,
 }: {
   selectedPet: Pet;
 }) {
+  const supabase = createSupabaseBrowserClient();
+
   const [breedOpen, setBreedOpen] = useState(false);
   const [selectedSpecies, setSelectedSpecies] = useState<string | undefined>();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { toast } = useToast();
   const router = useRouter();
   const { setSelectedPet } = useSelectedPet();
-
-  const path = usePathname();
-  const hospitalId = path.split("/")[2];
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const BREEDS = selectedSpecies === "canine" ? CANINE_BREEDS : FELINE_BREEDS;
 
@@ -114,36 +111,65 @@ export default function SelectedPetDialog({
     setSelectedSpecies(selectedPet.species);
   }, [selectedPet, form]);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = async (
     values: z.infer<typeof addAndEditPetFormSchema>
   ) => {
+    const {
+      birth,
+      breed,
+      gender,
+      hospitalPetId,
+      name,
+      species,
+      color,
+      memo,
+      microchipNumber,
+    } = values;
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
     setIsSubmitting(true);
     try {
-      const response = await fetch(`${location.origin}/api/pet`, {
-        method: "PUT",
-        body: JSON.stringify({
-          ...values,
-          hospitalId,
-          petId: selectedPet.pet_id,
-        }),
-      });
+      const { data, error: petError } = await supabase
+        .from("pets")
+        .update({
+          hos_pet_id: hospitalPetId,
+          birth: format(birth, "yyyy-MM-dd"),
+          species,
+          breed,
+          gender,
+          name,
+          color,
+          memo,
+          microchip_no: microchipNumber,
+        })
+        .match({ pet_id: selectedPet?.pet_id })
+        .select()
+        .single();
 
-      const data = await response.json();
-      if (response.ok) {
+      if (petError) {
         toast({
-          title: "환자정보가 수정되었습니다.",
+          variant: "destructive",
+          title: petError.message,
+          description: "관리자에게 문의하세요",
         });
-        setSelectedPet(data.pet);
-        router.refresh();
-        setIsDialogOpen(false);
         return;
       }
 
       toast({
-        variant: "destructive",
-        title: data.error,
-        description: "관리자에게 문의하세요",
+        title: "환자정보가 수정되었습니다.",
       });
+      router.refresh();
+      setSelectedPet(data);
+      setIsDialogOpen(false);
+      return;
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error, "error while updating a pet");
