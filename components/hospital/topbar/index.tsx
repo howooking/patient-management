@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { IoChatboxOutline, IoNotificationsOutline } from "react-icons/io5";
 import PetDialog from "./pet-dialog";
 import SelectedPet from "./selected-pet";
-import SettingButton from "./settings/setting-button";
+import SettingButton from "./setting-button";
 
 export default function TopBar() {
   return (

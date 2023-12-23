@@ -51,7 +51,7 @@ export default async function layout({
   }
 
   return (
-    <div className="flex bg-muted">
+    <div className="flex">
       <Sidebar />
       <div className="flex-1 h-screen overflow-y-auto">
         <TopBar />

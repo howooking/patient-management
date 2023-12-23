@@ -120,7 +120,7 @@ export interface Database {
           color: string | null
           created_at: string
           gender: string
-          hos_id: string
+          hos_id: string | null
           hos_owner_id: string | null
           hos_pet_id: string
           memo: string | null
@@ -136,7 +136,7 @@ export interface Database {
           color?: string | null
           created_at?: string
           gender: string
-          hos_id: string
+          hos_id?: string | null
           hos_owner_id?: string | null
           hos_pet_id: string
           memo?: string | null
@@ -152,7 +152,7 @@ export interface Database {
           color?: string | null
           created_at?: string
           gender?: string
-          hos_id?: string
+          hos_id?: string | null
           hos_owner_id?: string | null
           hos_pet_id?: string
           memo?: string | null
@@ -288,11 +288,11 @@ export interface Database {
       }
       tests: {
         Row: {
-          category: string
+          category: string | null
           created_at: string
           description: string | null
+          form: string
           general_name: string
-          group: string | null
           hos_id: string
           name: string
           original_name: string
@@ -302,11 +302,11 @@ export interface Database {
           unit: string | null
         }
         Insert: {
-          category?: string
+          category?: string | null
           created_at?: string
           description?: string | null
+          form?: string
           general_name: string
-          group?: string | null
           hos_id: string
           name: string
           original_name: string
@@ -316,11 +316,11 @@ export interface Database {
           unit?: string | null
         }
         Update: {
-          category?: string
+          category?: string | null
           created_at?: string
           description?: string | null
+          form?: string
           general_name?: string
-          group?: string | null
           hos_id?: string
           name?: string
           original_name?: string

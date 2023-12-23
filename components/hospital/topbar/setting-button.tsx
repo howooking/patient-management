@@ -23,7 +23,7 @@ export default function SettingButton() {
           <IoSettingsOutline size={20} className="font-bold text-xs" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end">
         {SETTINGS.map((setting) => (
           <DropdownMenuItem key={setting.title}>
             <Link
