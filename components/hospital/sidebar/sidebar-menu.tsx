@@ -10,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 import { Button } from "@/components/ui/button";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 
 type Props = {
   title: string;
@@ -23,7 +24,7 @@ export default function SidebarMenu({ icon, ready, title, href }: Props) {
 
   const pathname = usePathname();
 
-  const hospitalId = pathname.split("/")[2];
+  const hospitalId = useCurrentHospitalId();
   const currnetRoute = pathname.split("/")[3] ?? "/";
 
   const router = useRouter();

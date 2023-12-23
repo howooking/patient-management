@@ -1,8 +1,9 @@
 "use client";
 
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import LoadingSpinner from "@/components/common/loading-spinner";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useDebouncedCallback } from "use-debounce";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Table,
   TableBody,
@@ -11,15 +12,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import useTanstackPets from "@/hooks/useTanstackPet";
-import { usePathname } from "next/navigation";
-import type { Pet } from "@/types/type";
-import NoResult from "./no-result";
-import LoadingSpinner from "@/components/common/loading-spinner";
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSelectedPet } from "@/lib/store/pets";
+import type { Pet } from "@/types/type";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 import EditPetDialog from "./edit-pet-dialog";
+import NoResult from "./no-result";
 
 type Props = {
   setActiveTab: Dispatch<SetStateAction<string>>;
@@ -29,8 +29,7 @@ type Props = {
 export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
   const { setSelectedPet } = useSelectedPet();
 
-  const path = usePathname();
-  const hospitalId = path.split("/")[2];
+  const hospitalId = useCurrentHospitalId();
   const { data, error, isFetching, isLoading } = useTanstackPets(hospitalId);
 
   const inputRef = useRef<HTMLInputElement>(null);

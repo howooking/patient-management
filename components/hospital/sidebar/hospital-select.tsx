@@ -1,7 +1,6 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { FaStar, FaRegStar } from "react-icons/fa6";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -9,13 +8,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { useSelectedPet } from "@/lib/store/pets";
 import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { FaRegStar, FaStar } from "react-icons/fa6";
 
 type Props = {
   hospitalList:
@@ -36,8 +37,7 @@ export default function HospitalSelect({
 }: Props) {
   const supabase = createSupabaseBrowserClient();
 
-  const pathname = usePathname();
-  const hospitalId = pathname.split("/")[2];
+  const hospitalId = useCurrentHospitalId();
   const router = useRouter();
 
   const { setSelectedPet } = useSelectedPet();

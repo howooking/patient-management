@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
 import { CANINE_BREEDS, COLORS, FELINE_BREEDS } from "@/constants/breeds";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { useSelectedPet } from "@/lib/store/pets";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -48,7 +49,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -66,8 +67,7 @@ export default function AddPetTab({
 
   const router = useRouter();
 
-  const path = usePathname();
-  const hospitalId = path.split("/")[2];
+  const hospitalId = useCurrentHospitalId();
 
   const [breedOpen, setBreedOpen] = useState(false);
 
