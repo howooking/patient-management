@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -5,39 +7,35 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SETTINGS } from "@/constants/menus";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
+import Link from "next/link";
+import { useState } from "react";
 import { IoSettingsOutline } from "react-icons/io5";
-import {
-  PiPillFill,
-  PiTestTubeFill,
-  PiUserFill,
-  PiBowlFoodFill,
-} from "react-icons/pi";
 
 export default function SettingButton() {
+  const hospitalId = useCurrentHospitalId();
+  const [open, setOpen] = useState(false);
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button size="icon" variant="ghost" className="rounded-full">
           <IoSettingsOutline size={20} className="font-bold text-xs" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem className="flex items-center gap-1">
-          <PiUserFill />
-          사용자설정
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-1">
-          <PiTestTubeFill />
-          검사설정
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-1">
-          <PiPillFill />
-          약물설정
-        </DropdownMenuItem>
-        <DropdownMenuItem className="flex items-center gap-1">
-          <PiBowlFoodFill />
-          식이설정
-        </DropdownMenuItem>
+        {SETTINGS.map((setting) => (
+          <DropdownMenuItem key={setting.title}>
+            <Link
+              href={`/hospital/${hospitalId}/settings/${setting.href}`}
+              className="flex items-center gap-1"
+              onClick={() => setOpen(false)}
+            >
+              {setting.icon}
+              {setting.title}
+            </Link>
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );

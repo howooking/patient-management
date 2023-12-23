@@ -11,6 +11,12 @@ import {
   FaMaskFace,
   FaListCheck,
 } from "react-icons/fa6";
+import {
+  PiBowlFoodFill,
+  PiPillFill,
+  PiTestTubeFill,
+  PiUserFill,
+} from "react-icons/pi";
 
 export const SIDEBAR_NAV_MENUS = [
   {
@@ -51,3 +57,26 @@ export const SIDEBAR_NAV_MENUS_TRANSLATOR: { [key: string]: string } = {
   surgery: "수술실",
   healthCheck: "건강검진",
 };
+
+export const SETTINGS = [
+  {
+    title: "사용자 설정",
+    href: "user",
+    icon: <PiUserFill />,
+  },
+  {
+    title: "검사 설정",
+    href: "test",
+    icon: <PiTestTubeFill />,
+  },
+  {
+    title: "약물 설정",
+    href: "drug",
+    icon: <PiPillFill />,
+  },
+  {
+    title: "식이 설정",
+    href: "nutrient",
+    icon: <PiBowlFoodFill />,
+  },
+] as const;
