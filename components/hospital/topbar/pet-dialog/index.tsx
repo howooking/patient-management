@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { IoSearch } from "react-icons/io5";
+import { IoSearchOutline } from "react-icons/io5";
 import PetTab from "./pet-tab";
 import Image from "next/image";
 import addDogIcon from "@/public/icons/add-dog.svg";
@@ -19,7 +19,7 @@ export default function PetDialog({ search }: { search?: boolean }) {
           className="rounded-full"
         >
           {search ? (
-            <IoSearch size={20} />
+            <IoSearchOutline size={20} />
           ) : (
             <Image
               src={addDogIcon}

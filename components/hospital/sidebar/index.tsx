@@ -1,8 +1,8 @@
 import { Separator } from "@/components/ui/separator";
 import { SIDEBAR_NAV_MENUS } from "@/constants/menus";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import HospitalSelect from "./hospital-select";
 import CollapseButton from "./collapse-button";
+import HospitalSelect from "./hospital-select";
 import ProfileDropdown from "./profile-dropdown";
 import SidebarMenu from "./sidebar-menu";
 import ToggleProvider from "./toggle-provider";

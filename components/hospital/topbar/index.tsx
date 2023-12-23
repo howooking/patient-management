@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { FaRegStickyNote } from "react-icons/fa";
-import { FaRegBell } from "react-icons/fa6";
+import { IoChatboxOutline, IoNotificationsOutline } from "react-icons/io5";
 import PetDialog from "./pet-dialog";
 import SelectedPet from "./selected-pet";
+import SettingButton from "./settings/setting-button";
 
 export default function TopBar() {
   return (
@@ -17,12 +17,14 @@ export default function TopBar() {
           <PetDialog search />
 
           <Button size="icon" variant="ghost" className="rounded-full">
-            <FaRegStickyNote size={20} />
+            <IoChatboxOutline size={20} />
           </Button>
 
           <Button size="icon" variant="ghost" className="rounded-full">
-            <FaRegBell size={20} />
+            <IoNotificationsOutline size={20} />
           </Button>
+
+          <SettingButton />
         </div>
       </div>
     </nav>
