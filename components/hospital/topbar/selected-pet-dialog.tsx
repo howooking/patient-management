@@ -66,8 +66,10 @@ import * as z from "zod";
 
 export default function SelectedPetDialog({
   selectedPet,
+  latestWeight,
 }: {
   selectedPet: Pet;
+  latestWeight?: string;
 }) {
   const supabase = createSupabaseBrowserClient();
 
@@ -193,6 +195,7 @@ export default function SelectedPetDialog({
           <span>{selectedPet.breed}</span>
           <span>{selectedPet.gender.toUpperCase()}</span>
           <span>{calculateAge(selectedPet?.birth)}</span>
+          <span>{latestWeight ? `${latestWeight}kg` : ""}</span>
         </div>
       </DialogTrigger>
 
