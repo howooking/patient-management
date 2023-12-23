@@ -1,6 +1,14 @@
 "use client";
 
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -12,35 +20,21 @@ import {
   type SortingState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { useState } from "react";
-import { Button } from "./button";
-import { Input } from "./input";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableViewOptions } from "./data-table-view-options";
+import { Input } from "./input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  filterColumn: string;
 }
 
 export default function DataTable<TData, TValue>({
   columns,
   data,
+  filterColumn,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -67,17 +61,17 @@ export default function DataTable<TData, TValue>({
     <>
       <div className="flex items-center py-4">
         <Input
-          placeholder="카테고리 필터"
+          placeholder="태그 검색"
           value={
-            (table.getColumn("category")?.getFilterValue() as string) ?? ""
+            (table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn("category")?.setFilterValue(event.target.value)
+            table.getColumn(filterColumn)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
+        <DataTableViewOptions table={table} />
       </div>
-      <DataTableViewOptions table={table} />
 
       <div className="rounded-md border">
         <Table>

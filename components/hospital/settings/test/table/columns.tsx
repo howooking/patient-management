@@ -16,39 +16,53 @@ import { LuArrowDown } from "react-icons/lu";
 
 export type TestTableColum = Omit<
   Test,
-  | "created_at"
-  | "description"
-  | "form"
-  | "general_name"
-  | "hos_id"
-  | "original_name"
-  | "type"
+  "created_at" | "description" | "form" | "hos_id" | "original_name" | "type"
 >;
 
 export const columns: ColumnDef<TestTableColum>[] = [
   {
-    accessorKey: "category",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
+          size="sm"
+          className="text-sm"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          카테고리
+          검사명
           <LuArrowDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    accessorKey: "name",
+    accessorKey: "general_name",
     header: ({ column }) => {
       return (
         <Button
+          size="sm"
+          className="text-sm"
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          검사명
+          보호자용 검사명
+          <LuArrowDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "category",
+    header: ({ column }) => {
+      return (
+        <Button
+          size="sm"
+          className="text-sm"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          카테고리
           <LuArrowDown className="ml-2 h-4 w-4" />
         </Button>
       );
