@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { type Test } from "@/types/type";
+import { LuArrowDown } from "react-icons/lu";
 
 export type TestTableColum = Omit<
   Test,
@@ -27,11 +28,31 @@ export type TestTableColum = Omit<
 export const columns: ColumnDef<TestTableColum>[] = [
   {
     accessorKey: "category",
-    header: "카테고리",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          카테고리
+          <LuArrowDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
   {
     accessorKey: "name",
-    header: "검사명",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          검사명
+          <LuArrowDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
   },
 
   {
