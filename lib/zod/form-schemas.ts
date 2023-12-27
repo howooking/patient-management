@@ -84,5 +84,21 @@ export const addTestFormSchema = z.object({
     })
   ),
 
+  multiSelect: z.array(
+    z.object({
+      species: z.enum(["canine", "feline", "both"]),
+      age: z.string().optional(),
+      reference_range: z.string().optional(),
+      selects: z.array(
+        z.object({
+          select_value: z.string().optional(),
+          interpretation: z.string().optional(),
+          diagnosis: z.string().optional(),
+          description: z.string().optional(),
+        })
+      ),
+    })
+  ),
+
   description: z.string().optional(),
 });

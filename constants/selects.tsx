@@ -1,6 +1,7 @@
 export const TEST_CATEGORY = [
   "혈액",
   "소변",
+  "대변",
   "바이탈",
   "신체검사",
   "관절검사",

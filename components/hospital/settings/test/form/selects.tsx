@@ -5,7 +5,7 @@ import { Control, UseFormRegister, useFieldArray } from "react-hook-form";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import * as z from "zod";
 
-export default function Ranges({
+export default function Selects({
   nestIndex,
   control,
   register,
@@ -16,7 +16,7 @@ export default function Ranges({
 }) {
   const { fields, remove, append } = useFieldArray({
     control,
-    name: `multiRange.${nestIndex}.ranges`,
+    name: `multiSelect.${nestIndex}.selects`,
   });
 
   return (
@@ -26,35 +26,28 @@ export default function Ranges({
           <div key={item.id} className="grid grid-cols-2 gap-2">
             <div className="flex gap-1">
               <Input
-                {...register(`multiRange.${nestIndex}.ranges.${k}.ge`)}
-                placeholder="이상"
+                {...register(
+                  `multiSelect.${nestIndex}.selects.${k}.select_value`
+                )}
+                placeholder="선택지"
               />
-              <Input
-                {...register(`multiRange.${nestIndex}.ranges.${k}.gt`)}
-                placeholder="초과"
-              />
-              <Input
-                {...register(`multiRange.${nestIndex}.ranges.${k}.le`)}
-                placeholder="이하"
-              />
-              <Input
-                {...register(`multiRange.${nestIndex}.ranges.${k}.lt`)}
-                placeholder="미만"
-              />
+
               <Input
                 {...register(
-                  `multiRange.${nestIndex}.ranges.${k}.interpretation`
+                  `multiSelect.${nestIndex}.selects.${k}.interpretation`
                 )}
                 placeholder="해석"
               />
             </div>
             <div className="flex gap-1 items-center">
               <Input
-                {...register(`multiRange.${nestIndex}.ranges.${k}.diagnosis`)}
+                {...register(`multiSelect.${nestIndex}.selects.${k}.diagnosis`)}
                 placeholder="진단"
               />
               <Input
-                {...register(`multiRange.${nestIndex}.ranges.${k}.description`)}
+                {...register(
+                  `multiSelect.${nestIndex}.selects.${k}.description`
+                )}
                 placeholder="설명"
               />
               <div className="flex-1 w-20 flex gap-1">
@@ -72,10 +65,7 @@ export default function Ranges({
                   type="button"
                   onClick={() =>
                     append({
-                      gt: undefined,
-                      ge: undefined,
-                      lt: undefined,
-                      le: undefined,
+                      select_value: undefined,
                       description: undefined,
                       diagnosis: undefined,
                       interpretation: undefined,

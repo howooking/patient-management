@@ -87,6 +87,7 @@ export default function MultiRangeForm({
               </Button>
             </div>
 
+            {/* 종선택 */}
             <div className="flex items-center gap-4">
               <FormField
                 control={control}
@@ -156,7 +157,7 @@ export default function MultiRangeForm({
                   <FormControl>
                     <Input
                       className="h-8 text-sm"
-                      {...register(`multiRange.${index}.age`)}
+                      {...register(`multiRange.${index}.reference_range`)}
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />

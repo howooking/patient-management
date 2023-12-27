@@ -39,6 +39,7 @@ import { FaRegCircleQuestion } from "react-icons/fa6";
 import * as z from "zod";
 import MultiRangeForm from "./multi-range-form";
 import { TEST_CATEGORY, TEST_TYPE } from "@/constants/selects";
+import MultiSelectForm from "./multi-select-form";
 
 export default function AddTestForm({ setOpen }: { setOpen: any }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,12 +50,37 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
       multiRange: [
         {
           species: "canine",
-          ranges: [{ gt: "", lt: "" }],
+          ranges: [
+            {
+              gt: undefined,
+              ge: undefined,
+              lt: undefined,
+              le: undefined,
+              diagnosis: undefined,
+              description: undefined,
+              interpretation: undefined,
+            },
+          ],
+        },
+      ],
+      multiSelect: [
+        {
+          species: "canine",
+          selects: [
+            {
+              select_value: undefined,
+              description: undefined,
+              diagnosis: undefined,
+              interpretation: undefined,
+            },
+          ],
         },
       ],
     },
   });
   const { control, register, handleSubmit, getValues, setValue } = form;
+
+  const [selectedType, setSelectedType] = useState<string | undefined>();
 
   const supabase = createSupabaseBrowserClient();
   const router = useRouter();
@@ -69,6 +95,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
       unit,
       tag,
       multiRange,
+      multiSelect,
       description,
     } = values;
 
@@ -116,6 +143,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
         for (let i = 0; i < multiRange.length; i++) {
           const age = multiRange[i].age;
           const species = multiRange[i].species;
+          const reference_range = multiRange[i].reference_range;
 
           for (let j = 0; j < multiRange[i].ranges.length; j++) {
             const { description, diagnosis, ge, gt, interpretation, le, lt } =
@@ -126,6 +154,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
                 test_id: testsId,
                 age,
                 species,
+                reference_range,
                 description,
                 diagnosis,
                 interpretation,
@@ -134,9 +163,43 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
                 le,
                 lt,
                 order: j,
-              })
-              .select()
-              .single();
+              });
+
+            if (testSetError) {
+              toast({
+                variant: "destructive",
+                title: testSetError.message,
+                description: "관리자에게 문의하세요",
+              });
+              return;
+            }
+          }
+        }
+      }
+
+      // multi select || select
+      if (type === "다중선택" || type === "선택") {
+        for (let i = 0; i < multiSelect.length; i++) {
+          const age = multiSelect[i].age;
+          const species = multiSelect[i].species;
+          const reference_range = multiSelect[i].reference_range;
+
+          for (let j = 0; j < multiSelect[i].selects.length; j++) {
+            const { description, diagnosis, interpretation, select_value } =
+              multiSelect[i].selects[j];
+            const { error: testSetError } = await supabase
+              .from("test_set")
+              .insert({
+                test_id: testsId,
+                age,
+                species,
+                reference_range,
+                select_value,
+                description,
+                diagnosis,
+                interpretation,
+                order: j,
+              });
 
             if (testSetError) {
               toast({
@@ -163,8 +226,6 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
       setIsSubmitting(false);
     }
   };
-
-  const [selectedType, setSelectedType] = useState<string | undefined>();
 
   return (
     <Form {...form}>
@@ -262,7 +323,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
         {/* 검사명 */}
         <FormField
           control={control}
-          name="name"
+          name="original_name"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
@@ -289,7 +350,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
         {/* 원내 검사명 */}
         <FormField
           control={control}
-          name="original_name"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
@@ -369,8 +430,14 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
           />
         )}
 
-        {/* {selectedType === "선택" && <SelectForm />} */}
-        {/* {selectedType === "다중선택" && <MultiSelectForm />} */}
+        {(selectedType === "다중선택" || selectedType === "선택") && (
+          <MultiSelectForm
+            control={control}
+            register={register}
+            getValues={getValues}
+            setValue={setValue}
+          />
+        )}
 
         {/* 메모 */}
         <div className="col-span-2">
