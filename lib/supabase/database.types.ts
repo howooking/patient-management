@@ -179,8 +179,8 @@ export interface Database {
           memo: string | null
           pet_id: number | null
           result: string
+          test_id: string | null
           test_result_id: number
-          test_set_id: number | null
           tested_at: string | null
         }
         Insert: {
@@ -189,8 +189,8 @@ export interface Database {
           memo?: string | null
           pet_id?: number | null
           result: string
+          test_id?: string | null
           test_result_id?: number
-          test_set_id?: number | null
           tested_at?: string | null
         }
         Update: {
@@ -199,8 +199,8 @@ export interface Database {
           memo?: string | null
           pet_id?: number | null
           result?: string
+          test_id?: string | null
           test_result_id?: number
-          test_set_id?: number | null
           tested_at?: string | null
         }
         Relationships: [
@@ -219,11 +219,11 @@ export interface Database {
             referencedColumns: ["pet_id"]
           },
           {
-            foreignKeyName: "test_results_test_set_id_fkey"
-            columns: ["test_set_id"]
+            foreignKeyName: "test_results_test_id_fkey"
+            columns: ["test_id"]
             isOneToOne: false
-            referencedRelation: "test_set"
-            referencedColumns: ["test_set_id"]
+            referencedRelation: "tests"
+            referencedColumns: ["test_id"]
           }
         ]
       }

@@ -62,7 +62,7 @@ export const addTestFormSchema = z.object({
   }),
   name: z.string({ required_error: "원내검사명을 입력해주세요." }),
   original_name: z.string({ required_error: "본래의 검사명을 입력해주세요." }),
-  unit: z.string({ required_error: "단위를 입력해주세요." }),
+  unit: z.string().optional(),
   tag: z.string().optional(),
 
   multiRange: z.array(

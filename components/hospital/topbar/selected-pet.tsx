@@ -15,7 +15,10 @@ export default function SelectedPet() {
       const { data: weights, error } = await supabase
         .from("test_results")
         .select("result")
-        .match({ pet_id: selectedPet?.pet_id, test_set_id: 1 })
+        .match({
+          pet_id: selectedPet?.pet_id,
+          test_id: "43f6b6aa-a9a9-4bc8-8d0f-6a3117d32ff5",
+        })
         .order("created_at", { ascending: false });
 
       if (!error) {

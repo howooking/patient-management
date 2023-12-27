@@ -111,38 +111,41 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
       // test_set 삽입
       const testsId = tests.test_id;
 
-      for (let i = 0; i < multiRange.length; i++) {
-        const age = multiRange[i].age;
-        const species = multiRange[i].species;
+      // multi range
+      if (type === "다중범위") {
+        for (let i = 0; i < multiRange.length; i++) {
+          const age = multiRange[i].age;
+          const species = multiRange[i].species;
 
-        for (let j = 0; j < multiRange[i].ranges.length; j++) {
-          const { description, diagnosis, ge, gt, interpretation, le, lt } =
-            multiRange[i].ranges[j];
-          const { error: testSetError } = await supabase
-            .from("test_set")
-            .insert({
-              test_id: testsId,
-              age,
-              species,
-              description,
-              diagnosis,
-              interpretation,
-              ge,
-              gt,
-              le,
-              lt,
-              order: j,
-            })
-            .select()
-            .single();
+          for (let j = 0; j < multiRange[i].ranges.length; j++) {
+            const { description, diagnosis, ge, gt, interpretation, le, lt } =
+              multiRange[i].ranges[j];
+            const { error: testSetError } = await supabase
+              .from("test_set")
+              .insert({
+                test_id: testsId,
+                age,
+                species,
+                description,
+                diagnosis,
+                interpretation,
+                ge,
+                gt,
+                le,
+                lt,
+                order: j,
+              })
+              .select()
+              .single();
 
-          if (testSetError) {
-            toast({
-              variant: "destructive",
-              title: testSetError.message,
-              description: "관리자에게 문의하세요",
-            });
-            return;
+            if (testSetError) {
+              toast({
+                variant: "destructive",
+                title: testSetError.message,
+                description: "관리자에게 문의하세요",
+              });
+              return;
+            }
           }
         }
       }
@@ -319,7 +322,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                검사 단위*
+                검사 단위
               </FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
@@ -368,7 +371,6 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
 
         {/* {selectedType === "선택" && <SelectForm />} */}
         {/* {selectedType === "다중선택" && <MultiSelectForm />} */}
-        {/* {selectedType === "서술" && <DescriptionForm />} */}
 
         {/* 메모 */}
         <div className="col-span-2">
