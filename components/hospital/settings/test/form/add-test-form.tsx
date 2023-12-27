@@ -18,74 +18,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { toast } from "@/components/ui/use-toast";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { cn } from "@/lib/utils";
+import { addTestFormSchema } from "@/lib/zod/form-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import * as z from "zod";
 import MultiRangeForm from "./multi-range-form";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
-
-export const TEST_CATEGORY = [
-  "혈액",
-  "소변",
-  "바이탈",
-  "신체검사",
-  "관절검사",
-  "신경계검사",
-  "안과",
-  "치과",
-  "방사선",
-  "복부초음파",
-  "심장초음파",
-  "세포",
-  "병리",
-  "조영검사",
-  "CT",
-  "MRI",
-] as const;
-
-export const TEST_TYPE = ["다중범위", "선택", "다중선택", "서술"] as const;
-
-export const addTestFormSchema = z.object({
-  type: z.enum(TEST_TYPE, {
-    required_error: "검사 타입을 선택해주세요.",
-  }),
-  category: z.enum(TEST_CATEGORY, {
-    required_error: "검사 카테고리를 선택해주세요.",
-  }),
-  name: z.string({ required_error: "원내검사명을 입력해주세요." }),
-  original_name: z.string({ required_error: "본래의 검사명을 입력해주세요." }),
-
-  multiRange: z.array(
-    z.object({
-      species: z.enum(["canine", "feline", "both"]),
-      age: z.string().optional(),
-
-      ranges: z.array(
-        z.object({
-          ge: z.string().optional(),
-          gt: z.string().optional(),
-          lt: z.string().optional(),
-          le: z.string().optional(),
-          interpretation: z.string().optional(),
-          diagnosis: z.string().optional(),
-          description: z.string().optional(),
-        })
-      ),
-    })
-  ),
-
-  memo: z.string().optional(),
-});
+import { TEST_CATEGORY, TEST_TYPE } from "@/constants/selects";
 
 export default function AddTestForm({ setOpen }: { setOpen: any }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -103,8 +56,110 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
   });
   const { control, register, handleSubmit, getValues, setValue } = form;
 
-  const onSubmit = (data: z.infer<typeof addTestFormSchema>) =>
-    console.log("data", data);
+  const supabase = createSupabaseBrowserClient();
+  const router = useRouter();
+  const hospitalId = useCurrentHospitalId();
+
+  const onSubmit = async (values: z.infer<typeof addTestFormSchema>) => {
+    const {
+      type,
+      category,
+      original_name,
+      name,
+      unit,
+      tag,
+      multiRange,
+      description,
+    } = values;
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    // tests 삽입
+    try {
+      const { data: tests, error: testsError } = await supabase
+        .from("tests")
+        .insert({
+          hos_id: hospitalId,
+          type,
+          category,
+          original_name,
+          name,
+          description,
+          unit,
+          tag,
+        })
+        .select()
+        .single();
+
+      if (testsError) {
+        toast({
+          variant: "destructive",
+          title: testsError.message,
+          description: "관리자에게 문의하세요",
+        });
+        return;
+      }
+
+      // test_set 삽입
+      const testsId = tests.test_id;
+
+      for (let i = 0; i < multiRange.length; i++) {
+        const age = multiRange[i].age;
+        const species = multiRange[i].species;
+
+        for (let j = 0; j < multiRange[i].ranges.length; j++) {
+          const { description, diagnosis, ge, gt, interpretation, le, lt } =
+            multiRange[i].ranges[j];
+          const { error: testSetError } = await supabase
+            .from("test_set")
+            .insert({
+              test_id: testsId,
+              age,
+              species,
+              description,
+              diagnosis,
+              interpretation,
+              ge,
+              gt,
+              le,
+              lt,
+              order: j,
+            })
+            .select()
+            .single();
+
+          if (testSetError) {
+            toast({
+              variant: "destructive",
+              title: testSetError.message,
+              description: "관리자에게 문의하세요",
+            });
+            return;
+          }
+        }
+      }
+
+      toast({
+        title: "검사가 등록되었습니다.",
+      });
+      router.refresh();
+      setOpen(false);
+      return;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error, "error while adding a new pet");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const [selectedType, setSelectedType] = useState<string | undefined>();
 
@@ -163,6 +218,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
             </FormItem>
           )}
         />
+
         {/* 검사 카테고리 */}
         <FormField
           control={control}
@@ -199,6 +255,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
             </FormItem>
           )}
         />
+
         {/* 검사명 */}
         <FormField
           control={control}
@@ -225,6 +282,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
             </FormItem>
           )}
         />
+
         {/* 원내 검사명 */}
         <FormField
           control={control}
@@ -253,6 +311,52 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
             </FormItem>
           )}
         />
+
+        {/* 단위 */}
+        <FormField
+          control={control}
+          name="unit"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-sm font-semibold flex items-center gap-2">
+                검사 단위*
+              </FormLabel>
+              <FormControl>
+                <Input {...field} className="h-8 text-sm" />
+              </FormControl>
+              <FormMessage className="text-xs" />
+            </FormItem>
+          )}
+        />
+
+        {/* 태그 */}
+        <FormField
+          control={control}
+          name="tag"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-sm font-semibold flex items-center gap-2">
+                태그(#으로 구분)
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger tabIndex={-1} type="button">
+                      <FaRegCircleQuestion className="opacity-50" />
+                    </TooltipTrigger>
+                    <TooltipContent side="right">
+                      #CRP#염증수치
+                      <br />
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </FormLabel>
+              <FormControl>
+                <Input {...field} className="h-8 text-sm" />
+              </FormControl>
+              <FormMessage className="text-xs" />
+            </FormItem>
+          )}
+        />
+
         {selectedType === "다중범위" && (
           <MultiRangeForm
             control={control}
@@ -270,7 +374,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
         <div className="col-span-2">
           <FormField
             control={form.control}
-            name="memo"
+            name="description"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-sm font-semibold">메모</FormLabel>

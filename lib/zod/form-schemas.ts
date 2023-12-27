@@ -1,3 +1,4 @@
+import { TEST_CATEGORY, TEST_TYPE } from "@/constants/selects";
 import * as z from "zod";
 
 export const signupFormSchema = z.object({
@@ -50,4 +51,38 @@ export const addAndEditPetFormSchema = z.object({
   color: z.string().optional(),
   microchipNumber: z.string().optional(),
   memo: z.string().optional(),
+});
+
+export const addTestFormSchema = z.object({
+  type: z.enum(TEST_TYPE, {
+    required_error: "검사 타입을 선택해주세요.",
+  }),
+  category: z.enum(TEST_CATEGORY, {
+    required_error: "검사 카테고리를 선택해주세요.",
+  }),
+  name: z.string({ required_error: "원내검사명을 입력해주세요." }),
+  original_name: z.string({ required_error: "본래의 검사명을 입력해주세요." }),
+  unit: z.string({ required_error: "단위를 입력해주세요." }),
+  tag: z.string().optional(),
+
+  multiRange: z.array(
+    z.object({
+      species: z.enum(["canine", "feline", "both"]),
+      age: z.string().optional(),
+      reference_range: z.string().optional(),
+      ranges: z.array(
+        z.object({
+          ge: z.string().optional(),
+          gt: z.string().optional(),
+          lt: z.string().optional(),
+          le: z.string().optional(),
+          interpretation: z.string().optional(),
+          diagnosis: z.string().optional(),
+          description: z.string().optional(),
+        })
+      ),
+    })
+  ),
+
+  description: z.string().optional(),
 });

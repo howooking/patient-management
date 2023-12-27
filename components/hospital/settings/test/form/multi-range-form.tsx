@@ -18,8 +18,8 @@ import {
 } from "react-hook-form";
 import { LuPlus, LuTrash2 } from "react-icons/lu";
 import * as z from "zod";
-import { addTestFormSchema } from "./add-test-form";
 import Ranges from "./ranges";
+import { addTestFormSchema } from "@/lib/zod/form-schemas";
 
 export default function MultiRangeForm({
   control,
@@ -54,17 +54,20 @@ export default function MultiRangeForm({
                   setValue("multiRange", [
                     ...(getValues().multiRange || []),
                     {
-                      species: "canine",
+                      species: getValues("multiRange")[0].species,
+                      age: getValues("multiRange")[0].age,
+                      reference_range:
+                        getValues("multiRange")[0].reference_range,
                       ranges: [
-                        {
-                          ge: "",
-                          gt: "",
-                          le: "",
-                          lt: "",
-                          description: "",
-                          interpretation: "",
-                          diagnosis: "",
-                        },
+                        ...getValues("multiRange")[0].ranges.map((range) => ({
+                          ge: range.ge,
+                          gt: range.gt,
+                          le: range.le,
+                          lt: range.lt,
+                          description: range.description,
+                          interpretation: range.interpretation,
+                          diagnosis: range.diagnosis,
+                        })),
                       ],
                     },
                   ]);
@@ -83,48 +86,48 @@ export default function MultiRangeForm({
                 <LuTrash2 />
               </Button>
             </div>
-            <FormField
-              control={control}
-              name={`multiRange.${index}.species`}
-              render={({ field }) => (
-                <FormItem className="space-y-3">
-                  <FormLabel className="text-sm font-semibold">종*</FormLabel>
-                  <FormControl>
-                    <RadioGroup
-                      {...register(`multiRange.${index}.species`)}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                      className="flex gap-6"
-                    >
-                      <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
-                        <FormControl>
-                          <RadioGroupItem value="canine" />
-                        </FormControl>
-                        <FormLabel>개</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
-                        <FormControl>
-                          <RadioGroupItem value="feline" />
-                        </FormControl>
-                        <FormLabel>고양이</FormLabel>
-                      </FormItem>
-                      <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
-                        <FormControl>
-                          <RadioGroupItem value="both" />
-                        </FormControl>
-                        <FormLabel>공통</FormLabel>
-                      </FormItem>
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            <div className="flex items-end gap-2">
+            <div className="flex items-center gap-4">
               <FormField
                 control={control}
-                name="multiRange"
+                name={`multiRange.${index}.species`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold">종*</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        {...register(`multiRange.${index}.species`)}
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex gap-6"
+                      >
+                        <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
+                          <FormControl>
+                            <RadioGroupItem value="canine" />
+                          </FormControl>
+                          <FormLabel>개</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
+                          <FormControl>
+                            <RadioGroupItem value="feline" />
+                          </FormControl>
+                          <FormLabel>고양이</FormLabel>
+                        </FormItem>
+                        <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
+                          <FormControl>
+                            <RadioGroupItem value="both" />
+                          </FormControl>
+                          <FormLabel>공통</FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name={`multiRange.${index}.age`}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm font-semibold">
@@ -141,6 +144,25 @@ export default function MultiRangeForm({
                 )}
               />
             </div>
+
+            <FormField
+              control={control}
+              name={`multiRange.${index}.reference_range`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-semibold">
+                    정상 참고범위 (최소값~최대값)
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      className="h-8 text-sm"
+                      {...register(`multiRange.${index}.age`)}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
 
             <Ranges nestIndex={index} control={control} register={register} />
           </div>

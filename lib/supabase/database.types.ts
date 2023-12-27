@@ -229,48 +229,51 @@ export interface Database {
       }
       test_set: {
         Row: {
+          age: string | null
           created_at: string
-          description_1: string | null
-          description_2: string | null
-          description_3: string | null
+          description: string | null
           diagnosis: string | null
           ge: string | null
           gt: string | null
+          interpretation: string | null
           le: string | null
           lt: string | null
           order: number | null
+          reference_range: string | null
           select_value: string | null
           species: string | null
           test_id: string
           test_set_id: number
         }
         Insert: {
+          age?: string | null
           created_at?: string
-          description_1?: string | null
-          description_2?: string | null
-          description_3?: string | null
+          description?: string | null
           diagnosis?: string | null
           ge?: string | null
           gt?: string | null
+          interpretation?: string | null
           le?: string | null
           lt?: string | null
           order?: number | null
+          reference_range?: string | null
           select_value?: string | null
           species?: string | null
           test_id: string
           test_set_id?: number
         }
         Update: {
+          age?: string | null
           created_at?: string
-          description_1?: string | null
-          description_2?: string | null
-          description_3?: string | null
+          description?: string | null
           diagnosis?: string | null
           ge?: string | null
           gt?: string | null
+          interpretation?: string | null
           le?: string | null
           lt?: string | null
           order?: number | null
+          reference_range?: string | null
           select_value?: string | null
           species?: string | null
           test_id?: string
@@ -292,7 +295,6 @@ export interface Database {
           created_at: string
           description: string | null
           form: string
-          general_name: string
           hos_id: string
           name: string
           original_name: string
@@ -306,7 +308,6 @@ export interface Database {
           created_at?: string
           description?: string | null
           form?: string
-          general_name: string
           hos_id: string
           name: string
           original_name: string
@@ -320,7 +321,6 @@ export interface Database {
           created_at?: string
           description?: string | null
           form?: string
-          general_name?: string
           hos_id?: string
           name?: string
           original_name?: string

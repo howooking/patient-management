@@ -14,7 +14,7 @@ export default async function TestSettingPage({
 
   const { data: tests, error: testsErrors } = await supabase
     .from("tests")
-    .select("general_name, test_id, category, name, tag, unit")
+    .select("test_id, category, name, tag, unit")
     .match({ hos_id });
 
   if (testsErrors) {
@@ -27,6 +27,7 @@ export default async function TestSettingPage({
         <h2 className="text-xl text-primary font-bold">검사 설정</h2>
         <AddTestDialog />
       </div>
+
       <DataTable columns={columns} data={tests} filterColumn="tag" />
     </>
   );

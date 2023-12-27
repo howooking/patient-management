@@ -13,7 +13,7 @@ export function AddTestDialog() {
       <DialogTrigger asChild>
         <Button variant="outline">검사 추가</Button>
       </DialogTrigger>
-      <DialogContent className="min-w-[calc(100vw-40px)] max-h-screen">
+      <DialogContent className="min-w-[calc(100vw-40px)] max-h-[90vh] overflow-y-auto">
         <AddTestForm setOpen={setOpen} />
       </DialogContent>
     </Dialog>

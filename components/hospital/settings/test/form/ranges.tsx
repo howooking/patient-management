@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { addTestFormSchema } from "@/lib/zod/form-schemas";
 import { Control, UseFormRegister, useFieldArray } from "react-hook-form";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import * as z from "zod";
-import { addTestFormSchema } from "./add-test-form";
 
 export default function Ranges({
   nestIndex,
@@ -41,14 +41,14 @@ export default function Ranges({
                 {...register(`multiRange.${nestIndex}.ranges.${k}.lt`)}
                 placeholder="미만"
               />
-            </div>
-            <div className="flex gap-1 items-center">
               <Input
                 {...register(
                   `multiRange.${nestIndex}.ranges.${k}.interpretation`
                 )}
                 placeholder="해석"
               />
+            </div>
+            <div className="flex gap-1 items-center">
               <Input
                 {...register(`multiRange.${nestIndex}.ranges.${k}.diagnosis`)}
                 placeholder="진단"

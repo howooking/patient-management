@@ -36,22 +36,7 @@ export const columns: ColumnDef<TestTableColum>[] = [
       );
     },
   },
-  {
-    accessorKey: "general_name",
-    header: ({ column }) => {
-      return (
-        <Button
-          size="sm"
-          className="text-sm"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          보호자용 검사명
-          <LuArrowDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
+
   {
     accessorKey: "category",
     header: ({ column }) => {
