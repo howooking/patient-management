@@ -32,27 +32,44 @@ export function calculateAge(inputDate: string) {
   return ageString;
 }
 
-type SelectItem = {
+type Select = {
   description: string;
   diagnosis: string;
   interpretation: string;
   select_value: string;
 };
-
-type GroupedData = {
-  [key: string]: SelectItem[];
+type SelectGroupedData = {
+  [key: string]: Select[];
 };
-
-type MappedDataItem = {
+type SelectMappedData = {
   species: "canine" | "feline" | "both";
   age: string;
-  selects: SelectItem[];
   reference_range: string;
+  selects: Select[];
+};
+
+type Range = {
+  description: string;
+  diagnosis: string;
+  interpretation: string;
+  gt: string;
+  ge: string;
+  lt: string;
+  le: string;
+};
+type RangeGroupedData = {
+  [key: string]: Range[];
+};
+type RangeMappedData = {
+  species: "canine" | "feline" | "both";
+  age: string;
+  reference_range: string;
+  ranges: Range[];
 };
 
 export function groupMultiSelectTests(testDetail: TestSet[]) {
-  const groupedData: GroupedData = testDetail.reduce(
-    (result: GroupedData, item) => {
+  const groupedData: SelectGroupedData = testDetail.reduce(
+    (result: SelectGroupedData, item) => {
       const key = `${item.species}-${item.age}-${item.reference_range}`;
       if (!result[key]) {
         result[key] = [];
@@ -67,7 +84,7 @@ export function groupMultiSelectTests(testDetail: TestSet[]) {
     },
     {}
   );
-  const mappedData: MappedDataItem[] = Object.entries(groupedData).map(
+  const mappedData: SelectMappedData[] = Object.entries(groupedData).map(
     ([key, values]) => {
       const [species, age, reference_range] = key.split("-");
       return {
@@ -75,6 +92,40 @@ export function groupMultiSelectTests(testDetail: TestSet[]) {
         age,
         reference_range,
         selects: values,
+      };
+    }
+  );
+  return mappedData;
+}
+
+export function groupMultiRangeTests(testDetail: TestSet[]) {
+  const groupedData: RangeGroupedData = testDetail.reduce(
+    (result: RangeGroupedData, item) => {
+      const key = `${item.species}-${item.age}-${item.reference_range}`;
+      if (!result[key]) {
+        result[key] = [];
+      }
+      result[key].push({
+        description: item.description!,
+        diagnosis: item.diagnosis!,
+        interpretation: item.interpretation!,
+        ge: item.ge!,
+        gt: item.gt!,
+        lt: item.lt!,
+        le: item.le!,
+      });
+      return result;
+    },
+    {}
+  );
+  const mappedData: RangeMappedData[] = Object.entries(groupedData).map(
+    ([key, values]) => {
+      const [species, age, reference_range] = key.split("-");
+      return {
+        species: species as "canine" | "feline" | "both",
+        age,
+        reference_range,
+        ranges: values,
       };
     }
   );

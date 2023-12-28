@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { cn } from "@/lib/utils";
+import { cn, groupMultiRangeTests } from "@/lib/utils";
 import {
   Control,
   UseFormGetValues,
@@ -20,13 +20,19 @@ import { LuPlus, LuTrash2 } from "react-icons/lu";
 import * as z from "zod";
 import Ranges from "./ranges";
 import { addTestFormSchema } from "@/lib/zod/form-schemas";
+import { useEffect } from "react";
+import { TestSet } from "@/types/type";
 
 export default function MultiRangeForm({
+  testDetail,
+  edit,
   control,
   register,
   setValue,
   getValues,
 }: {
+  testDetail: TestSet[];
+  edit?: boolean;
   control: Control<z.infer<typeof addTestFormSchema>>;
   register: UseFormRegister<z.infer<typeof addTestFormSchema>>;
   setValue: UseFormSetValue<z.infer<typeof addTestFormSchema>>;
@@ -36,6 +42,15 @@ export default function MultiRangeForm({
     control,
     name: "multiRange",
   });
+
+  console.log(testDetail);
+
+  useEffect(() => {
+    if (edit) {
+      const mappedData = groupMultiRangeTests(testDetail);
+      setValue("multiRange", mappedData);
+    }
+  }, [edit, setValue, testDetail]);
 
   return (
     <div className="col-span-2 gap-2 flex flex-col">

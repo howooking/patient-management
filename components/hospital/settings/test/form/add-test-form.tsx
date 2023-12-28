@@ -256,7 +256,7 @@ export default function AddTestForm({
       }
 
       toast({
-        title: "검사가 등록되었습니다.",
+        title: edit ? "검사가 수정되었습니다." : "검사가 등록되었습니다.",
       });
       router.refresh();
       setOpen(false);
@@ -301,6 +301,7 @@ export default function AddTestForm({
               </FormLabel>
               <FormControl>
                 <RadioGroup
+                  disabled={edit}
                   onValueChange={(selectd) => {
                     field.onChange(selectd);
                     setSelectedType(selectd);
@@ -466,6 +467,8 @@ export default function AddTestForm({
 
         {selectedType === "다중범위" && (
           <MultiRangeForm
+            testDetail={testDetail}
+            edit={edit}
             control={control}
             register={register}
             getValues={getValues}

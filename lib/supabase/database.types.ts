@@ -300,7 +300,7 @@ export interface Database {
           original_name: string
           tag: string | null
           test_id: string
-          type: string | null
+          type: string
           unit: string | null
         }
         Insert: {
@@ -313,7 +313,7 @@ export interface Database {
           original_name: string
           tag?: string | null
           test_id?: string
-          type?: string | null
+          type: string
           unit?: string | null
         }
         Update: {
@@ -326,7 +326,7 @@ export interface Database {
           original_name?: string
           tag?: string | null
           test_id?: string
-          type?: string | null
+          type?: string
           unit?: string | null
         }
         Relationships: [
