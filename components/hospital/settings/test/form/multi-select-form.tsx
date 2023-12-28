@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { cn } from "@/lib/utils";
+import { cn, groupMultiSelectTests } from "@/lib/utils";
 import { addTestFormSchema } from "@/lib/zod/form-schemas";
 import {
   Control,
@@ -20,13 +20,19 @@ import {
 import { LuPlus, LuTrash2 } from "react-icons/lu";
 import * as z from "zod";
 import Selects from "./selects";
+import { TestSet } from "@/types/type";
+import { useEffect } from "react";
 
 export default function MultiSelectForm({
+  testDetail,
+  edit,
   control,
   register,
   setValue,
   getValues,
 }: {
+  testDetail: TestSet[];
+  edit?: boolean;
   control: Control<z.infer<typeof addTestFormSchema>>;
   register: UseFormRegister<z.infer<typeof addTestFormSchema>>;
   setValue: UseFormSetValue<z.infer<typeof addTestFormSchema>>;
@@ -36,6 +42,13 @@ export default function MultiSelectForm({
     control,
     name: "multiSelect",
   });
+
+  useEffect(() => {
+    if (edit) {
+      const mappedData = groupMultiSelectTests(testDetail);
+      setValue("multiSelect", mappedData);
+    }
+  }, [edit, setValue, testDetail]);
 
   return (
     <div className="col-span-2 gap-2 flex flex-col">
@@ -92,7 +105,7 @@ export default function MultiSelectForm({
                 control={control}
                 name={`multiSelect.${index}.species`}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-semibold">종*</FormLabel>
                     <FormControl>
                       <RadioGroup

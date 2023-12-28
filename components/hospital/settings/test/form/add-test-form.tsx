@@ -26,22 +26,39 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
-import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { addTestFormSchema } from "@/lib/zod/form-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import * as z from "zod";
 import MultiRangeForm from "./multi-range-form";
-import { TEST_CATEGORY, TEST_TYPE } from "@/constants/selects";
+import {
+  TEST_CATEGORY,
+  TEST_TYPE,
+  TestCategory,
+  TestType,
+} from "@/constants/selects";
 import MultiSelectForm from "./multi-select-form";
+import { TestTableColum } from "../table/columns";
+import { TestSet } from "@/types/type";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 
-export default function AddTestForm({ setOpen }: { setOpen: any }) {
+export default function AddTestForm({
+  setOpen,
+  edit,
+  test,
+  testDetail,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  edit?: boolean;
+  test?: TestTableColum;
+  testDetail: TestSet[];
+}) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof addTestFormSchema>>({
@@ -80,7 +97,28 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
   });
   const { control, register, handleSubmit, getValues, setValue } = form;
 
-  const [selectedType, setSelectedType] = useState<string | undefined>();
+  const [selectedType, setSelectedType] = useState<string | undefined>(
+    edit ? test?.type! : undefined
+  );
+
+  useEffect(() => {
+    setValue("category", test?.category as TestCategory);
+    setValue("description", test?.description!);
+    setValue("name", test?.name!);
+    setValue("original_name", test?.original_name!);
+    setValue("tag", test?.tag!);
+    setValue("type", test?.type! as TestType);
+    setValue("unit", test?.unit!);
+  }, [
+    setValue,
+    test?.category,
+    test?.description,
+    test?.name,
+    test?.original_name,
+    test?.tag,
+    test?.type,
+    test?.unit,
+  ]);
 
   const supabase = createSupabaseBrowserClient();
   const router = useRouter();
@@ -109,7 +147,6 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
 
     setIsSubmitting(true);
 
-    // tests 삽입
     try {
       const { data: tests, error: testsError } = await supabase
         .from("tests")
@@ -213,15 +250,21 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
         }
       }
 
+      // 수정인 경우 원본 test를 삭제
+      if (edit) {
+        await supabase.from("tests").delete().match({ test_id: test?.test_id });
+      }
+
       toast({
         title: "검사가 등록되었습니다.",
       });
       router.refresh();
       setOpen(false);
+
       return;
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.error(error, "error while adding a new pet");
+      console.error(error, "error while adding or editing test");
     } finally {
       setIsSubmitting(false);
     }
@@ -262,7 +305,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
                     field.onChange(selectd);
                     setSelectedType(selectd);
                   }}
-                  defaultValue={field.value}
+                  defaultValue={edit ? test?.type! : field.value}
                   className="flex gap-6"
                 >
                   {TEST_TYPE.map((type) => (
@@ -296,7 +339,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
                 onValueChange={(selectd) => {
                   field.onChange(selectd);
                 }}
-                defaultValue={field.value}
+                defaultValue={edit ? test?.category! : field.value}
               >
                 <FormControl>
                   <SelectTrigger className="h-8 text-sm">
@@ -432,6 +475,8 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
 
         {(selectedType === "다중선택" || selectedType === "선택") && (
           <MultiSelectForm
+            testDetail={testDetail}
+            edit={edit}
             control={control}
             register={register}
             getValues={getValues}
@@ -458,7 +503,7 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
 
         <div className="flex gap-4 col-span-2">
           <Button className="font-semibold mt-4 w-full" disabled={isSubmitting}>
-            검사 등록
+            {edit ? "검사 수정" : "검사 등록"}
             <AiOutlineLoading3Quarters
               className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
             />
@@ -471,9 +516,6 @@ export default function AddTestForm({ setOpen }: { setOpen: any }) {
             onClick={() => setOpen(false)}
           >
             취소
-            <AiOutlineLoading3Quarters
-              className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
-            />
           </Button>
         </div>
       </form>

@@ -1,23 +1,19 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ColumnDef } from "@tanstack/react-table";
-import { MdMoreVert } from "react-icons/md";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { type Test } from "@/types/type";
+import { ColumnDef } from "@tanstack/react-table";
 import { LuArrowDown } from "react-icons/lu";
+import { MdMoreVert } from "react-icons/md";
+import { EditTestDialog } from "./edit-test-dialog";
 
-export type TestTableColum = Omit<
-  Test,
-  "created_at" | "description" | "form" | "hos_id" | "original_name" | "type"
->;
+export type TestTableColum = Omit<Test, "created_at">;
 
 export const columns: ColumnDef<TestTableColum>[] = [
   {
@@ -90,13 +86,13 @@ export const columns: ColumnDef<TestTableColum>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => alert(test.test_id)}>
               Copy payment ID
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+
+            <EditTestDialog test={test} />
+
+            <DropdownMenuItem>삭제</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

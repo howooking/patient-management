@@ -1,3 +1,4 @@
+import { TestSet } from "@/types/type";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -29,4 +30,53 @@ export function calculateAge(inputDate: string) {
   }`;
 
   return ageString;
+}
+
+type SelectItem = {
+  description: string;
+  diagnosis: string;
+  interpretation: string;
+  select_value: string;
+};
+
+type GroupedData = {
+  [key: string]: SelectItem[];
+};
+
+type MappedDataItem = {
+  species: "canine" | "feline" | "both";
+  age: string;
+  selects: SelectItem[];
+  reference_range: string;
+};
+
+export function groupMultiSelectTests(testDetail: TestSet[]) {
+  const groupedData: GroupedData = testDetail.reduce(
+    (result: GroupedData, item) => {
+      const key = `${item.species}-${item.age}-${item.reference_range}`;
+      if (!result[key]) {
+        result[key] = [];
+      }
+      result[key].push({
+        description: item.description!,
+        diagnosis: item.diagnosis!,
+        interpretation: item.interpretation!,
+        select_value: item.select_value!,
+      });
+      return result;
+    },
+    {}
+  );
+  const mappedData: MappedDataItem[] = Object.entries(groupedData).map(
+    ([key, values]) => {
+      const [species, age, reference_range] = key.split("-");
+      return {
+        species: species as "canine" | "feline" | "both",
+        age,
+        reference_range,
+        selects: values,
+      };
+    }
+  );
+  return mappedData;
 }

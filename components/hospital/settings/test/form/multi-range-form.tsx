@@ -88,12 +88,12 @@ export default function MultiRangeForm({
             </div>
 
             {/* 종선택 */}
-            <div className="flex items-center gap-4">
+            <div className="flex gap-4">
               <FormField
                 control={control}
                 name={`multiRange.${index}.species`}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="space-y-4">
                     <FormLabel className="text-sm font-semibold">종*</FormLabel>
                     <FormControl>
                       <RadioGroup

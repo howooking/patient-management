@@ -18,4 +18,8 @@ export const TEST_CATEGORY = [
   "MRI",
 ] as const;
 
+export type TestCategory = (typeof TEST_CATEGORY)[number];
+
 export const TEST_TYPE = ["다중범위", "선택", "다중선택", "서술"] as const;
+
+export type TestType = (typeof TEST_TYPE)[number];
