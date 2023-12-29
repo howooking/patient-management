@@ -53,11 +53,13 @@ export default function AddTestForm({
   edit,
   test,
   testDetail,
+  copy,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
   edit?: boolean;
   test?: TestTableColum;
   testDetail: TestSet[];
+  copy?: boolean;
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -176,7 +178,7 @@ export default function AddTestForm({
       const testsId = tests.test_id;
 
       // multi range
-      if (type === "다중범위") {
+      if (type === "범위") {
         for (let i = 0; i < multiRange.length; i++) {
           const age = multiRange[i].age;
           const species = multiRange[i].species;
@@ -214,8 +216,8 @@ export default function AddTestForm({
         }
       }
 
-      // multi select || select
-      if (type === "다중선택" || type === "선택") {
+      //  select
+      if (type === "선택") {
         for (let i = 0; i < multiSelect.length; i++) {
           const age = multiSelect[i].age;
           const species = multiSelect[i].species;
@@ -251,12 +253,13 @@ export default function AddTestForm({
       }
 
       // 수정인 경우 원본 test를 삭제
-      if (edit) {
+      if (edit && !copy) {
         await supabase.from("tests").delete().match({ test_id: test?.test_id });
       }
 
       toast({
-        title: edit ? "검사가 수정되었습니다." : "검사가 등록되었습니다.",
+        title:
+          edit && !copy ? "검사가 수정되었습니다." : "검사가 등록되었습니다.",
       });
       router.refresh();
       setOpen(false);
@@ -290,10 +293,10 @@ export default function AddTestForm({
                       <FaRegCircleQuestion className="opacity-50" />
                     </TooltipTrigger>
                     <TooltipContent side="right">
-                      다중범위 : APL, 47미만 낮음, 정상 밤위 47 ~ 254, 254이상
-                      높음 <br />
-                      선택 : 키트, 양성/음성 <br />
-                      다중선택 : 변상태, 혈변 & 점액변 & 설사 <br />
+                      범위 : APL, 47미만 낮음, 정상 밤위 47 ~ 254, 254이상 높음
+                      <br />
+                      선택 : 키트검사 양성/음성, 변상태 혈변 & 점액변 & 설사
+                      <br />
                       서술 : 혈액 도말 검사
                     </TooltipContent>
                   </Tooltip>
@@ -465,7 +468,7 @@ export default function AddTestForm({
           )}
         />
 
-        {selectedType === "다중범위" && (
+        {selectedType === "범위" && (
           <MultiRangeForm
             testDetail={testDetail}
             edit={edit}
@@ -476,7 +479,7 @@ export default function AddTestForm({
           />
         )}
 
-        {(selectedType === "다중선택" || selectedType === "선택") && (
+        {selectedType === "선택" && (
           <MultiSelectForm
             testDetail={testDetail}
             edit={edit}
@@ -506,7 +509,7 @@ export default function AddTestForm({
 
         <div className="flex gap-4 col-span-2">
           <Button className="font-semibold mt-4 w-full" disabled={isSubmitting}>
-            {edit ? "검사 수정" : "검사 등록"}
+            {edit && !copy ? "검사 수정" : "검사 등록"}
             <AiOutlineLoading3Quarters
               className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
             />

@@ -12,7 +12,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { LuArrowDown } from "react-icons/lu";
 import { MdMoreVert } from "react-icons/md";
 import { EditTestDialog } from "./edit-test-dialog";
-
+import { DeleteTestDialog } from "./delete-test-dialog";
 export type TestTableColum = Omit<Test, "created_at">;
 
 export const columns: ColumnDef<TestTableColum>[] = [
@@ -80,19 +80,17 @@ export const columns: ColumnDef<TestTableColum>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
+            <Button variant="ghost" className="rounded-full" size="icon">
               <span className="sr-only">Open menu</span>
               <MdMoreVert />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => alert(test.test_id)}>
-              Copy payment ID
-            </DropdownMenuItem>
+          <DropdownMenuContent align="end" className="flex flex-col gap-2">
+            <EditTestDialog test={test} copy />
 
             <EditTestDialog test={test} />
 
-            <DropdownMenuItem>삭제</DropdownMenuItem>
+            <DeleteTestDialog test={test} />
           </DropdownMenuContent>
         </DropdownMenu>
       );
