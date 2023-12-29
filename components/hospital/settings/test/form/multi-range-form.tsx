@@ -43,8 +43,6 @@ export default function MultiRangeForm({
     name: "multiRange",
   });
 
-  console.log(testDetail);
-
   useEffect(() => {
     if (edit) {
       const mappedData = groupMultiRangeTests(testDetail);
