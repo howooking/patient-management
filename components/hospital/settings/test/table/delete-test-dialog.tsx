@@ -20,11 +20,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
 
 export function DeleteTestDialog({ test }: { test: TestTableColum }) {
-  console.log(test);
-
   const router = useRouter();
-
-  const [open, setOpen] = useState(false);
 
   const supabase = createSupabaseBrowserClient();
 
