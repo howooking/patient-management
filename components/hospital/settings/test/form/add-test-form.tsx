@@ -58,7 +58,7 @@ export default function AddTestForm({
   setOpen: Dispatch<SetStateAction<boolean>>;
   edit?: boolean;
   test?: TestTableColum;
-  testDetail: TestSet[];
+  testDetail?: TestSet[];
   copy?: boolean;
 }) {
   const [isSubmitting, setIsSubmitting] = useState(false);

@@ -32,7 +32,7 @@ export default function MultiRangeForm({
   setValue,
   getValues,
 }: {
-  testDetail: TestSet[];
+  testDetail?: TestSet[];
   edit?: boolean;
   control: Control<z.infer<typeof addTestFormSchema>>;
   register: UseFormRegister<z.infer<typeof addTestFormSchema>>;
@@ -45,7 +45,7 @@ export default function MultiRangeForm({
   });
 
   useEffect(() => {
-    if (edit) {
+    if (edit && testDetail) {
       const mappedData = groupMultiRangeTests(testDetail);
       setValue("multiRange", mappedData);
     }

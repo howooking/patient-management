@@ -32,7 +32,7 @@ export default function MultiSelectForm({
   setValue,
   getValues,
 }: {
-  testDetail: TestSet[];
+  testDetail?: TestSet[];
   edit?: boolean;
   control: Control<z.infer<typeof addTestFormSchema>>;
   register: UseFormRegister<z.infer<typeof addTestFormSchema>>;
@@ -45,7 +45,7 @@ export default function MultiSelectForm({
   });
 
   useEffect(() => {
-    if (edit) {
+    if (edit && testDetail) {
       const mappedData = groupMultiSelectTests(testDetail);
       setValue("multiSelect", mappedData);
     }
