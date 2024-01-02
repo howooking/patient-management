@@ -11,7 +11,12 @@ export default function HomeNavbar() {
         <Logo link />
         <div className="flex items-center gap-2">
           {NAV_MENUS.map((menu) => (
-            <Button key={menu.title} asChild variant="ghost">
+            <Button
+              key={menu.title}
+              asChild
+              variant="ghost"
+              className="text-sm"
+            >
               <Link href={menu.href}>{menu.title}</Link>
             </Button>
           ))}

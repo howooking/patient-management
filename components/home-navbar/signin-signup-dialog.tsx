@@ -6,7 +6,7 @@ export default function SigninSignupDialog({ signin }: { signin?: boolean }) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={signin ? "outline" : "default"}>
+        <Button variant={signin ? "outline" : "default"} className="text-sm">
           {signin ? "로그인" : "무료로 시작하세요"}
         </Button>
       </DialogTrigger>

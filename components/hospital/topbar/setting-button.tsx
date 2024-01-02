@@ -28,10 +28,8 @@ export default function SettingButton() {
           <DropdownMenuItem key={setting.title}>
             <Link
               href={`/hospital/${hospitalId}/settings/${setting.href}`}
-              className="flex items-center gap-1"
               onClick={() => setOpen(false)}
             >
-              {setting.icon}
               {setting.title}
             </Link>
           </DropdownMenuItem>

@@ -62,21 +62,21 @@ export const SETTINGS = [
   {
     title: "사용자 설정",
     href: "user",
-    icon: <PiUserFill />,
+    // icon: <PiUserFill />,
   },
   {
     title: "검사 설정",
     href: "test",
-    icon: <PiTestTubeFill />,
+    // icon: <PiTestTubeFill />,
   },
   {
     title: "약물 설정",
     href: "drug",
-    icon: <PiPillFill />,
+    // icon: <PiPillFill />,
   },
   {
     title: "식이 설정",
     href: "nutrient",
-    icon: <PiBowlFoodFill />,
+    // icon: <PiBowlFoodFill />,
   },
 ] as const;
