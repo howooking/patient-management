@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SigninTab from "./signin-tab";
 import SignupTab from "../../components/signin/signup-tab";
 
 export default function SigninSignupTab({ signin }: { signin?: boolean }) {
@@ -21,7 +20,7 @@ export default function SigninSignupTab({ signin }: { signin?: boolean }) {
       </TabsList>
 
       <TabsContent value="signin" className="mt-0 space-y-6">
-        <SigninTab setActiveTab={setActiveTab} />
+        {/* <SigninTab setActiveTab={setActiveTab} /> */}
       </TabsContent>
 
       <TabsContent value="signup" className="mt-0 space-y-6">
