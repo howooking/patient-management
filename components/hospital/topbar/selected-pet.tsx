@@ -1,14 +1,15 @@
 "use client";
 
 import { useSelectedPet } from "@/lib/store/pets";
-import SelectedPetDialog from "./selected-pet-dialog";
-import { useEffect, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { useEffect, useState } from "react";
+import SelectedPetDialog from "./selected-pet-dialog";
 
 export default function SelectedPet() {
   const [latestWeight, setLatestWeight] = useState<string>();
 
   const { selectedPet } = useSelectedPet();
+
   const supabase = createSupabaseBrowserClient();
   useEffect(() => {
     const getData = async () => {
@@ -17,7 +18,7 @@ export default function SelectedPet() {
         .select("result")
         .match({
           pet_id: selectedPet?.pet_id,
-          test_id: "43f6b6aa-a9a9-4bc8-8d0f-6a3117d32ff5",
+          test_id: "5a3e166a-4962-4cb9-9cbc-dbc1ce2c8cdc", // 체중 test_id
         })
         .order("created_at", { ascending: false });
 
@@ -29,8 +30,8 @@ export default function SelectedPet() {
         }
       }
     };
-    getData();
-  }, [selectedPet?.pet_id, supabase]);
+    selectedPet && getData();
+  }, [selectedPet, selectedPet?.pet_id, supabase]);
 
   if (!selectedPet) {
     return;

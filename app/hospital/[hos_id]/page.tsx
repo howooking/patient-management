@@ -1,9 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
-import Howoo from "./howoo";
 
 export default async function page({ params }: { params: { hos_id: string } }) {
-  await new Promise((res) => setTimeout(res, 2000));
-
   const { hos_id } = params;
   const supabase = await createSupabaseServerClient(true);
 
@@ -18,8 +15,7 @@ export default async function page({ params }: { params: { hos_id: string } }) {
 
   return (
     <>
-      <Howoo />
-      <pre>{JSON.stringify(pets, null, 2)}</pre>
+      <pre>{JSON.stringify(pets, null, "\t")}</pre>
     </>
   );
 }
