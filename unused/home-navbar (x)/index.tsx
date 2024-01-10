@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Button } from "../ui/button";
+import { Button } from "../../components/ui/button";
 import SigninSignupDialog from "./signin-signup-dialog";
-import Logo from "../common/logo";
+import Logo from "../../components/common/logo";
 import { NAV_MENUS } from "@/constants/menus";
 
 export default function HomeNavbar() {

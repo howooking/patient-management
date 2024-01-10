@@ -9,6 +9,169 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      drug_doses: {
+        Row: {
+          bw_unit: string | null
+          created_at: string
+          cri_unit: string | null
+          default_dose: string | null
+          description: string | null
+          dose_id: number
+          dose_unit: string | null
+          drug_id: string | null
+          max_dose: string | null
+          min_dose: string | null
+          route: string | null
+          species: string | null
+        }
+        Insert: {
+          bw_unit?: string | null
+          created_at?: string
+          cri_unit?: string | null
+          default_dose?: string | null
+          description?: string | null
+          dose_id?: number
+          dose_unit?: string | null
+          drug_id?: string | null
+          max_dose?: string | null
+          min_dose?: string | null
+          route?: string | null
+          species?: string | null
+        }
+        Update: {
+          bw_unit?: string | null
+          created_at?: string
+          cri_unit?: string | null
+          default_dose?: string | null
+          description?: string | null
+          dose_id?: number
+          dose_unit?: string | null
+          drug_id?: string | null
+          max_dose?: string | null
+          min_dose?: string | null
+          route?: string | null
+          species?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drug_doses_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "drugs"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      drugs: {
+        Row: {
+          created_at: string
+          description: string | null
+          dose_view: string | null
+          hos_id: string | null
+          id: string
+          indication: string | null
+          name: string
+          side_effect: string | null
+          tag: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          dose_view?: string | null
+          hos_id?: string | null
+          id?: string
+          indication?: string | null
+          name: string
+          side_effect?: string | null
+          tag?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          dose_view?: string | null
+          hos_id?: string | null
+          id?: string
+          indication?: string | null
+          name?: string
+          side_effect?: string | null
+          tag?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drugs_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          }
+        ]
+      }
+      dug_products: {
+        Row: {
+          company: string | null
+          created_at: string
+          description: string | null
+          dialution_unit: string | null
+          dilution_amount: string | null
+          drug_id: string | null
+          drug_product_id: string
+          hos_id: string | null
+          name: string | null
+          price: string | null
+          tag: string | null
+          total_volume: string | null
+          type: string | null
+          unit: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          description?: string | null
+          dialution_unit?: string | null
+          dilution_amount?: string | null
+          drug_id?: string | null
+          drug_product_id?: string
+          hos_id?: string | null
+          name?: string | null
+          price?: string | null
+          tag?: string | null
+          total_volume?: string | null
+          type?: string | null
+          unit?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          description?: string | null
+          dialution_unit?: string | null
+          dilution_amount?: string | null
+          drug_id?: string | null
+          drug_product_id?: string
+          hos_id?: string | null
+          name?: string | null
+          price?: string | null
+          tag?: string | null
+          total_volume?: string | null
+          type?: string | null
+          unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dug_products_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "drugs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dug_products_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          }
+        ]
+      }
       hos_vet_mapping: {
         Row: {
           class: string
@@ -238,10 +401,10 @@ export interface Database {
           interpretation: string | null
           le: string | null
           lt: string | null
-          order: number | null
+          order: number
           reference_range: string | null
           select_value: string | null
-          species: string | null
+          species: string
           test_id: string
           test_set_id: number
         }
@@ -255,10 +418,10 @@ export interface Database {
           interpretation?: string | null
           le?: string | null
           lt?: string | null
-          order?: number | null
+          order: number
           reference_range?: string | null
           select_value?: string | null
-          species?: string | null
+          species: string
           test_id: string
           test_set_id?: number
         }
@@ -272,10 +435,10 @@ export interface Database {
           interpretation?: string | null
           le?: string | null
           lt?: string | null
-          order?: number | null
+          order?: number
           reference_range?: string | null
           select_value?: string | null
-          species?: string | null
+          species?: string
           test_id?: string
           test_set_id?: number
         }

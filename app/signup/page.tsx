@@ -7,11 +7,11 @@ export default async function SignupPage() {
   const supabase = await createSupabaseServerClient(true);
   const {
     data: { user },
-    error: sessionError,
+    error: userError,
   } = await supabase.auth.getUser();
 
-  if (sessionError) {
-    throw new Error(sessionError.message);
+  if (userError) {
+    throw new Error(userError.message);
   }
 
   if (!user) {

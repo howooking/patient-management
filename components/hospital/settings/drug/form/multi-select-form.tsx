@@ -101,12 +101,12 @@ export default function MultiSelectForm({
             </div>
 
             {/* 종선택 */}
-            <div className="flex gap-4">
+            <div className="flex items-center gap-4">
               <FormField
                 control={control}
                 name={`multiSelect.${index}.species`}
                 render={({ field }) => (
-                  <FormItem className="space-y-4">
+                  <FormItem className="space-y-2">
                     <FormLabel className="text-sm font-semibold">종*</FormLabel>
                     <FormControl>
                       <RadioGroup

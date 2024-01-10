@@ -29,9 +29,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TanstackProvider>
-            <div className="min-h-screen flex flex-col">{children}</div>
-          </TanstackProvider>
+          <TanstackProvider>{children}</TanstackProvider>
           <Toaster />
         </ThemeProvider>
       </body>

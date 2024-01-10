@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SigninTab from "./signin-tab";
-import SignupTab from "./signup-tab";
+import SignupTab from "../../components/signin/signup-tab";
 
 export default function SigninSignupTab({ signin }: { signin?: boolean }) {
   const [activeTab, setActiveTab] = useState(signin ? "signin" : "signup");

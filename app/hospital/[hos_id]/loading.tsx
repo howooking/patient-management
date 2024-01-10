@@ -1,3 +1,9 @@
+import LoadingLogo from "@/components/common/loading-logo";
+
 export default function loading() {
-  return <div>병원 로딩</div>;
+  return (
+    <div className="w-full h-[calc(100vh-52px)]">
+      <LoadingLogo />
+    </div>
+  );
 }

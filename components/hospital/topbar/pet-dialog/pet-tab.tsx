@@ -1,5 +1,3 @@
-"use client";
-
 import { Dispatch, SetStateAction, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AddPetTab from "./add-pet-tab";

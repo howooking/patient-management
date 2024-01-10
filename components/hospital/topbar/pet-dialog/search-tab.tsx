@@ -1,6 +1,3 @@
-"use client";
-
-import LoadingSpinner from "@/components/common/loading-spinner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -20,6 +17,7 @@ import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import EditPetDialog from "./edit-pet-dialog";
 import NoResult from "./no-result";
+import LoadingLogo from "@/components/common/loading-logo";
 
 type Props = {
   setActiveTab: Dispatch<SetStateAction<string>>;
@@ -78,7 +76,7 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
   if (isLoading || isFetching) {
     return (
       <div className="h-[480px]">
-        <LoadingSpinner />
+        <LoadingLogo />
       </div>
     );
   }

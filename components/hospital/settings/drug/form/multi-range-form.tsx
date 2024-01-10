@@ -9,8 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { cn, groupMultiSelectTests } from "@/lib/utils";
-import { addTestFormSchema } from "@/lib/zod/form-schemas";
+import { cn, groupMultiRangeTests } from "@/lib/utils";
 import {
   Control,
   UseFormGetValues,
@@ -20,11 +19,12 @@ import {
 } from "react-hook-form";
 import { LuPlus, LuTrash2 } from "react-icons/lu";
 import * as z from "zod";
-import Selects from "./selects";
-import { TestSet } from "@/types/type";
+import Ranges from "./ranges";
+import { addTestFormSchema } from "@/lib/zod/form-schemas";
 import { useEffect } from "react";
+import { TestSet } from "@/types/type";
 
-export default function MultiSelectForm({
+export default function MultiRangeForm({
   testDetail,
   edit,
   control,
@@ -41,13 +41,13 @@ export default function MultiSelectForm({
 }) {
   const { fields, remove } = useFieldArray({
     control,
-    name: "multiSelect",
+    name: "multiRange",
   });
 
   useEffect(() => {
     if (edit && testDetail) {
-      const mappedData = groupMultiSelectTests(testDetail);
-      setValue("multiSelect", mappedData);
+      const mappedData = groupMultiRangeTests(testDetail);
+      setValue("multiRange", mappedData);
     }
   }, [edit, setValue, testDetail]);
 
@@ -65,22 +65,23 @@ export default function MultiSelectForm({
                 size="icon"
                 variant="ghost"
                 onClick={() => {
-                  setValue("multiSelect", [
-                    ...(getValues().multiSelect || []),
+                  setValue("multiRange", [
+                    ...(getValues().multiRange || []),
                     {
-                      species: getValues("multiSelect")[0].species,
-                      age: getValues("multiSelect")[0].age,
+                      species: getValues("multiRange")[0].species,
+                      age: getValues("multiRange")[0].age,
                       reference_range:
-                        getValues("multiSelect")[0].reference_range,
-                      selects: [
-                        ...getValues("multiSelect")[0].selects.map(
-                          (select) => ({
-                            select_value: select.select_value,
-                            description: select.description,
-                            interpretation: select.interpretation,
-                            diagnosis: select.diagnosis,
-                          })
-                        ),
+                        getValues("multiRange")[0].reference_range,
+                      ranges: [
+                        ...getValues("multiRange")[0].ranges.map((range) => ({
+                          ge: range.ge,
+                          gt: range.gt,
+                          le: range.le,
+                          lt: range.lt,
+                          description: range.description,
+                          interpretation: range.interpretation,
+                          diagnosis: range.diagnosis,
+                        })),
                       ],
                     },
                   ]);
@@ -104,13 +105,13 @@ export default function MultiSelectForm({
             <div className="flex gap-4">
               <FormField
                 control={control}
-                name={`multiSelect.${index}.species`}
+                name={`multiRange.${index}.species`}
                 render={({ field }) => (
                   <FormItem className="space-y-4">
                     <FormLabel className="text-sm font-semibold">종*</FormLabel>
                     <FormControl>
                       <RadioGroup
-                        {...register(`multiSelect.${index}.species`)}
+                        {...register(`multiRange.${index}.species`)}
                         onValueChange={field.onChange}
                         defaultValue={field.value}
                         className="flex gap-6"
@@ -141,7 +142,7 @@ export default function MultiSelectForm({
               />
               <FormField
                 control={control}
-                name={`multiSelect.${index}.age`}
+                name={`multiRange.${index}.age`}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-sm font-semibold">
@@ -150,7 +151,7 @@ export default function MultiSelectForm({
                     <FormControl>
                       <Input
                         className="h-8 text-sm"
-                        {...register(`multiSelect.${index}.age`)}
+                        {...register(`multiRange.${index}.age`)}
                       />
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -161,16 +162,16 @@ export default function MultiSelectForm({
 
             <FormField
               control={control}
-              name={`multiSelect.${index}.reference_range`}
+              name={`multiRange.${index}.reference_range`}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold">
-                    정상값
+                    정상 참고범위 (최소값~최대값)
                   </FormLabel>
                   <FormControl>
                     <Input
                       className="h-8 text-sm"
-                      {...register(`multiSelect.${index}.reference_range`)}
+                      {...register(`multiRange.${index}.reference_range`)}
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />
@@ -178,7 +179,7 @@ export default function MultiSelectForm({
               )}
             />
 
-            <Selects nestIndex={index} control={control} register={register} />
+            <Ranges nestIndex={index} control={control} register={register} />
           </div>
         );
       })}
