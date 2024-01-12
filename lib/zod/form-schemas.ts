@@ -68,7 +68,8 @@ export const addTestFormSchema = z.object({
   multiRange: z.array(
     z.object({
       species: z.enum(["canine", "feline", "both"]),
-      age: z.string().optional(),
+      age_min: z.string().optional(),
+      age_max: z.string().optional(),
       reference_range: z.string().optional(),
       ranges: z.array(
         z.object({
@@ -87,7 +88,8 @@ export const addTestFormSchema = z.object({
   multiSelect: z.array(
     z.object({
       species: z.enum(["canine", "feline", "both"]),
-      age: z.string().optional(),
+      age_min: z.string().optional(),
+      age_max: z.string().optional(),
       reference_range: z.string().optional(),
       selects: z.array(
         z.object({

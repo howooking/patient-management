@@ -26,22 +26,27 @@ export default function Ranges({
           <div key={item.id} className="grid grid-cols-2 gap-2">
             <div className="flex gap-1">
               <Input
+                className="h-8 text-sm"
                 {...register(`multiRange.${nestIndex}.ranges.${k}.ge`)}
                 placeholder="이상"
               />
               <Input
+                className="h-8 text-sm"
                 {...register(`multiRange.${nestIndex}.ranges.${k}.gt`)}
                 placeholder="초과"
               />
               <Input
+                className="h-8 text-sm"
                 {...register(`multiRange.${nestIndex}.ranges.${k}.le`)}
                 placeholder="이하"
               />
               <Input
+                className="h-8 text-sm"
                 {...register(`multiRange.${nestIndex}.ranges.${k}.lt`)}
                 placeholder="미만"
               />
               <Input
+                className="h-8 text-sm"
                 {...register(
                   `multiRange.${nestIndex}.ranges.${k}.interpretation`
                 )}
@@ -50,10 +55,12 @@ export default function Ranges({
             </div>
             <div className="flex gap-1 items-center">
               <Input
+                className="h-8 text-sm"
                 {...register(`multiRange.${nestIndex}.ranges.${k}.diagnosis`)}
                 placeholder="진단"
               />
               <Input
+                className="h-8 text-sm"
                 {...register(`multiRange.${nestIndex}.ranges.${k}.description`)}
                 placeholder="설명"
               />

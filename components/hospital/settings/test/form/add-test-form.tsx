@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -180,7 +178,8 @@ export default function AddTestForm({
       // multi range
       if (type === "범위") {
         for (let i = 0; i < multiRange.length; i++) {
-          const age = multiRange[i].age;
+          const age_min = multiRange[i].age_min;
+          const age_max = multiRange[i].age_max;
           const species = multiRange[i].species;
           const reference_range = multiRange[i].reference_range;
 
@@ -191,7 +190,8 @@ export default function AddTestForm({
               .from("test_set")
               .insert({
                 test_id: testsId,
-                age,
+                age_min,
+                age_max,
                 species,
                 reference_range,
                 description,
@@ -219,7 +219,8 @@ export default function AddTestForm({
       //  select
       if (type === "선택") {
         for (let i = 0; i < multiSelect.length; i++) {
-          const age = multiSelect[i].age;
+          const age_min = multiSelect[i].age_min;
+          const age_max = multiSelect[i].age_max;
           const species = multiSelect[i].species;
           const reference_range = multiSelect[i].reference_range;
 
@@ -230,7 +231,8 @@ export default function AddTestForm({
               .from("test_set")
               .insert({
                 test_id: testsId,
-                age,
+                age_min,
+                age_max,
                 species,
                 reference_range,
                 select_value,
@@ -287,7 +289,7 @@ export default function AddTestForm({
             <FormItem className="space-y-3">
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
                 검사타입*
-                <TooltipProvider delayDuration={100}>
+                {/* <TooltipProvider delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger tabIndex={-1} type="button">
                       <FaRegCircleQuestion className="opacity-50" />
@@ -295,12 +297,14 @@ export default function AddTestForm({
                     <TooltipContent side="right">
                       범위 : APL, 47미만 낮음, 정상 밤위 47 ~ 254, 254이상 높음
                       <br />
-                      선택 : 키트검사 양성/음성, 변상태 혈변 & 점액변 & 설사
+                      선택 : 키트검사 양성/음성
+                      <br />
+                      다중선택 : 변상태 혈변 & 점액변 & 설사
                       <br />
                       서술 : 혈액 도말 검사
                     </TooltipContent>
                   </Tooltip>
-                </TooltipProvider>
+                </TooltipProvider> */}
               </FormLabel>
               <FormControl>
                 <RadioGroup
@@ -479,7 +483,7 @@ export default function AddTestForm({
           />
         )}
 
-        {selectedType === "선택" && (
+        {(selectedType === "선택" || selectedType === "다중선택") && (
           <MultiSelectForm
             testDetail={testDetail}
             edit={edit}

@@ -13,7 +13,12 @@ export function AddTestDialog() {
       <DialogTrigger asChild>
         <Button variant="outline">검사 추가</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent
+        className="max-w-4xl max-h-[90vh] overflow-y-auto"
+        onInteractOutside={(e) => {
+          e.preventDefault();
+        }}
+      >
         <AddTestForm setOpen={setOpen} />
       </DialogContent>
     </Dialog>

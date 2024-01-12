@@ -52,12 +52,12 @@ export default function MultiSelectForm({
   }, [edit, setValue, testDetail]);
 
   return (
-    <div className="col-span-2 gap-2 flex flex-col">
+    <div className="col-span-2 flex flex-col">
       {fields.map((item, index) => {
         return (
           <div
             key={item.id}
-            className="border p-2 rounded-md grid grid-cols-2 gap-4 relative"
+            className="border p-2 rounded-md grid grid-cols-2 gap-2 relative"
           >
             <div className="absolute right-1 top-1">
               <Button
@@ -69,7 +69,8 @@ export default function MultiSelectForm({
                     ...(getValues().multiSelect || []),
                     {
                       species: getValues("multiSelect")[0].species,
-                      age: getValues("multiSelect")[0].age,
+                      age_min: getValues("multiSelect")[0].age_min,
+                      age_max: getValues("multiSelect")[0].age_max,
                       reference_range:
                         getValues("multiSelect")[0].reference_range,
                       selects: [
@@ -89,6 +90,7 @@ export default function MultiSelectForm({
               >
                 <LuPlus />
               </Button>
+
               <Button
                 type="button"
                 size="icon"
@@ -139,18 +141,19 @@ export default function MultiSelectForm({
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={control}
-                name={`multiSelect.${index}.age`}
+                name={`multiSelect.${index}.reference_range`}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex-1">
                     <FormLabel className="text-sm font-semibold">
-                      연령
+                      정상값
                     </FormLabel>
                     <FormControl>
                       <Input
                         className="h-8 text-sm"
-                        {...register(`multiSelect.${index}.age`)}
+                        {...register(`multiSelect.${index}.reference_range`)}
                       />
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -159,24 +162,43 @@ export default function MultiSelectForm({
               />
             </div>
 
-            <FormField
-              control={control}
-              name={`multiSelect.${index}.reference_range`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-semibold">
-                    정상값
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      className="h-8 text-sm"
-                      {...register(`multiSelect.${index}.reference_range`)}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
-            />
+            <div className="flex gap-1">
+              <FormField
+                control={control}
+                name={`multiSelect.${index}.age_min`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold">
+                      연령
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="이상"
+                        className="h-8 text-sm"
+                        {...register(`multiSelect.${index}.age_min`)}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-xs" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name={`multiSelect.${index}.age_max`}
+                render={({ field }) => (
+                  <FormItem className="flex justify-end items-end">
+                    <FormControl>
+                      <Input
+                        placeholder="이하"
+                        className="h-8 text-sm"
+                        {...register(`multiSelect.${index}.age_max`)}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-xs" />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <Selects nestIndex={index} control={control} register={register} />
           </div>

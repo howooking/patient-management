@@ -57,7 +57,7 @@ export default function MultiRangeForm({
         return (
           <div
             key={item.id}
-            className="border p-2 rounded-md grid grid-cols-2 gap-4 relative"
+            className="border p-2 rounded-md grid grid-cols-2 gap-2 relative"
           >
             <div className="absolute right-1 top-1">
               <Button
@@ -69,7 +69,8 @@ export default function MultiRangeForm({
                     ...(getValues().multiRange || []),
                     {
                       species: getValues("multiRange")[0].species,
-                      age: getValues("multiRange")[0].age,
+                      age_min: getValues("multiRange")[0].age_min,
+                      age_max: getValues("multiRange")[0].age_max,
                       reference_range:
                         getValues("multiRange")[0].reference_range,
                       ranges: [
@@ -102,7 +103,7 @@ export default function MultiRangeForm({
             </div>
 
             {/* 종선택 */}
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <FormField
                 control={control}
                 name={`multiRange.${index}.species`}
@@ -142,16 +143,16 @@ export default function MultiRangeForm({
               />
               <FormField
                 control={control}
-                name={`multiRange.${index}.age`}
+                name={`multiRange.${index}.reference_range`}
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex-1">
                     <FormLabel className="text-sm font-semibold">
-                      연령
+                      참고범위 (최소값~최대값)
                     </FormLabel>
                     <FormControl>
                       <Input
                         className="h-8 text-sm"
-                        {...register(`multiRange.${index}.age`)}
+                        {...register(`multiRange.${index}.reference_range`)}
                       />
                     </FormControl>
                     <FormMessage className="text-xs" />
@@ -160,24 +161,43 @@ export default function MultiRangeForm({
               />
             </div>
 
-            <FormField
-              control={control}
-              name={`multiRange.${index}.reference_range`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-semibold">
-                    정상 참고범위 (최소값~최대값)
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      className="h-8 text-sm"
-                      {...register(`multiRange.${index}.reference_range`)}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
-            />
+            <div className="flex gap-2">
+              <FormField
+                control={control}
+                name={`multiRange.${index}.age_min`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-semibold">
+                      연령
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="이상"
+                        className="h-8 text-sm"
+                        {...register(`multiRange.${index}.age_min`)}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-xs" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name={`multiRange.${index}.age_max`}
+                render={({ field }) => (
+                  <FormItem className="flex items-end">
+                    <FormControl>
+                      <Input
+                        placeholder="이하"
+                        className="h-8 text-sm"
+                        {...register(`multiRange.${index}.age_max`)}
+                      />
+                    </FormControl>
+                    <FormMessage className="text-xs" />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <Ranges nestIndex={index} control={control} register={register} />
           </div>

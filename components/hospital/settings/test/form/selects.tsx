@@ -26,6 +26,7 @@ export default function Selects({
           <div key={item.id} className="grid grid-cols-2 gap-2">
             <div className="flex gap-1">
               <Input
+                className="h-8 text-sm"
                 {...register(
                   `multiSelect.${nestIndex}.selects.${k}.select_value`
                 )}
@@ -33,6 +34,7 @@ export default function Selects({
               />
 
               <Input
+                className="h-8 text-sm"
                 {...register(
                   `multiSelect.${nestIndex}.selects.${k}.interpretation`
                 )}
@@ -41,10 +43,12 @@ export default function Selects({
             </div>
             <div className="flex gap-1 items-center">
               <Input
+                className="h-8 text-sm"
                 {...register(`multiSelect.${nestIndex}.selects.${k}.diagnosis`)}
                 placeholder="진단"
               />
               <Input
+                className="h-8 text-sm"
                 {...register(
                   `multiSelect.${nestIndex}.selects.${k}.description`
                 )}
