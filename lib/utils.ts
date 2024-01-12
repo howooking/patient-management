@@ -70,7 +70,7 @@ type RangeMappedData = {
 export function groupMultiSelectTests(testDetail: TestSet[]) {
   const groupedData: SelectGroupedData = testDetail.reduce(
     (result: SelectGroupedData, item) => {
-      const key = `${item.species}-${item.age}-${item.reference_range}`;
+      const key = `${item.species}-${item.age_min}-${item.age_max}-${item.reference_range}`;
       if (!result[key]) {
         result[key] = [];
       }
@@ -101,7 +101,7 @@ export function groupMultiSelectTests(testDetail: TestSet[]) {
 export function groupMultiRangeTests(testDetail: TestSet[]) {
   const groupedData: RangeGroupedData = testDetail.reduce(
     (result: RangeGroupedData, item) => {
-      const key = `${item.species}-${item.age}-${item.reference_range}`;
+      const key = `${item.species}-${item.age_min}-${item.age_max}-${item.reference_range}`;
       if (!result[key]) {
         result[key] = [];
       }
