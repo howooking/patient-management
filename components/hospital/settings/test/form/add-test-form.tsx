@@ -42,7 +42,7 @@ import {
   TestType,
 } from "@/constants/selects";
 import MultiSelectForm from "./multi-select-form";
-import { TestTableColum } from "../table/columns";
+import { TestTableColumn } from "../table/columns";
 import { TestSet } from "@/types/type";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 
@@ -55,7 +55,7 @@ export default function AddTestForm({
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
   edit?: boolean;
-  test?: TestTableColum;
+  test?: TestTableColumn;
   testDetail?: TestSet[];
   copy?: boolean;
 }) {
@@ -217,7 +217,7 @@ export default function AddTestForm({
       }
 
       //  select
-      if (type === "선택") {
+      if (type === "선택" || type === "다중선택") {
         for (let i = 0; i < multiSelect.length; i++) {
           const age_min = multiSelect[i].age_min;
           const age_max = multiSelect[i].age_max;

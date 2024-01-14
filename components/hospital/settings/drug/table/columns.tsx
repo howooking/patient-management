@@ -1,13 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { type Test } from "@/types/type";
+import { type Drug } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { LuArrowDown } from "react-icons/lu";
 import TableDropdown from "./table-dropdown";
-export type TestTableColumn = Omit<Test, "created_at">;
+export type DrugTableColumn = Omit<Drug, "created_at">;
 
-export const columns: ColumnDef<TestTableColumn>[] = [
+export const columns: ColumnDef<DrugTableColumn>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -18,24 +18,7 @@ export const columns: ColumnDef<TestTableColumn>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          검사명
-          <LuArrowDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-
-  {
-    accessorKey: "category",
-    header: ({ column }) => {
-      return (
-        <Button
-          size="sm"
-          className="text-sm"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          카테고리
+          약품명
           <LuArrowDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -48,8 +31,17 @@ export const columns: ColumnDef<TestTableColumn>[] = [
   },
 
   {
-    accessorKey: "unit",
-    header: "단위",
+    accessorKey: "indication",
+    header: "적용증",
+  },
+
+  {
+    accessorKey: "description",
+    header: "설명",
+  },
+  {
+    accessorKey: "side_effect",
+    header: "부작용",
   },
   // {
   //   accessorKey: "amount",
@@ -67,9 +59,9 @@ export const columns: ColumnDef<TestTableColumn>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const test = row.original;
+      const drug = row.original;
 
-      return <TableDropdown test={test} />;
+      return <TableDropdown drug={drug} />;
     },
   },
 ];

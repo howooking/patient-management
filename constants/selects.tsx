@@ -17,9 +17,10 @@ export const TEST_CATEGORY = [
   "CT",
   "MRI",
 ] as const;
-
 export type TestCategory = (typeof TEST_CATEGORY)[number];
 
 export const TEST_TYPE = ["범위", "선택", "다중선택", "서술"] as const;
-
 export type TestType = (typeof TEST_TYPE)[number];
+
+export const ROUTES = ["IV", "SC", "IM", "ID", "PO", "patch", "etc"] as const;
+export type RoutesType = (typeof ROUTES)[number];

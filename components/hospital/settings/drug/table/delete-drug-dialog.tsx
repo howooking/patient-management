@@ -14,14 +14,14 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { TestTableColumn } from "./columns";
+import { DrugTableColumn } from "./columns";
 
-export function DeleteTestDialog({
-  test,
+export function DeleteDrugDialog({
+  drug,
   isDeleteDialogOpen,
   setIsDeleteDialogOpen,
 }: {
-  test: TestTableColumn;
+  drug: DrugTableColumn;
   isDeleteDialogOpen: boolean;
   setIsDeleteDialogOpen: Dispatch<SetStateAction<boolean>>;
 }) {
@@ -33,30 +33,24 @@ export function DeleteTestDialog({
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    try {
-      const { error } = await supabase
-        .from("tests")
-        .delete()
-        .match({ test_id: test.test_id });
+    const { error } = await supabase
+      .from("drugs")
+      .delete()
+      .match({ id: drug.id });
 
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: error.message,
-          description: "관리자에게 문의하세요",
-        });
-        return;
-      }
+    if (error) {
       toast({
-        title: `${test.name} 검사가 삭제되었습니다.`,
+        variant: "destructive",
+        title: error.message,
+        description: "관리자에게 문의하세요",
       });
-      router.refresh();
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error, "error while adding or deleting test");
-    } finally {
-      setIsDeleting(false);
+      return;
     }
+    toast({
+      title: `${drug.name} 약품이 삭제되었습니다.`,
+    });
+    setIsDeleting(false);
+    router.refresh();
   };
 
   return (
@@ -64,7 +58,7 @@ export function DeleteTestDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {test.name} 검사를 삭제하시겠습니까?
+            {drug.name} 검사를 삭제하시겠습니까?
           </AlertDialogTitle>
           <AlertDialogDescription>
             삭제 된 데이터는 복구되지 않습니다.
