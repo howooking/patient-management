@@ -19,6 +19,7 @@ import { toast } from "@/components/ui/use-toast";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { addDrugFormSchema } from "@/lib/zod/form-schemas";
 import { type DrugDose } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -29,30 +30,6 @@ import { FaRegCircleQuestion } from "react-icons/fa6";
 import * as z from "zod";
 import { DrugTableColumn } from "../table/columns";
 import DrugDoses from "./drug-doses";
-
-export const addDrugFormSchema = z.object({
-  name: z.string({ required_error: "약품명을 입력해주세요." }),
-  tag: z.string().optional(),
-  indication: z.string().optional(),
-  description: z.string().optional(),
-  side_effect: z.string().optional(),
-
-  drug_doses: z.array(
-    z.object({
-      dose_unit: z.string().optional().nullable(),
-      bw_unit: z.string().optional().nullable(),
-      cri_unit: z.string().optional().nullable(),
-      default_dose: z.string().optional().nullable(),
-      min_dose: z.string().optional().nullable(),
-      max_dose: z.string().optional().nullable(),
-      route: z.string({ required_error: "투약 경로를 입력해주세요." }),
-      species: z.enum(["canine", "feline", "both"], {
-        required_error: "종을 선택해주세요.",
-      }),
-      description: z.string().optional().nullable(),
-    })
-  ),
-});
 
 export default function AddDrugForm({
   setOpen,

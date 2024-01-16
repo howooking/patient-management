@@ -21,7 +21,7 @@ export interface Database {
           drug_id: string | null
           max_dose: string | null
           min_dose: string | null
-          route: string | null
+          route: string
           species: string | null
         }
         Insert: {
@@ -35,7 +35,7 @@ export interface Database {
           drug_id?: string | null
           max_dose?: string | null
           min_dose?: string | null
-          route?: string | null
+          route: string
           species?: string | null
         }
         Update: {
@@ -49,7 +49,7 @@ export interface Database {
           drug_id?: string | null
           max_dose?: string | null
           min_dose?: string | null
-          route?: string | null
+          route?: string
           species?: string | null
         }
         Relationships: [
@@ -62,48 +62,7 @@ export interface Database {
           }
         ]
       }
-      drugs: {
-        Row: {
-          created_at: string
-          description: string | null
-          hos_id: string | null
-          id: string
-          indication: string | null
-          name: string
-          side_effect: string | null
-          tag: string | null
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          hos_id?: string | null
-          id?: string
-          indication?: string | null
-          name: string
-          side_effect?: string | null
-          tag?: string | null
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          hos_id?: string | null
-          id?: string
-          indication?: string | null
-          name?: string
-          side_effect?: string | null
-          tag?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "drugs_hos_id_fkey"
-            columns: ["hos_id"]
-            isOneToOne: false
-            referencedRelation: "hospitals"
-            referencedColumns: ["hos_id"]
-          }
-        ]
-      }
-      dug_products: {
+      drug_products: {
         Row: {
           company: string | null
           created_at: string
@@ -151,14 +110,55 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "dug_products_drug_id_fkey"
+            foreignKeyName: "drug_products_drug_id_fkey"
             columns: ["drug_id"]
             isOneToOne: false
             referencedRelation: "drugs"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "dug_products_hos_id_fkey"
+            foreignKeyName: "drug_products_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          }
+        ]
+      }
+      drugs: {
+        Row: {
+          created_at: string
+          description: string | null
+          hos_id: string | null
+          id: string
+          indication: string | null
+          name: string
+          side_effect: string | null
+          tag: string | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          hos_id?: string | null
+          id?: string
+          indication?: string | null
+          name: string
+          side_effect?: string | null
+          tag?: string | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          hos_id?: string | null
+          id?: string
+          indication?: string | null
+          name?: string
+          side_effect?: string | null
+          tag?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drugs_hos_id_fkey"
             columns: ["hos_id"]
             isOneToOne: false
             referencedRelation: "hospitals"

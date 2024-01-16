@@ -1,4 +1,8 @@
-import { TEST_CATEGORY, TEST_TYPE } from "@/constants/selects";
+import {
+  DRUG_PRODUCT_TYPE,
+  TEST_CATEGORY,
+  TEST_TYPE,
+} from "@/constants/selects";
 import * as z from "zod";
 
 export const signupFormSchema = z.object({
@@ -103,4 +107,43 @@ export const addTestFormSchema = z.object({
   ),
 
   description: z.string().optional(),
+});
+
+export const addDrugFormSchema = z.object({
+  name: z.string({ required_error: "약품명을 입력해주세요." }),
+  tag: z.string().optional(),
+  indication: z.string().optional(),
+  description: z.string().optional(),
+  side_effect: z.string().optional(),
+
+  drug_doses: z.array(
+    z.object({
+      dose_unit: z.string().optional().nullable(),
+      bw_unit: z.string().optional().nullable(),
+      cri_unit: z.string().optional().nullable(),
+      default_dose: z.string().optional().nullable(),
+      min_dose: z.string().optional().nullable(),
+      max_dose: z.string().optional().nullable(),
+      route: z.string({ required_error: "투약 경로를 입력해주세요." }),
+      species: z.enum(["canine", "feline", "both"], {
+        required_error: "종을 선택해주세요.",
+      }),
+      description: z.string().optional().nullable(),
+    })
+  ),
+});
+
+export const addDrugProductFormSchema = z.object({
+  drug_id: z.string({ required_error: "약물원료를 선택해주세요." }),
+  name: z.string({ required_error: "제품명을 입력해주세요." }),
+  tag: z.string().optional(),
+  volume: z.string().optional(),
+  unit: z.string().optional(),
+  mass_unit: z.string().optional(),
+  price: z.string().optional(),
+  type: z.enum(DRUG_PRODUCT_TYPE, {
+    required_error: "제품타입을 선택해주세요",
+  }),
+  description: z.string().optional(),
+  company: z.string().optional(),
 });

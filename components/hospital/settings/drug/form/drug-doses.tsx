@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { addDrugFormSchema } from "@/lib/zod/form-schemas";
 import { type DrugDose } from "@/types/type";
 import { useEffect } from "react";
 import {
@@ -28,7 +29,6 @@ import {
 import { FaRegCircleQuestion } from "react-icons/fa6";
 import { LuPlus, LuTrash2 } from "react-icons/lu";
 import * as z from "zod";
-import { addDrugFormSchema } from "./add-drug-form";
 
 export default function DrugDoses({
   doseDetail,
