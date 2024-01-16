@@ -72,20 +72,9 @@ export default function AddDrugForm({
   const form = useForm<z.infer<typeof addDrugFormSchema>>({
     resolver: zodResolver(addDrugFormSchema),
     defaultValues: {
-      description: "",
-      indication: "",
-      side_effect: "",
-      tag: "",
       drug_doses: [
         {
-          bw_unit: "",
-          cri_unit: "",
-          default_dose: "",
-          description: "",
-          dose_unit: "",
-          max_dose: "",
-          min_dose: "",
-          route: "IV",
+          route: "#IV",
           species: "canine",
         },
       ],

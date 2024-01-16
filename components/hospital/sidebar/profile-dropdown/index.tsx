@@ -4,10 +4,13 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import HospitalSettingMenu from "./hospital-setting-menu";
+import HospitalSetting from "./hospital-setting";
 import ProfileDropdownTrigger from "./profile-dropdown-trigger";
-import ToggleThemeMenu from "./toggle-theme-menu";
 import Signout from "./signout";
+import TestSetting from "./test-setting";
+import ToggleThemeMenu from "./toggle-theme-menu";
+import DrugSetting from "./drug-setting";
+import UserSetting from "./user-setting";
 
 type Props = {
   src?: string | null;
@@ -35,9 +38,13 @@ export default function ProfileDropdown({
       <ProfileDropdownTrigger name={name} src={src} email={email} />
 
       <DropdownMenuContent className="w-[240px] ml-2 border-input shadow-lg">
-        <DropdownMenuItem>사용자 설정</DropdownMenuItem>
+        <UserSetting />
 
-        <HospitalSettingMenu hospitalList={hospitalList} />
+        <TestSetting />
+
+        <DrugSetting />
+
+        <HospitalSetting hospitalList={hospitalList} />
 
         <ToggleThemeMenu />
 

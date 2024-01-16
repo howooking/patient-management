@@ -24,7 +24,7 @@ export default async function DrugSettingPage({
   return (
     <>
       <div className="flex justify-between">
-        <h2 className="text-xl text-primary font-bold">약물 설정</h2>
+        <h2 className="text-xl text-primary font-bold">약품원료 설정</h2>
         <AddDrugDialog />
       </div>
 

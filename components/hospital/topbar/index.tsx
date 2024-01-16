@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { IoChatboxOutline, IoNotificationsOutline } from "react-icons/io5";
 import PetDialog from "./pet-dialog";
 import SelectedPet from "./selected-pet";
-import SettingButton from "./setting-button";
 
 export default function TopBar() {
   return (
@@ -23,8 +22,6 @@ export default function TopBar() {
           <Button size="icon" variant="ghost" className="rounded-full">
             <IoNotificationsOutline size={20} />
           </Button>
-
-          <SettingButton />
         </div>
       </div>
     </nav>

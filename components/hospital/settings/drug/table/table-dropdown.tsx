@@ -5,11 +5,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MdMoreVert } from "react-icons/md";
-import { EditDrugDialog } from "./edit-drug-dialog";
-import { DeleteDrugDialog } from "./delete-drug-dialog";
-import { DrugTableColumn } from "./columns";
 import { useState } from "react";
+import { MdMoreVert } from "react-icons/md";
+import { DrugTableColumn } from "./columns";
+import { DeleteDrugDialog } from "./delete-drug-dialog";
+import { EditDrugDialog } from "./edit-drug-dialog";
 
 export default function TableDropdown({ drug }: { drug: DrugTableColumn }) {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);

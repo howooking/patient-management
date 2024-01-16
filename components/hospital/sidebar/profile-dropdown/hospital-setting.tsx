@@ -20,7 +20,7 @@ type Props = {
     | undefined;
 };
 
-export default async function HospitalSettingMenu({ hospitalList }: Props) {
+export default async function HospitalSetting({ hospitalList }: Props) {
   return (
     <DropdownMenuSub>
       <DropdownMenuSubTrigger>병원 설정</DropdownMenuSubTrigger>
