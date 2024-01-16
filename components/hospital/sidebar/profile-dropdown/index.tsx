@@ -11,6 +11,7 @@ import TestSetting from "./test-setting";
 import ToggleThemeMenu from "./toggle-theme-menu";
 import DrugSetting from "./drug-setting";
 import UserSetting from "./user-setting";
+import FeedSetting from "./feed-setting";
 
 type Props = {
   src?: string | null;
@@ -41,6 +42,8 @@ export default function ProfileDropdown({
         <UserSetting />
 
         <TestSetting />
+
+        <FeedSetting />
 
         <DrugSetting />
 

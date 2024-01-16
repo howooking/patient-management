@@ -166,6 +166,59 @@ export interface Database {
           }
         ]
       }
+      feeds: {
+        Row: {
+          calory: string
+          created_at: string
+          description: string | null
+          hos_id: string
+          id: string
+          name: string
+          price: string
+          species: string
+          tag: string
+          type: string
+          unit: string
+          volume: string
+        }
+        Insert: {
+          calory?: string
+          created_at?: string
+          description?: string | null
+          hos_id: string
+          id?: string
+          name?: string
+          price?: string
+          species: string
+          tag?: string
+          type?: string
+          unit?: string
+          volume?: string
+        }
+        Update: {
+          calory?: string
+          created_at?: string
+          description?: string | null
+          hos_id?: string
+          id?: string
+          name?: string
+          price?: string
+          species?: string
+          tag?: string
+          type?: string
+          unit?: string
+          volume?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feeds_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          }
+        ]
+      }
       hos_vet_mapping: {
         Row: {
           class: string

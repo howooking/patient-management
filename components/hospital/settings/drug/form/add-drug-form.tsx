@@ -288,8 +288,8 @@ export default function AddDrugForm({
           setValue={setValue}
         />
 
-        <div className="flex gap-4 col-span-2">
-          <Button className="font-semibold mt-4 w-full" disabled={isSubmitting}>
+        <div className="flex gap-4 col-span-2 pb-4">
+          <Button className="w-full" disabled={isSubmitting}>
             {edit && !copy ? "검사 수정" : "검사 등록"}
             <AiOutlineLoading3Quarters
               className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
@@ -297,7 +297,7 @@ export default function AddDrugForm({
           </Button>
           <Button
             type="button"
-            className="font-semibold mt-4 w-full"
+            className="w-full"
             disabled={isSubmitting}
             variant="outline"
             onClick={() => setOpen(false)}

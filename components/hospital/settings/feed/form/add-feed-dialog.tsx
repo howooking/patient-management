@@ -3,9 +3,9 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useState } from "react";
-import AddTestForm from "./add-test-form";
+import AddFeedForm from "./add-feed-form";
 
-export function AddTestDialog() {
+export function AddFeedDialog() {
   const [open, setOpen] = useState(false);
 
   return (
@@ -19,7 +19,7 @@ export function AddTestDialog() {
           e.preventDefault();
         }}
       >
-        <AddTestForm setOpen={setOpen} />
+        <AddFeedForm setOpen={setOpen} />
       </DialogContent>
     </Dialog>
   );
