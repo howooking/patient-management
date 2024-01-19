@@ -56,31 +56,24 @@ export default function HospitalSelect({
 
     setIsChanging(true);
 
-    try {
-      const { error: vetError } = await supabase
-        .from("vets")
-        .update({ default_hos_id: hospitalId })
-        .match({ vet_id: user.id });
+    const { error: vetError } = await supabase
+      .from("vets")
+      .update({ default_hos_id: hospitalId })
+      .match({ vet_id: user.id });
 
-      if (vetError) {
-        toast({
-          variant: "destructive",
-          title: vetError.message,
-          description: "관리자에게 문의하세요",
-        });
-        return;
-      }
+    if (vetError) {
       toast({
-        title: "기본 병원이 변경되었습니다.",
+        variant: "destructive",
+        title: vetError.message,
+        description: "관리자에게 문의하세요",
       });
-      router.refresh();
       return;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error, "error while changing default hospital");
-    } finally {
-      setIsChanging(false);
     }
+    toast({
+      title: "기본 병원이 변경되었습니다.",
+    });
+    router.refresh();
+    setIsChanging(false);
   };
 
   const { collapse } = useSidebarCollapse();

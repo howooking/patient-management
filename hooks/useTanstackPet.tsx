@@ -1,5 +1,5 @@
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export default function useTanstackPets(hospitalId: string) {
   const queryClient = useQueryClient();

@@ -1,26 +1,27 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import AddDrugProductForm from "../form/add-drug-product-form";
 import { DrugProductTableColumn } from "./columns";
-import useCurrentHospitalId from "@/hooks/useCurrentHospital";
+
+type Props = {
+  drugProduct: DrugProductTableColumn;
+  copy?: boolean;
+  isEditDialogOpen: boolean;
+  setIsEditDialogOpen: Dispatch<SetStateAction<boolean>>;
+};
 
 export function EditDrugProductDialog({
   drugProduct,
   copy,
   isEditDialogOpen,
   setIsEditDialogOpen,
-}: {
-  drugProduct: DrugProductTableColumn;
-  copy?: boolean;
-  isEditDialogOpen: boolean;
-  setIsEditDialogOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+}: Props) {
   const supabase = createSupabaseBrowserClient();
   const hospitalId = useCurrentHospitalId();
   const [drugs, setDrugs] = useState<{ name: string; id: string }[] | null>([]);
 
-  // TODO: client side error handling
   useEffect(() => {
     const getData = async () => {
       const { data: drugs, error: drugsErrors } = await supabase
@@ -42,7 +43,7 @@ export function EditDrugProductDialog({
         }}
       >
         <AddDrugProductForm
-          drugs={drugs}
+          drugs={drugs || []}
           copy={copy}
           setOpen={setIsEditDialogOpen}
           edit

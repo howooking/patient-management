@@ -14,9 +14,7 @@ export default async function TestSettingPage({
 
   const { data: tests, error: testsErrors } = await supabase
     .from("tests")
-    .select(
-      "test_id, category, name, tag, unit, type, original_name, hos_id, form, description"
-    )
+    .select()
     .match({ hos_id });
 
   if (testsErrors) {

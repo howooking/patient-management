@@ -10,6 +10,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn, groupMultiRangeTests } from "@/lib/utils";
+import { addTestFormSchema } from "@/lib/zod/form-schemas";
+import { type TestSet } from "@/types/type";
+import { useEffect } from "react";
 import {
   Control,
   UseFormGetValues,
@@ -20,9 +23,16 @@ import {
 import { LuPlus, LuTrash2 } from "react-icons/lu";
 import * as z from "zod";
 import Ranges from "./ranges";
-import { addTestFormSchema } from "@/lib/zod/form-schemas";
-import { useEffect } from "react";
-import { TestSet } from "@/types/type";
+import { SPECIES } from "@/constants/selects";
+
+type Props = {
+  testDetail?: TestSet[];
+  edit?: boolean;
+  control: Control<z.infer<typeof addTestFormSchema>>;
+  register: UseFormRegister<z.infer<typeof addTestFormSchema>>;
+  setValue: UseFormSetValue<z.infer<typeof addTestFormSchema>>;
+  getValues: UseFormGetValues<z.infer<typeof addTestFormSchema>>;
+};
 
 export default function MultiRangeForm({
   testDetail,
@@ -31,14 +41,7 @@ export default function MultiRangeForm({
   register,
   setValue,
   getValues,
-}: {
-  testDetail?: TestSet[];
-  edit?: boolean;
-  control: Control<z.infer<typeof addTestFormSchema>>;
-  register: UseFormRegister<z.infer<typeof addTestFormSchema>>;
-  setValue: UseFormSetValue<z.infer<typeof addTestFormSchema>>;
-  getValues: UseFormGetValues<z.infer<typeof addTestFormSchema>>;
-}) {
+}: Props) {
   const { fields, remove } = useFieldArray({
     control,
     name: "multiRange",
@@ -47,6 +50,7 @@ export default function MultiRangeForm({
   useEffect(() => {
     if (edit && testDetail) {
       const mappedData = groupMultiRangeTests(testDetail);
+
       setValue("multiRange", mappedData);
     }
   }, [edit, setValue, testDetail]);
@@ -115,26 +119,19 @@ export default function MultiRangeForm({
                         {...register(`multiRange.${index}.species`)}
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        className="flex gap-6"
+                        className="flex gap-3"
                       >
-                        <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
-                          <FormControl>
-                            <RadioGroupItem value="canine" />
-                          </FormControl>
-                          <FormLabel>개</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
-                          <FormControl>
-                            <RadioGroupItem value="feline" />
-                          </FormControl>
-                          <FormLabel>고양이</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
-                          <FormControl>
-                            <RadioGroupItem value="both" />
-                          </FormControl>
-                          <FormLabel>공통</FormLabel>
-                        </FormItem>
+                        {SPECIES.map((species) => (
+                          <FormItem
+                            className="flex items-center space-x-1 space-y-0 text-sm"
+                            key={species}
+                          >
+                            <FormControl>
+                              <RadioGroupItem value={species} />
+                            </FormControl>
+                            <FormLabel>{species}</FormLabel>
+                          </FormItem>
+                        ))}
                       </RadioGroup>
                     </FormControl>
                     <FormMessage />
@@ -144,7 +141,7 @@ export default function MultiRangeForm({
               <FormField
                 control={control}
                 name={`multiRange.${index}.reference_range`}
-                render={({ field }) => (
+                render={() => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-sm font-semibold">
                       참고범위 (최소값~최대값)
@@ -165,7 +162,7 @@ export default function MultiRangeForm({
               <FormField
                 control={control}
                 name={`multiRange.${index}.age_min`}
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
                     <FormLabel className="text-sm font-semibold">
                       연령
@@ -184,7 +181,7 @@ export default function MultiRangeForm({
               <FormField
                 control={control}
                 name={`multiRange.${index}.age_max`}
-                render={({ field }) => (
+                render={() => (
                   <FormItem className="flex items-end">
                     <FormControl>
                       <Input

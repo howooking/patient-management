@@ -17,10 +17,10 @@ export const TEST_CATEGORY = [
   "CT",
   "MRI",
 ] as const;
-export type TestCategory = (typeof TEST_CATEGORY)[number];
+export type TestCategoryEnum = (typeof TEST_CATEGORY)[number];
 
 export const TEST_TYPE = ["범위", "선택", "다중선택", "서술"] as const;
-export type TestType = (typeof TEST_TYPE)[number];
+export type TestTypeEnum = (typeof TEST_TYPE)[number];
 
 export const DRUG_PRODUCT_TYPE = [
   "vial",
@@ -31,4 +31,10 @@ export const DRUG_PRODUCT_TYPE = [
   "powder",
   "bottle",
 ] as const;
-export type DrugProductType = (typeof DRUG_PRODUCT_TYPE)[number];
+export type DrugProductTypeEnum = (typeof DRUG_PRODUCT_TYPE)[number];
+
+export const FEED_TYPE = ["wet", "dry", "liquid", "half-dry"] as const;
+export type FeedTypeEnum = (typeof FEED_TYPE)[number];
+
+export const SPECIES = ["canine", "feline", "both"] as const;
+export type SpeciesTypeEnum = (typeof SPECIES)[number];

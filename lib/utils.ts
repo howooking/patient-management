@@ -43,7 +43,8 @@ type SelectGroupedData = {
 };
 type SelectMappedData = {
   species: "canine" | "feline" | "both";
-  age: string;
+  age_min: string;
+  age_max: string;
   reference_range: string;
   selects: Select[];
 };
@@ -62,7 +63,8 @@ type RangeGroupedData = {
 };
 type RangeMappedData = {
   species: "canine" | "feline" | "both";
-  age: string;
+  age_min: string;
+  age_max: string;
   reference_range: string;
   ranges: Range[];
 };
@@ -86,10 +88,11 @@ export function groupMultiSelectTests(testDetail: TestSet[]) {
   );
   const mappedData: SelectMappedData[] = Object.entries(groupedData).map(
     ([key, values]) => {
-      const [species, age, reference_range] = key.split("-");
+      const [species, age_min, age_max, reference_range] = key.split("-");
       return {
         species: species as "canine" | "feline" | "both",
-        age,
+        age_max,
+        age_min,
         reference_range,
         selects: values,
       };
@@ -120,10 +123,11 @@ export function groupMultiRangeTests(testDetail: TestSet[]) {
   );
   const mappedData: RangeMappedData[] = Object.entries(groupedData).map(
     ([key, values]) => {
-      const [species, age, reference_range] = key.split("-");
+      const [species, age_min, age_max, reference_range] = key.split("-");
       return {
         species: species as "canine" | "feline" | "both",
-        age,
+        age_min,
+        age_max,
         reference_range,
         ranges: values,
       };

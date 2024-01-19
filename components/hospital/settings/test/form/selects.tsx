@@ -5,15 +5,13 @@ import { Control, UseFormRegister, useFieldArray } from "react-hook-form";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import * as z from "zod";
 
-export default function Selects({
-  nestIndex,
-  control,
-  register,
-}: {
+type Props = {
   nestIndex: number;
   control: Control<z.infer<typeof addTestFormSchema>>;
   register: UseFormRegister<z.infer<typeof addTestFormSchema>>;
-}) {
+};
+
+export default function Selects({ nestIndex, control, register }: Props) {
   const { fields, remove, append } = useFieldArray({
     control,
     name: `multiSelect.${nestIndex}.selects`,
@@ -69,10 +67,10 @@ export default function Selects({
                   type="button"
                   onClick={() =>
                     append({
-                      select_value: undefined,
-                      description: undefined,
-                      diagnosis: undefined,
-                      interpretation: undefined,
+                      select_value: "",
+                      description: "",
+                      diagnosis: "",
+                      interpretation: "",
                     })
                   }
                   size="icon"

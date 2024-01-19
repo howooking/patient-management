@@ -1,3 +1,4 @@
+import FormTooltip from "@/components/common/form-tooltip";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,40 +18,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
+import { FeedTypeEnum, SpeciesTypeEnum } from "@/constants/selects";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { addFeedFormSchema } from "@/lib/zod/form-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { FaRegCircleQuestion } from "react-icons/fa6";
 import * as z from "zod";
 import { FeedTableColumn } from "../table/columns";
-
-export const addFeedFormSchema = z.object({
-  name: z.string({ required_error: "사료명을 입력해주세요." }),
-  price: z.string().optional(),
-  tag: z.string({ required_error: "사료명을 입력해주세요." }),
-  type: z.enum(["wet", "dry", "liquid", "half-dry"], {
-    required_error: "사료명을 입력해주세요.",
-  }),
-  calory: z.string({ required_error: "칼로리를 입력해주세요." }),
-  volume: z.string({ required_error: "사료 용량을 입력해주세요." }),
-  unit: z.string({ required_error: "사료단위를 입력해주세요." }),
-  species: z.enum(["canine", "feline", "both"], {
-    required_error: "사료명을 입력해주세요.",
-  }),
-  description: z.string().optional(),
-});
 
 export default function AddFeedForm({
   setOpen,
@@ -68,20 +48,23 @@ export default function AddFeedForm({
   const form = useForm<z.infer<typeof addFeedFormSchema>>({
     resolver: zodResolver(addFeedFormSchema),
   });
-  const { control, register, handleSubmit, getValues, setValue } = form;
+  const { control, handleSubmit, setValue } = form;
 
   useEffect(() => {
-    setValue("calory", feed?.calory!);
-    setValue("description", feed?.description!);
-    setValue("name", feed?.name!);
-    setValue("price", feed?.price!);
-    setValue("price", feed?.price!);
-    setValue("species", feed?.species as "canine" | "feline" | "both");
-    setValue("tag", feed?.tag!);
-    setValue("type", feed?.type! as "wet" | "dry" | "liquid" | "half-dry");
-    setValue("unit", feed?.unit!);
-    setValue("volume", feed?.volume!);
+    if (edit) {
+      setValue("calory", feed?.calory!);
+      setValue("description", feed?.description!);
+      setValue("name", feed?.name!);
+      setValue("price", feed?.price!);
+      setValue("price", feed?.price!);
+      setValue("species", feed?.species as SpeciesTypeEnum);
+      setValue("tag", feed?.tag!);
+      setValue("type", feed?.type! as FeedTypeEnum);
+      setValue("unit", feed?.unit!);
+      setValue("volume", feed?.volume!);
+    }
   }, [
+    edit,
     feed?.calory,
     feed?.description,
     feed?.name,
@@ -111,32 +94,20 @@ export default function AddFeedForm({
       price,
     } = values;
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return;
-    }
-
     setIsSubmitting(true);
 
-    const { error: feedError } = await supabase
-      .from("feeds")
-      .insert({
-        hos_id: hospitalId,
-        species,
-        calory,
-        description,
-        name,
-        price,
-        tag,
-        type,
-        unit,
-        volume,
-      })
-      .select()
-      .single();
+    const { error: feedError } = await supabase.from("feeds").insert({
+      hos_id: hospitalId,
+      species,
+      calory,
+      description,
+      name,
+      price,
+      tag,
+      type,
+      unit,
+      volume,
+    });
 
     if (feedError) {
       toast({
@@ -193,16 +164,7 @@ export default function AddFeedForm({
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
                 태그*
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger tabIndex={-1} type="button">
-                      <FaRegCircleQuestion className="opacity-50" />
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      #힐스#로우펫#저지방
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <FormTooltip title="#힐스#로우펫#저지방" />
               </FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
@@ -277,7 +239,6 @@ export default function AddFeedForm({
                   <SelectItem value="half-dry">반건식</SelectItem>
                 </SelectContent>
               </Select>
-
               <FormMessage />
             </FormItem>
           )}
@@ -291,16 +252,7 @@ export default function AddFeedForm({
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
                 단위*
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger tabIndex={-1} type="button">
-                      <FaRegCircleQuestion className="opacity-50" />
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      고체 g, 액체 ml
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <FormTooltip title="고체 g, 액체 ml" />
               </FormLabel>
               <Select
                 onValueChange={field.onChange}
@@ -330,16 +282,7 @@ export default function AddFeedForm({
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
                 칼로리*
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger tabIndex={-1} type="button">
-                      <FaRegCircleQuestion className="opacity-50" />
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      1kcal/g인 경우 1
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <FormTooltip title="1kcal/g인 경우 1" />
               </FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
@@ -357,16 +300,7 @@ export default function AddFeedForm({
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
                 사료량*
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger tabIndex={-1} type="button">
-                      <FaRegCircleQuestion className="opacity-50" />
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      i/d low fat 3kg인 경우 3000
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <FormTooltip title="i/d low fat 3kg인 경우 3000" />
               </FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />

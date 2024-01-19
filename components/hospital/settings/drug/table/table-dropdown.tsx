@@ -12,9 +12,9 @@ import { DeleteDrugDialog } from "./delete-drug-dialog";
 import { EditDrugDialog } from "./edit-drug-dialog";
 
 export default function TableDropdown({ drug }: { drug: DrugTableColumn }) {
+  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   return (
     <>
       <DropdownMenu>

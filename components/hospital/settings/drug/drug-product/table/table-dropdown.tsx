@@ -16,25 +16,27 @@ export default function TableDropdown({
 }: {
   drugProduct: DrugProductTableColumn;
 }) {
+  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="rounded-full" size="icon">
-            <span className="sr-only">Open menu</span>
             <MdMoreVert />
           </Button>
         </DropdownMenuTrigger>
+
         <DropdownMenuContent align="end" className="flex flex-col gap-2">
           <DropdownMenuItem onClick={() => setIsCopyDialogOpen(true)}>
             복사
           </DropdownMenuItem>
+
           <DropdownMenuItem onClick={() => setIsEditDialogOpen(true)}>
             수정
           </DropdownMenuItem>
+
           <DropdownMenuItem onClick={() => setIsDeleteDialogOpen(true)}>
             삭제
           </DropdownMenuItem>
@@ -47,11 +49,13 @@ export default function TableDropdown({
         isEditDialogOpen={isCopyDialogOpen}
         setIsEditDialogOpen={setIsCopyDialogOpen}
       />
+
       <EditDrugProductDialog
         drugProduct={drugProduct}
         isEditDialogOpen={isEditDialogOpen}
         setIsEditDialogOpen={setIsEditDialogOpen}
       />
+
       <DeleteDrugProductDialog
         drugProduct={drugProduct}
         isDeleteDialogOpen={isDeleteDialogOpen}

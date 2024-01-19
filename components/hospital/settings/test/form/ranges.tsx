@@ -5,15 +5,13 @@ import { Control, UseFormRegister, useFieldArray } from "react-hook-form";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import * as z from "zod";
 
-export default function Ranges({
-  nestIndex,
-  control,
-  register,
-}: {
+type Props = {
   nestIndex: number;
   control: Control<z.infer<typeof addTestFormSchema>>;
   register: UseFormRegister<z.infer<typeof addTestFormSchema>>;
-}) {
+};
+
+export default function Ranges({ nestIndex, control, register }: Props) {
   const { fields, remove, append } = useFieldArray({
     control,
     name: `multiRange.${nestIndex}.ranges`,
@@ -79,13 +77,13 @@ export default function Ranges({
                   type="button"
                   onClick={() =>
                     append({
-                      gt: undefined,
-                      ge: undefined,
-                      lt: undefined,
-                      le: undefined,
-                      description: undefined,
-                      diagnosis: undefined,
-                      interpretation: undefined,
+                      gt: "",
+                      ge: "",
+                      lt: "",
+                      le: "",
+                      description: "",
+                      diagnosis: "",
+                      interpretation: "",
                     })
                   }
                   size="icon"

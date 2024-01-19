@@ -1,5 +1,6 @@
 import {
   DRUG_PRODUCT_TYPE,
+  FEED_TYPE,
   TEST_CATEGORY,
   TEST_TYPE,
 } from "@/constants/selects";
@@ -146,4 +147,20 @@ export const addDrugProductFormSchema = z.object({
   }),
   description: z.string().optional(),
   company: z.string().optional(),
+});
+
+export const addFeedFormSchema = z.object({
+  name: z.string({ required_error: "사료명을 입력해주세요." }),
+  price: z.string().optional(),
+  tag: z.string({ required_error: "사료명을 입력해주세요." }),
+  type: z.enum(FEED_TYPE, {
+    required_error: "사료명을 입력해주세요.",
+  }),
+  calory: z.string({ required_error: "칼로리를 입력해주세요." }),
+  volume: z.string({ required_error: "사료 용량을 입력해주세요." }),
+  unit: z.string({ required_error: "사료단위를 입력해주세요." }),
+  species: z.enum(["canine", "feline", "both"], {
+    required_error: "사료명을 입력해주세요.",
+  }),
+  description: z.string().optional(),
 });

@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -13,22 +12,18 @@ export async function GET(request: Request) {
       error: sessionError,
     } = await supabase.auth.exchangeCodeForSession(code);
 
-    if (sessionError) {
-      // return NextResponse.redirect(`${requestUrl.origin}/auth-error`);
-      throw new Error(sessionError.message);
-    }
+    if (sessionError) throw new Error(sessionError.message);
 
     const { data: vet, error: vetError } = await supabase
       .from("vets")
-      .select("*")
+      .select()
       .match({ vet_id: session?.user.id })
       .single();
 
     // supabase 에러
     if (vetError) {
-      // 회원이 아닌 경우 vetError.code === "PGRST116" 제외
-      if (vetError.code !== "PGRST116")
-        return NextResponse.redirect(`${requestUrl.origin}/auth-error`);
+      // 회원이 아닌 경우(vet === null) vetError.code === "PGRST116" 제외
+      if (vetError.code !== "PGRST116") throw new Error(vetError.message);
     }
 
     // 회원이 아닌경우, vet === null

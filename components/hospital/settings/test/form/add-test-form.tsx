@@ -1,3 +1,4 @@
+import FormTooltip from "@/components/common/form-tooltip";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,34 +18,35 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
+import {
+  TEST_CATEGORY,
+  TEST_TYPE,
+  TestCategoryEnum,
+  TestTypeEnum,
+} from "@/constants/selects";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { addTestFormSchema } from "@/lib/zod/form-schemas";
+import { type TestSet } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { FaRegCircleQuestion } from "react-icons/fa6";
 import * as z from "zod";
+import { type TestTableColumn } from "../table/columns";
 import MultiRangeForm from "./multi-range-form";
-import {
-  TEST_CATEGORY,
-  TEST_TYPE,
-  TestCategory,
-  TestType,
-} from "@/constants/selects";
 import MultiSelectForm from "./multi-select-form";
-import { TestTableColumn } from "../table/columns";
-import { TestSet } from "@/types/type";
-import useCurrentHospitalId from "@/hooks/useCurrentHospital";
+
+type Props = {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  edit?: boolean;
+  test?: TestTableColumn;
+  testDetail?: TestSet[];
+  copy?: boolean;
+};
 
 export default function AddTestForm({
   setOpen,
@@ -52,15 +54,7 @@ export default function AddTestForm({
   test,
   testDetail,
   copy,
-}: {
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  edit?: boolean;
-  test?: TestTableColumn;
-  testDetail?: TestSet[];
-  copy?: boolean;
-}) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+}: Props) {
   const form = useForm<z.infer<typeof addTestFormSchema>>({
     resolver: zodResolver(addTestFormSchema),
     defaultValues: {
@@ -69,13 +63,13 @@ export default function AddTestForm({
           species: "canine",
           ranges: [
             {
-              gt: undefined,
-              ge: undefined,
-              lt: undefined,
-              le: undefined,
-              diagnosis: undefined,
-              description: undefined,
-              interpretation: undefined,
+              gt: "",
+              ge: "",
+              lt: "",
+              le: "",
+              diagnosis: "",
+              description: "",
+              interpretation: "",
             },
           ],
         },
@@ -85,10 +79,10 @@ export default function AddTestForm({
           species: "canine",
           selects: [
             {
-              select_value: undefined,
-              description: undefined,
-              diagnosis: undefined,
-              interpretation: undefined,
+              select_value: "",
+              description: "",
+              diagnosis: "",
+              interpretation: "",
             },
           ],
         },
@@ -102,14 +96,17 @@ export default function AddTestForm({
   );
 
   useEffect(() => {
-    setValue("category", test?.category as TestCategory);
-    setValue("description", test?.description!);
-    setValue("name", test?.name!);
-    setValue("original_name", test?.original_name!);
-    setValue("tag", test?.tag!);
-    setValue("type", test?.type! as TestType);
-    setValue("unit", test?.unit!);
+    if (edit) {
+      setValue("category", test?.category as TestCategoryEnum);
+      setValue("description", test?.description!);
+      setValue("name", test?.name!);
+      setValue("original_name", test?.original_name!);
+      setValue("tag", test?.tag!);
+      setValue("type", test?.type! as TestTypeEnum);
+      setValue("unit", test?.unit!);
+    }
   }, [
+    edit,
     setValue,
     test?.category,
     test?.description,
@@ -124,6 +121,7 @@ export default function AddTestForm({
   const router = useRouter();
   const hospitalId = useCurrentHospitalId();
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const onSubmit = async (values: z.infer<typeof addTestFormSchema>) => {
     const {
       type,
@@ -137,142 +135,126 @@ export default function AddTestForm({
       description,
     } = values;
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return;
-    }
-
     setIsSubmitting(true);
 
-    try {
-      const { data: tests, error: testsError } = await supabase
-        .from("tests")
-        .insert({
-          hos_id: hospitalId,
-          type,
-          category,
-          original_name,
-          name,
-          description,
-          unit,
-          tag,
-        })
-        .select()
-        .single();
+    const { data: tests, error: testsError } = await supabase
+      .from("tests")
+      .insert({
+        hos_id: hospitalId,
+        type,
+        category,
+        original_name,
+        name,
+        description,
+        unit,
+        tag,
+      })
+      .select()
+      .single();
 
-      if (testsError) {
-        toast({
-          variant: "destructive",
-          title: testsError.message,
-          description: "관리자에게 문의하세요",
-        });
-        return;
-      }
-
-      // test_set 삽입
-      const testsId = tests.test_id;
-
-      // multi range
-      if (type === "범위") {
-        for (let i = 0; i < multiRange.length; i++) {
-          const age_min = multiRange[i].age_min;
-          const age_max = multiRange[i].age_max;
-          const species = multiRange[i].species;
-          const reference_range = multiRange[i].reference_range;
-
-          for (let j = 0; j < multiRange[i].ranges.length; j++) {
-            const { description, diagnosis, ge, gt, interpretation, le, lt } =
-              multiRange[i].ranges[j];
-            const { error: testSetError } = await supabase
-              .from("test_set")
-              .insert({
-                test_id: testsId,
-                age_min,
-                age_max,
-                species,
-                reference_range,
-                description,
-                diagnosis,
-                interpretation,
-                ge,
-                gt,
-                le,
-                lt,
-                order: j,
-              });
-
-            if (testSetError) {
-              toast({
-                variant: "destructive",
-                title: testSetError.message,
-                description: "관리자에게 문의하세요",
-              });
-              return;
-            }
-          }
-        }
-      }
-
-      //  select
-      if (type === "선택" || type === "다중선택") {
-        for (let i = 0; i < multiSelect.length; i++) {
-          const age_min = multiSelect[i].age_min;
-          const age_max = multiSelect[i].age_max;
-          const species = multiSelect[i].species;
-          const reference_range = multiSelect[i].reference_range;
-
-          for (let j = 0; j < multiSelect[i].selects.length; j++) {
-            const { description, diagnosis, interpretation, select_value } =
-              multiSelect[i].selects[j];
-            const { error: testSetError } = await supabase
-              .from("test_set")
-              .insert({
-                test_id: testsId,
-                age_min,
-                age_max,
-                species,
-                reference_range,
-                select_value,
-                description,
-                diagnosis,
-                interpretation,
-                order: j,
-              });
-
-            if (testSetError) {
-              toast({
-                variant: "destructive",
-                title: testSetError.message,
-                description: "관리자에게 문의하세요",
-              });
-              return;
-            }
-          }
-        }
-      }
-
-      // 수정인 경우 원본 test를 삭제
-      if (edit && !copy) {
-        await supabase.from("tests").delete().match({ test_id: test?.test_id });
-      }
-
+    if (testsError) {
       toast({
-        title:
-          edit && !copy ? "검사가 수정되었습니다." : "검사가 등록되었습니다.",
+        variant: "destructive",
+        title: testsError.message,
+        description: "관리자에게 문의하세요",
       });
-      router.refresh();
-      setOpen(false);
-
       return;
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error, "error while adding or editing test");
-    } finally {
-      setIsSubmitting(false);
     }
+
+    // test_set 삽입
+    const testsId = tests.test_id;
+
+    // multi range
+    if (type === "범위") {
+      for (let i = 0; i < multiRange.length; i++) {
+        const age_min = multiRange[i].age_min;
+        const age_max = multiRange[i].age_max;
+        const species = multiRange[i].species;
+        const reference_range = multiRange[i].reference_range;
+
+        for (let j = 0; j < multiRange[i].ranges.length; j++) {
+          const { description, diagnosis, ge, gt, interpretation, le, lt } =
+            multiRange[i].ranges[j];
+          const { error: testSetError } = await supabase
+            .from("test_set")
+            .insert({
+              test_id: testsId,
+              age_min,
+              age_max,
+              species,
+              reference_range,
+              description,
+              diagnosis,
+              interpretation,
+              ge,
+              gt,
+              le,
+              lt,
+              order: j,
+            });
+
+          if (testSetError) {
+            toast({
+              variant: "destructive",
+              title: testSetError.message,
+              description: "관리자에게 문의하세요",
+            });
+            return;
+          }
+        }
+      }
+    }
+
+    //  select
+    if (type === "선택" || type === "다중선택") {
+      for (let i = 0; i < multiSelect.length; i++) {
+        const age_min = multiSelect[i].age_min;
+        const age_max = multiSelect[i].age_max;
+        const species = multiSelect[i].species;
+        const reference_range = multiSelect[i].reference_range;
+
+        for (let j = 0; j < multiSelect[i].selects.length; j++) {
+          const { description, diagnosis, interpretation, select_value } =
+            multiSelect[i].selects[j];
+          const { error: testSetError } = await supabase
+            .from("test_set")
+            .insert({
+              test_id: testsId,
+              age_min,
+              age_max,
+              species,
+              reference_range,
+              select_value,
+              description,
+              diagnosis,
+              interpretation,
+              order: j,
+            });
+
+          if (testSetError) {
+            toast({
+              variant: "destructive",
+              title: testSetError.message,
+              description: "관리자에게 문의하세요",
+            });
+            return;
+          }
+        }
+      }
+    }
+
+    // 수정인 경우 원본 test를 삭제
+    if (edit && !copy) {
+      await supabase.from("tests").delete().match({ test_id: test?.test_id });
+    }
+
+    toast({
+      title:
+        edit && !copy ? "검사가 수정되었습니다." : "검사가 등록되었습니다.",
+    });
+    router.refresh();
+    setOpen(false);
+    setIsSubmitting(false);
   };
 
   return (
@@ -289,22 +271,6 @@ export default function AddTestForm({
             <FormItem className="space-y-3">
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
                 검사타입*
-                {/* <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger tabIndex={-1} type="button">
-                      <FaRegCircleQuestion className="opacity-50" />
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      범위 : APL, 47미만 낮음, 정상 밤위 47 ~ 254, 254이상 높음
-                      <br />
-                      선택 : 키트검사 양성/음성
-                      <br />
-                      다중선택 : 변상태 혈변 & 점액변 & 설사
-                      <br />
-                      서술 : 혈액 도말 검사
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider> */}
               </FormLabel>
               <FormControl>
                 <RadioGroup
@@ -379,16 +345,7 @@ export default function AddTestForm({
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
                 검사명*
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger tabIndex={-1} type="button">
-                      <FaRegCircleQuestion className="opacity-50" />
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      cPL키트검사, cPL-vcheck 종류 상관없이 모두 cPL
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <FormTooltip title="cPL키트검사, cPL-vcheck 종류 상관없이 모두 cPL" />
               </FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
@@ -406,18 +363,7 @@ export default function AddTestForm({
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
                 원내 검사명*
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger tabIndex={-1} type="button">
-                      <FaRegCircleQuestion className="opacity-50" />
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      검사명과 기계명을 함께 입력 <br />
-                      예) CRP-vcheck, CRP-fuji / cPL-IDEXX키트, cPL-vcheck
-                      <br />
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <FormTooltip title="CRP-vcheck, CRP-fuji / cPL-IDEXX키트, cPL-vcheck" />
               </FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
@@ -452,17 +398,7 @@ export default function AddTestForm({
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
                 태그(#으로 구분)
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger tabIndex={-1} type="button">
-                      <FaRegCircleQuestion className="opacity-50" />
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      #CRP#염증수치
-                      <br />
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <FormTooltip title="#CRP#염증수치" />
               </FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
@@ -511,8 +447,8 @@ export default function AddTestForm({
           />
         </div>
 
-        <div className="flex gap-4 col-span-2 pb-4">
-          <Button className="w-full" disabled={isSubmitting}>
+        <div className="flex gap-4 col-span-2 pt-4">
+          <Button className="w-full" disabled={isSubmitting} type="submit">
             {edit && !copy ? "검사 수정" : "검사 등록"}
             <AiOutlineLoading3Quarters
               className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}

@@ -5,6 +5,7 @@ import { type Drug } from "@/types/type";
 import { ColumnDef } from "@tanstack/react-table";
 import { LuArrowDown } from "react-icons/lu";
 import TableDropdown from "./table-dropdown";
+
 export type DrugTableColumn = Omit<Drug, "created_at">;
 
 export const columns: ColumnDef<DrugTableColumn>[] = [
@@ -24,12 +25,10 @@ export const columns: ColumnDef<DrugTableColumn>[] = [
       );
     },
   },
-
   {
     accessorKey: "tag",
     header: "태그",
   },
-
   {
     accessorKey: "indication",
     header: "적용증",
@@ -43,19 +42,6 @@ export const columns: ColumnDef<DrugTableColumn>[] = [
     accessorKey: "side_effect",
     header: "부작용",
   },
-  // {
-  //   accessorKey: "amount",
-  //   header: () => <div className="text-right">Amount</div>,
-  //   cell: ({ row }) => {
-  //     const amount = parseFloat(row.getValue("amount"));
-  //     const formatted = new Intl.NumberFormat("en-US", {
-  //       style: "currency",
-  //       currency: "USD",
-  //     }).format(amount);
-
-  //     return <div className="text-right font-medium">{formatted}</div>;
-  //   },
-  // },
   {
     id: "actions",
     cell: ({ row }) => {

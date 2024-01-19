@@ -23,6 +23,7 @@ import * as z from "zod";
 import Selects from "./selects";
 import { TestSet } from "@/types/type";
 import { useEffect } from "react";
+import { SPECIES } from "@/constants/selects";
 
 export default function MultiSelectForm({
   testDetail,
@@ -115,26 +116,19 @@ export default function MultiSelectForm({
                         {...register(`multiSelect.${index}.species`)}
                         onValueChange={field.onChange}
                         defaultValue={field.value}
-                        className="flex gap-6"
+                        className="flex gap-3"
                       >
-                        <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
-                          <FormControl>
-                            <RadioGroupItem value="canine" />
-                          </FormControl>
-                          <FormLabel>개</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
-                          <FormControl>
-                            <RadioGroupItem value="feline" />
-                          </FormControl>
-                          <FormLabel>고양이</FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-2 space-y-0 text-sm">
-                          <FormControl>
-                            <RadioGroupItem value="both" />
-                          </FormControl>
-                          <FormLabel>공통</FormLabel>
-                        </FormItem>
+                        {SPECIES.map((species) => (
+                          <FormItem
+                            className="flex items-center space-x-1 space-y-0 text-sm"
+                            key={species}
+                          >
+                            <FormControl>
+                              <RadioGroupItem value={species} />
+                            </FormControl>
+                            <FormLabel>{species}</FormLabel>
+                          </FormItem>
+                        ))}
                       </RadioGroup>
                     </FormControl>
                     <FormMessage />
@@ -145,7 +139,7 @@ export default function MultiSelectForm({
               <FormField
                 control={control}
                 name={`multiSelect.${index}.reference_range`}
-                render={({ field }) => (
+                render={() => (
                   <FormItem className="flex-1">
                     <FormLabel className="text-sm font-semibold">
                       정상값
@@ -166,7 +160,7 @@ export default function MultiSelectForm({
               <FormField
                 control={control}
                 name={`multiSelect.${index}.age_min`}
-                render={({ field }) => (
+                render={() => (
                   <FormItem>
                     <FormLabel className="text-sm font-semibold">
                       연령
@@ -185,7 +179,7 @@ export default function MultiSelectForm({
               <FormField
                 control={control}
                 name={`multiSelect.${index}.age_max`}
-                render={({ field }) => (
+                render={() => (
                   <FormItem className="flex justify-end items-end">
                     <FormControl>
                       <Input

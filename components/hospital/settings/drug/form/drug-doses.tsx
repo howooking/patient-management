@@ -1,4 +1,5 @@
 /* eslint-disable unused-imports/no-unused-vars */
+import FormTooltip from "@/components/common/form-tooltip";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -9,12 +10,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { addDrugFormSchema } from "@/lib/zod/form-schemas";
 import { type DrugDose } from "@/types/type";
@@ -26,9 +21,17 @@ import {
   UseFormSetValue,
   useFieldArray,
 } from "react-hook-form";
-import { FaRegCircleQuestion } from "react-icons/fa6";
 import { LuPlus, LuTrash2 } from "react-icons/lu";
 import * as z from "zod";
+
+type Props = {
+  doseDetail?: DrugDose[];
+  edit?: boolean;
+  control: Control<z.infer<typeof addDrugFormSchema>>;
+  register: UseFormRegister<z.infer<typeof addDrugFormSchema>>;
+  setValue: UseFormSetValue<z.infer<typeof addDrugFormSchema>>;
+  getValues: UseFormGetValues<z.infer<typeof addDrugFormSchema>>;
+};
 
 export default function DrugDoses({
   doseDetail,
@@ -37,14 +40,7 @@ export default function DrugDoses({
   register,
   setValue,
   getValues,
-}: {
-  doseDetail?: DrugDose[];
-  edit?: boolean;
-  control: Control<z.infer<typeof addDrugFormSchema>>;
-  register: UseFormRegister<z.infer<typeof addDrugFormSchema>>;
-  setValue: UseFormSetValue<z.infer<typeof addDrugFormSchema>>;
-  getValues: UseFormGetValues<z.infer<typeof addDrugFormSchema>>;
-}) {
+}: Props) {
   const { fields, remove } = useFieldArray({
     control,
     name: "drug_doses",
@@ -52,7 +48,22 @@ export default function DrugDoses({
 
   useEffect(() => {
     if (edit && doseDetail) {
-      // @ts-ignore
+      if (doseDetail) {
+        setValue("drug_doses", [
+          {
+            route: "",
+            species: "canine",
+            bw_unit: "",
+            cri_unit: "",
+            default_dose: "",
+            description: "",
+            dose_unit: "",
+            max_dose: "",
+            min_dose: "",
+          },
+        ]);
+      }
+      // @ts-expect-error
       setValue("drug_doses", doseDetail);
     }
   }, [doseDetail, edit, setValue]);
@@ -147,18 +158,8 @@ export default function DrugDoses({
                 <FormItem className="flex flex-col justify-end">
                   <FormLabel className="text-sm font-semibold flex items-center gap-2">
                     투약경로*
-                    <TooltipProvider delayDuration={100}>
-                      <Tooltip>
-                        <TooltipTrigger tabIndex={-1} type="button">
-                          <FaRegCircleQuestion className="opacity-50" />
-                        </TooltipTrigger>
-                        <TooltipContent side="right">
-                          #IV#SC#IM#ID#PO#patch#etc
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
+                    <FormTooltip title="#IV#SC#IM#ID#PO#patch#etc" />
                   </FormLabel>
-
                   <FormControl>
                     <Input
                       className="h-8 text-sm"

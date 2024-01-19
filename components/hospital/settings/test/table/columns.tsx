@@ -43,6 +43,23 @@ export const columns: ColumnDef<TestTableColumn>[] = [
   },
 
   {
+    accessorKey: "type",
+    header: ({ column }) => {
+      return (
+        <Button
+          size="sm"
+          className="text-sm"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          타입
+          <LuArrowDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+
+  {
     accessorKey: "tag",
     header: "태그",
   },
@@ -51,6 +68,7 @@ export const columns: ColumnDef<TestTableColumn>[] = [
     accessorKey: "unit",
     header: "단위",
   },
+
   // {
   //   accessorKey: "amount",
   //   header: () => <div className="text-right">Amount</div>,

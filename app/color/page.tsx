@@ -34,6 +34,39 @@ export default async function page() {
         </div>
         <div className="border w-28 h-28 bg-border">border</div>
       </div>
+      <div className="flex text-amber-400 gap-6 flex-wrap mt-8">
+        <div className="border w-28 h-28 bg-primaryTeal-50">primaryTeal-50</div>
+        <div className="border w-28 h-28 bg-primaryTeal-100">
+          primaryTeal-100
+        </div>
+        <div className="border w-28 h-28 bg-primaryTeal-200">
+          primaryTeal-200
+        </div>
+        <div className="border w-28 h-28 bg-primaryTeal-300">
+          primaryTeal-300
+        </div>
+        <div className="border w-28 h-28 bg-primaryTeal-400">
+          primaryTeal-400
+        </div>
+        <div className="border w-28 h-28 bg-primaryTeal-500">
+          primaryTeal-500
+        </div>
+        <div className="border w-28 h-28 bg-primaryTeal-600">
+          primaryTeal-600 === primary
+        </div>
+        <div className="border w-28 h-28 bg-primaryTeal-700">
+          primaryTeal-700
+        </div>
+        <div className="border w-28 h-28 bg-primaryTeal-800">
+          primaryTeal-800
+        </div>
+        <div className="border w-28 h-28 bg-primaryTeal-900">
+          primaryTeal-900
+        </div>
+        <div className="border w-28 h-28 bg-primaryTeal-950">
+          primaryTeal-950
+        </div>
+      </div>
     </div>
   );
 }

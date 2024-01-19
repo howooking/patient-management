@@ -5,27 +5,27 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import AddDrugForm from "../form/add-drug-form";
 import { DrugTableColumn } from "./columns";
 
+type Props = {
+  drug: DrugTableColumn;
+  copy?: boolean;
+  isEditDialogOpen: boolean;
+  setIsEditDialogOpen: Dispatch<SetStateAction<boolean>>;
+};
+
 export function EditDrugDialog({
   drug,
   copy,
   isEditDialogOpen,
   setIsEditDialogOpen,
-}: {
-  drug: DrugTableColumn;
-  copy?: boolean;
-  isEditDialogOpen: boolean;
-  setIsEditDialogOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+}: Props) {
   const [doseDetail, setDoseDetail] = useState<DrugDose[]>([]);
-
   const supabase = createSupabaseBrowserClient();
 
-  // TODO: client side error handling
   useEffect(() => {
     const getData = async () => {
       const { data: drugDoses, error: drugsError } = await supabase
         .from("drug_doses")
-        .select("*")
+        .select()
         .match({ drug_id: drug.id });
       if (!drugsError) {
         setDoseDetail(drugDoses);

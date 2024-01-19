@@ -16,47 +16,41 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { TestTableColumn } from "./columns";
 
+type Props = {
+  test: TestTableColumn;
+  isDeleteDialogOpen: boolean;
+  setIsDeleteDialogOpen: Dispatch<SetStateAction<boolean>>;
+};
+
 export function DeleteTestDialog({
   test,
   isDeleteDialogOpen,
   setIsDeleteDialogOpen,
-}: {
-  test: TestTableColumn;
-  isDeleteDialogOpen: boolean;
-  setIsDeleteDialogOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+}: Props) {
   const router = useRouter();
-
   const supabase = createSupabaseBrowserClient();
-
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    try {
-      const { error } = await supabase
-        .from("tests")
-        .delete()
-        .match({ test_id: test.test_id });
+    const { error } = await supabase
+      .from("tests")
+      .delete()
+      .match({ test_id: test.test_id });
 
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: error.message,
-          description: "관리자에게 문의하세요",
-        });
-        return;
-      }
+    if (error) {
       toast({
-        title: `${test.name} 검사가 삭제되었습니다.`,
+        variant: "destructive",
+        title: error.message,
+        description: "관리자에게 문의하세요",
       });
-      router.refresh();
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error, "error while adding or deleting test");
-    } finally {
-      setIsDeleting(false);
+      return;
     }
+    toast({
+      title: `${test.name} 검사가 삭제되었습니다.`,
+    });
+    router.refresh();
+    setIsDeleting(false);
   };
 
   return (

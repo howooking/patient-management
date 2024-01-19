@@ -12,9 +12,9 @@ import { DeleteTestDialog } from "./delete-test-dialog";
 import { EditTestDialog } from "./edit-test-dialog";
 
 export default function TableDropdown({ test }: { test: TestTableColumn }) {
+  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [isCopyDialogOpen, setIsCopyDialogOpen] = useState(false);
   return (
     <>
       <DropdownMenu>

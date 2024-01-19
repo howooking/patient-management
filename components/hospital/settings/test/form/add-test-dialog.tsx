@@ -11,7 +11,7 @@ export function AddTestDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">사료 추가</Button>
+        <Button variant="outline">검사 추가</Button>
       </DialogTrigger>
       <DialogContent
         className="max-w-4xl max-h-[90vh] overflow-y-auto"

@@ -16,19 +16,19 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { DrugTableColumn } from "./columns";
 
+type Props = {
+  drug: DrugTableColumn;
+  isDeleteDialogOpen: boolean;
+  setIsDeleteDialogOpen: Dispatch<SetStateAction<boolean>>;
+};
+
 export function DeleteDrugDialog({
   drug,
   isDeleteDialogOpen,
   setIsDeleteDialogOpen,
-}: {
-  drug: DrugTableColumn;
-  isDeleteDialogOpen: boolean;
-  setIsDeleteDialogOpen: Dispatch<SetStateAction<boolean>>;
-}) {
+}: Props) {
   const router = useRouter();
-
   const supabase = createSupabaseBrowserClient();
-
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
