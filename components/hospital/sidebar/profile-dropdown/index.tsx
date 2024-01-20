@@ -28,12 +28,7 @@ type Props = {
     | undefined;
 };
 
-export default function ProfileDropdown({
-  email,
-  name,
-  src,
-  hospitalList,
-}: Props) {
+export default function ProfileDropdown({ email, name, src }: Props) {
   return (
     <DropdownMenu>
       <ProfileDropdownTrigger name={name} src={src} email={email} />
@@ -47,7 +42,7 @@ export default function ProfileDropdown({
 
         <DrugSetting />
 
-        <HospitalSetting hospitalList={hospitalList} />
+        <HospitalSetting />
 
         <ToggleThemeMenu />
 
