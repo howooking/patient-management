@@ -53,7 +53,7 @@ export default function SidebarMenu({ icon, ready, title, href }: Props) {
           </TooltipTrigger>
 
           <TooltipContent
-            className={cn(collapse ? "block" : "hidden", "ml-3")}
+            className={cn(collapse ? "block" : "hidden")}
             side="right"
           >
             <p>{title}</p>

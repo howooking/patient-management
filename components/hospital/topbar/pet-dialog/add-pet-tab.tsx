@@ -1,5 +1,6 @@
 "use client";
 
+import FormTooltip from "@/components/common/form-tooltip";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -32,12 +33,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
 import { CANINE_BREEDS, COLORS, FELINE_BREEDS } from "@/constants/breeds";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
@@ -53,7 +48,6 @@ import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { FaRegCircleQuestion } from "react-icons/fa6";
 import * as z from "zod";
 
 export default function AddPetTab({
@@ -187,16 +181,7 @@ export default function AddPetTab({
             <FormItem>
               <FormLabel className="text-sm font-semibold flex items-center gap-2 my-[2px]">
                 환자 번호*
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger tabIndex={-1} type="button">
-                      <FaRegCircleQuestion className="opacity-50" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      인투벳, 이프렌즈, 우리엔에 등록된 환자번호
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                <FormTooltip title="인투벳, 이프렌즈, 우리엔에 등록된 환자번호" />
               </FormLabel>
               <FormControl>
                 <Input {...field} className="h-8 text-sm" />
