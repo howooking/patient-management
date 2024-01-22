@@ -9,7 +9,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-export default function ApproveVet({
+export default function ApproveColumn({
   approved,
   vetId,
 }: {
@@ -21,7 +21,7 @@ export default function ApproveVet({
   const handleApprove = async (value: "true" | "false") => {
     const { error } = await supabase
       .from("hos_vet_mapping")
-      .update({ vet_approved: value === "true" ? true : false })
+      .update({ vet_approved: value === "true" })
       .match({ vet_id: vetId });
 
     if (error) {

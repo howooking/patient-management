@@ -10,8 +10,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function HospitalSetting() {
+  const { push } = useRouter();
   const hospitalId = useCurrentHospitalId();
   return (
     <DropdownMenuSub>
@@ -25,10 +27,11 @@ export default function HospitalSetting() {
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem>
-            <Link href={`/hospital/${hospitalId}/settings/hospital`}>
-              병원직원 설정
-            </Link>
+          <DropdownMenuItem
+            onClick={() => push(`/hospital/${hospitalId}/settings/hospital`)}
+            className="cursor-pointer"
+          >
+            병원직원 설정
           </DropdownMenuItem>
         </DropdownMenuSubContent>
       </DropdownMenuPortal>

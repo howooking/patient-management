@@ -28,7 +28,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "tailwind.config.js"
+    "tailwind.config.js",
+    "components/hospital/settings/hospital/table/nickname-column.tsx"
   ],
   "exclude": ["node_modules"]
 }

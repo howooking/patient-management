@@ -5,10 +5,15 @@ import { ColumnDef } from "@tanstack/react-table";
 import { LuArrowDown } from "react-icons/lu";
 import Image from "next/image";
 import avatarDefault from "@/public/default-avatar.jpg";
-import ApproveVet from "./approve-vet";
-import { UpdateNicknameDialog } from "./update-nickname";
+import ApproveColumn from "./approve-column";
+import { NicknameColumn } from "./nickname-column";
+import GroupColumn from "./group-column";
 
 export type vetsTableColumn = {
+  hospitals: {
+    group_list: string[];
+    position_list: string[];
+  } | null;
   vets: {
     vet_name: string;
     avatar_url: string | null;
@@ -35,6 +40,7 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
       return (
         <div className="flex gap-1 items-center">
           <Image
+            referrerPolicy="no-referrer"
             className="rounded-full"
             unoptimized
             alt="avatar"
@@ -57,7 +63,7 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
       return (
         <div className="flex items-center gap-2">
           <p>{nickname}</p>
-          <UpdateNicknameDialog nickname={nickname ?? ""} vetId={vet_id} />
+          <NicknameColumn nickname={nickname ?? ""} vetId={vet_id} />
         </div>
       );
     },
@@ -77,6 +83,14 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const group = row.original.group;
+      const groupList = row.original.hospitals?.group_list;
+      const vet_id = row.original.vet_id;
+      return (
+        <GroupColumn group={group} groupList={groupList ?? []} vetId={vet_id} />
+      );
+    },
   },
 
   {
@@ -92,7 +106,7 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
 
       return (
         <div className=" text-center">
-          <ApproveVet approved={vet_approved} vetId={vet_id} />
+          <ApproveColumn approved={vet_approved} vetId={vet_id} />
         </div>
       );
     },

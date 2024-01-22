@@ -15,6 +15,7 @@ export default async function HospitalSettingPage({
     .from("hos_vet_mapping")
     .select(
       `
+        hospitals (group_list, position_list),
         vets (
           vet_name,
           avatar_url  

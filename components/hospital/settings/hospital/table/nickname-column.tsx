@@ -16,7 +16,7 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 
-export function UpdateNicknameDialog({
+export function NicknameColumn({
   nickname,
   vetId,
 }: {
