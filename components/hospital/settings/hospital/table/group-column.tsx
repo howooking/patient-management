@@ -9,15 +9,13 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-export default function GroupColumn({
-  group,
-  groupList,
-  vetId,
-}: {
+type Props = {
   group: string;
   groupList: string[];
   vetId: string;
-}) {
+};
+
+export default function GroupColumn({ group, groupList, vetId }: Props) {
   const supabase = createSupabaseBrowserClient();
 
   const handleGroup = async (value: string) => {

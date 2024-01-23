@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { groupListFormSchema } from "@/lib/zod/form-schemas";
+import { positionListFormSchema } from "@/lib/zod/form-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
@@ -19,33 +19,37 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import * as z from "zod";
 
-export default function GroupSetting({ groupList }: { groupList: string[] }) {
+export default function PositionSetting({
+  positionList,
+}: {
+  positionList: string[];
+}) {
   const router = useRouter();
   const hospitalId = useCurrentHospitalId();
   const [open, setOpen] = useState(false);
   const supabase = createSupabaseBrowserClient();
 
   const { control, register, handleSubmit } = useForm<
-    z.infer<typeof groupListFormSchema>
+    z.infer<typeof positionListFormSchema>
   >({
-    resolver: zodResolver(groupListFormSchema),
+    resolver: zodResolver(positionListFormSchema),
     defaultValues: {
-      groupList: groupList.map((list) => ({ group: list })),
+      positionList: positionList.map((list) => ({ position: list })),
     },
   });
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "groupList",
+    name: "positionList",
   });
 
-  const onSubmit = async (values: z.infer<typeof groupListFormSchema>) => {
-    const updatedGoupList: string[] = values.groupList.map(
-      (element) => element.group
+  const onSubmit = async (values: z.infer<typeof positionListFormSchema>) => {
+    const updatedPositionList: string[] = values.positionList.map(
+      (element) => element.position
     );
 
     const { error } = await supabase
       .from("hospitals")
-      .update({ group_list: updatedGoupList })
+      .update({ position_list: updatedPositionList })
       .match({ hos_id: hospitalId });
     if (error) {
       toast({
@@ -56,7 +60,7 @@ export default function GroupSetting({ groupList }: { groupList: string[] }) {
       return;
     }
     toast({
-      title: "그룹명 설정이 수정되었습니다.",
+      title: "직급명 설정이 수정되었습니다.",
     });
     setOpen(false);
     router.refresh();
@@ -69,14 +73,17 @@ export default function GroupSetting({ groupList }: { groupList: string[] }) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>그룹명 수정</DialogTitle>
+          <DialogTitle>직급명 수정</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <ul className="space-y-1">
             {fields.map((item, index) => {
               return (
                 <li key={item.id} className="flex items-center gap-2">
-                  <Input {...register(`groupList.${index}.group`)} required />
+                  <Input
+                    {...register(`positionList.${index}.position`)}
+                    required
+                  />
                   <div className="flex-1 w-20 flex gap-1">
                     <Button
                       type="button"
@@ -90,7 +97,7 @@ export default function GroupSetting({ groupList }: { groupList: string[] }) {
 
                     <Button
                       type="button"
-                      onClick={() => append({ group: "" })}
+                      onClick={() => append({ position: "" })}
                       size="icon"
                       className="rounded-full w-4 h-4"
                     >

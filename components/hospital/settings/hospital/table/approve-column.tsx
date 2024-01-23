@@ -9,13 +9,12 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-export default function ApproveColumn({
-  approved,
-  vetId,
-}: {
+type Props = {
   approved: boolean;
   vetId: string;
-}) {
+};
+
+export default function ApproveColumn({ approved, vetId }: Props) {
   const supabase = createSupabaseBrowserClient();
 
   const handleApprove = async (value: "true" | "false") => {

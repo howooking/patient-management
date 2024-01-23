@@ -9,15 +9,17 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
+type Props = {
+  position: string;
+  positionList: string[];
+  vetId: string;
+};
+
 export default function PositionColumn({
   position,
   positionList,
   vetId,
-}: {
-  position: string;
-  positionList: string[];
-  vetId: string;
-}) {
+}: Props) {
   const supabase = createSupabaseBrowserClient();
 
   const handlePosition = async (value: string) => {

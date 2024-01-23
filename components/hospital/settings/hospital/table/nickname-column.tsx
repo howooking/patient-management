@@ -15,13 +15,12 @@ import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
-export function NicknameColumn({
-  nickname,
-  vetId,
-}: {
+type Props = {
   nickname: string;
   vetId: string;
-}) {
+};
+
+export function NicknameColumn({ nickname, vetId }: Props) {
   const [open, setOpen] = useState(false);
   const { refresh } = useRouter();
   const [nicknameInput, setNicknameInput] = useState("");

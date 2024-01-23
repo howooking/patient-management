@@ -11,13 +11,12 @@ import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useState } from "react";
 
-export default function RankColumn({
-  rank,
-  vetId,
-}: {
+type Props = {
   rank: number;
   vetId: string;
-}) {
+};
+
+export default function RankColumn({ rank, vetId }: Props) {
   const [count, setCount] = useState(8);
   const supabase = createSupabaseBrowserClient();
 

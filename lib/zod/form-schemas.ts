@@ -164,3 +164,11 @@ export const addFeedFormSchema = z.object({
   }),
   description: z.string().optional(),
 });
+
+export const positionListFormSchema = z.object({
+  positionList: z.array(z.object({ position: z.string() })),
+});
+
+export const groupListFormSchema = z.object({
+  groupList: z.array(z.object({ group: z.string() })),
+});

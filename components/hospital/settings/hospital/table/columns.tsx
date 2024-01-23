@@ -1,17 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ColumnDef } from "@tanstack/react-table";
-import { LuArrowDown } from "react-icons/lu";
-import Image from "next/image";
 import avatarDefault from "@/public/default-avatar.jpg";
+import { ColumnDef } from "@tanstack/react-table";
+import Image from "next/image";
+import { LuArrowDown } from "react-icons/lu";
 import ApproveColumn from "./approve-column";
-import { NicknameColumn } from "./nickname-column";
 import GroupColumn from "./group-column";
-import PositionColumn from "./position-column";
-import RankColumn from "./rank-column";
-import { Pencil1Icon } from "@radix-ui/react-icons";
 import GroupSetting from "./group-setting";
+import { NicknameColumn } from "./nickname-column";
+import PositionColumn from "./position-column";
+import PositionSetting from "./position-setting";
+import RankColumn from "./rank-column";
 
 export type vetsTableColumn = {
   hospitals: {
@@ -109,7 +109,8 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
 
   {
     accessorKey: "position",
-    header: ({ column }) => {
+    header: ({ column, table }) => {
+      const positionList = table.getRow("0").original.hospitals?.position_list;
       return (
         <div className="flex items-center gap-1">
           <Button
@@ -121,7 +122,7 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
             직급
             <LuArrowDown className="ml-2 h-4 w-4" />
           </Button>
-          <Pencil1Icon className="text-primary hover:opacity-50 cursor-pointer" />
+          <PositionSetting positionList={positionList ?? []} />
         </div>
       );
     },
