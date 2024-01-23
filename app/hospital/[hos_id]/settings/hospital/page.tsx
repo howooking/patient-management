@@ -11,11 +11,25 @@ export default async function HospitalSettingPage({
 
   const supabase = await createSupabaseServerClient(true);
 
+  // const {
+  //   data: { user },
+  //   error: userError,
+  // } = await supabase.auth.getUser();
+
+  // const { data: hospital, error: hospitalError } = await supabase
+  //   .from("hospitals")
+  //   .select("master_id")
+  //   .match({ hos_id })
+  //   .single();
+
   const { data: vets, error: vetsError } = await supabase
     .from("hos_vet_mapping")
     .select(
       `
-        hospitals (group_list, position_list),
+        hospitals (
+          group_list, 
+          position_list
+        ),
         vets (
           vet_name,
           avatar_url  
@@ -34,6 +48,10 @@ export default async function HospitalSettingPage({
   if (vetsError) {
     throw new Error(vetsError.message);
   }
+
+  // if (user?.id !== hospital?.master_id) {
+  //   throw new Error("병원장만 접근 가능합니다.");
+  // }
 
   return (
     <>

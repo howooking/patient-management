@@ -31,7 +31,7 @@ export default function HospitalSetting() {
             onClick={() => push(`/hospital/${hospitalId}/settings/hospital`)}
             className="cursor-pointer"
           >
-            병원직원 설정
+            스태프 설정
           </DropdownMenuItem>
         </DropdownMenuSubContent>
       </DropdownMenuPortal>
