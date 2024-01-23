@@ -6,12 +6,13 @@ import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
 import { LuArrowDown } from "react-icons/lu";
 import ApproveColumn from "./approve-column";
-import GroupColumn from "./group-column";
-import GroupSetting from "./group-setting";
+
 import { NicknameColumn } from "./nickname-column";
 import PositionColumn from "./position-column";
 import PositionSetting from "./position-setting";
 import RankColumn from "./rank-column";
+import GroupSetting from "./group-setting";
+import { GroupColumn } from "./group-column";
 
 export type vetsTableColumn = {
   hospitals: {
@@ -24,7 +25,7 @@ export type vetsTableColumn = {
   } | null;
   vet_id: string;
   vet_approved: boolean;
-  group: string;
+  group: string[] | null;
   position: string;
   nickname: string | null;
   rank: number;
@@ -33,7 +34,7 @@ export type vetsTableColumn = {
 export const columns: ColumnDef<vetsTableColumn>[] = [
   {
     accessorKey: "rank",
-    header: "서열",
+    header: "순번",
     cell: ({ row }) => {
       const rank = row.original.rank;
       const vet_id = row.original.vet_id;
@@ -102,7 +103,11 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
       const groupList = row.original.hospitals?.group_list;
       const vet_id = row.original.vet_id;
       return (
-        <GroupColumn group={group} groupList={groupList ?? []} vetId={vet_id} />
+        <GroupColumn
+          group={group ?? []}
+          groupList={groupList ?? []}
+          vetId={vet_id}
+        />
       );
     },
   },

@@ -174,7 +174,7 @@ export interface Database {
           hos_id: string
           id: string
           name: string
-          price: string
+          price: string | null
           species: string
           tag: string
           type: string
@@ -188,7 +188,7 @@ export interface Database {
           hos_id: string
           id?: string
           name?: string
-          price?: string
+          price?: string | null
           species: string
           tag?: string
           type?: string
@@ -202,7 +202,7 @@ export interface Database {
           hos_id?: string
           id?: string
           name?: string
-          price?: string
+          price?: string | null
           species?: string
           tag?: string
           type?: string
@@ -223,7 +223,7 @@ export interface Database {
         Row: {
           class: string
           created_at: string
-          group: string
+          group: string[] | null
           hos_id: string
           nickname: string | null
           position: string
@@ -234,7 +234,7 @@ export interface Database {
         Insert: {
           class?: string
           created_at?: string
-          group?: string
+          group?: string[] | null
           hos_id: string
           nickname?: string | null
           position?: string
@@ -245,7 +245,7 @@ export interface Database {
         Update: {
           class?: string
           created_at?: string
-          group?: string
+          group?: string[] | null
           hos_id?: string
           nickname?: string | null
           position?: string
