@@ -25,6 +25,7 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 
 const groupListSchema = z.object({
   group: z.array(z.string()).refine((value) => value.some((item) => item), {
@@ -39,6 +40,7 @@ type Props = {
 };
 
 export function GroupColumn({ groupList, group, vetId }: Props) {
+  const hospitalId = useCurrentHospitalId();
   const [open, setOpen] = useState(false);
   const supabase = createSupabaseBrowserClient();
   const router = useRouter();
@@ -53,7 +55,7 @@ export function GroupColumn({ groupList, group, vetId }: Props) {
     const { error } = await supabase
       .from("hos_vet_mapping")
       .update({ group: value.group })
-      .match({ vet_id: vetId });
+      .match({ vet_id: vetId, hos_id: hospitalId });
 
     if (error) {
       toast({

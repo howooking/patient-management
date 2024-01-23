@@ -7,6 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type Props = {
@@ -16,12 +17,13 @@ type Props = {
 
 export default function ApproveColumn({ approved, vetId }: Props) {
   const supabase = createSupabaseBrowserClient();
+  const hospitalId = useCurrentHospitalId();
 
   const handleApprove = async (value: "true" | "false") => {
     const { error } = await supabase
       .from("hos_vet_mapping")
       .update({ vet_approved: value === "true" })
-      .match({ vet_id: vetId });
+      .match({ vet_id: vetId, hos_id: hospitalId });
 
     if (error) {
       toast({

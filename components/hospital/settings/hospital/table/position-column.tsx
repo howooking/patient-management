@@ -7,6 +7,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type Props = {
@@ -21,12 +22,13 @@ export default function PositionColumn({
   vetId,
 }: Props) {
   const supabase = createSupabaseBrowserClient();
+  const hospitalId = useCurrentHospitalId();
 
   const handlePosition = async (value: string) => {
     const { error } = await supabase
       .from("hos_vet_mapping")
       .update({ position: value })
-      .match({ vet_id: vetId });
+      .match({ vet_id: vetId, hos_id: hospitalId });
     if (error) {
       toast({
         variant: "destructive",

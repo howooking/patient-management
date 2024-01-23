@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 
 type Props = {
   nickname: string;
@@ -25,13 +26,14 @@ export function NicknameColumn({ nickname, vetId }: Props) {
   const { refresh } = useRouter();
   const [nicknameInput, setNicknameInput] = useState("");
   const supabase = createSupabaseBrowserClient();
+  const hospitalId = useCurrentHospitalId();
 
   const handleUpdateNickname = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { error } = await supabase
       .from("hos_vet_mapping")
       .update({ nickname: nicknameInput })
-      .match({ vet_id: vetId });
+      .match({ vet_id: vetId, hos_id: hospitalId });
 
     if (error) {
       toast({
