@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -8,22 +9,22 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { useState } from "react";
 
-export default function GroupColumn({
-  group,
-  groupList,
+export default function RankColumn({
+  rank,
   vetId,
 }: {
-  group: string;
-  groupList: string[];
+  rank: number;
   vetId: string;
 }) {
+  const [count, setCount] = useState(8);
   const supabase = createSupabaseBrowserClient();
 
-  const handleGroup = async (value: string) => {
+  const handlePosition = async (value: string) => {
     const { error } = await supabase
       .from("hos_vet_mapping")
-      .update({ group: value })
+      .update({ rank: Number(value) })
       .match({ vet_id: vetId });
     if (error) {
       toast({
@@ -34,23 +35,30 @@ export default function GroupColumn({
       return;
     }
     toast({
-      title: "소속을 변경하였습니다.",
+      title: "서열을 변경하였습니다.",
     });
   };
 
   return (
     <>
-      <Select onValueChange={handleGroup} defaultValue={group}>
-        <SelectTrigger className="w-20">
+      <Select onValueChange={handlePosition} defaultValue={rank.toString()}>
+        <SelectTrigger className="w-16">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="w-20">
+        <SelectContent>
           <SelectGroup>
-            {groupList.map((element) => (
-              <SelectItem value={element} key={element}>
-                {element}
+            {new Array(count).fill(0).map((_, index) => (
+              <SelectItem value={`${index + 1}`} key={index}>
+                {index + 1}
               </SelectItem>
             ))}
+            <Button
+              className="w-full"
+              variant="ghost"
+              onClick={() => setCount((prev) => prev + 8)}
+            >
+              +
+            </Button>
           </SelectGroup>
         </SelectContent>
       </Select>

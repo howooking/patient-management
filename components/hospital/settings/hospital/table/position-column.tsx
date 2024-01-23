@@ -9,21 +9,21 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-export default function GroupColumn({
-  group,
-  groupList,
+export default function PositionColumn({
+  position,
+  positionList,
   vetId,
 }: {
-  group: string;
-  groupList: string[];
+  position: string;
+  positionList: string[];
   vetId: string;
 }) {
   const supabase = createSupabaseBrowserClient();
 
-  const handleGroup = async (value: string) => {
+  const handlePosition = async (value: string) => {
     const { error } = await supabase
       .from("hos_vet_mapping")
-      .update({ group: value })
+      .update({ position: value })
       .match({ vet_id: vetId });
     if (error) {
       toast({
@@ -40,13 +40,13 @@ export default function GroupColumn({
 
   return (
     <>
-      <Select onValueChange={handleGroup} defaultValue={group}>
-        <SelectTrigger className="w-20">
+      <Select onValueChange={handlePosition} defaultValue={position}>
+        <SelectTrigger className="w-28">
           <SelectValue />
         </SelectTrigger>
-        <SelectContent className="w-20">
+        <SelectContent className="w-28">
           <SelectGroup>
-            {groupList.map((element) => (
+            {positionList.map((element) => (
               <SelectItem value={element} key={element}>
                 {element}
               </SelectItem>

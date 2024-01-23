@@ -11,9 +11,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { toast } from "@/components/ui/use-toast";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 export function NicknameColumn({
@@ -66,9 +65,6 @@ export function NicknameColumn({
           onSubmit={handleUpdateNickname}
         >
           <div className="grid flex-1 gap-2">
-            <Label htmlFor="link" className="sr-only">
-              Link
-            </Label>
             <Input
               defaultValue={nickname}
               onChange={(e) => setNicknameInput(e.target.value)}
@@ -82,38 +78,3 @@ export function NicknameColumn({
     </Dialog>
   );
 }
-
-// export default function UpdateNickname({ nickname }: { nickname: string }) {
-//   const [editMode, setEditMode] = useState(false);
-//   const [nicknameInput, setNicknameInput] = useState(() => nickname);
-//   return (
-//     <div className="flex w-full max-w-sm items-center space-x-2">
-//       {editMode ? (
-//         <>
-//           <Input
-//             placeholder="Email"
-//             className="w-28  p-2 h-7"
-//             value={nicknameInput}
-//             onChange={(e) => setNicknameInput(e.target.value)}
-//           />
-//           <CheckIcon
-//             onClick={() => setEditMode(true)}
-//             className="cursor-pointer hover:opacity-50 transition"
-//           />
-//           <Cross2Icon
-//             onClick={() => setEditMode(false)}
-//             className="cursor-pointer hover:opacity-50 transition"
-//           />
-//         </>
-//       ) : (
-//         <>
-//           <p className="w-28">{nickname}</p>
-//           <Pencil1Icon
-//             onClick={() => setEditMode(true)}
-//             className="cursor-pointer hover:opacity-50 transition"
-//           />
-//         </>
-//       )}
-//     </div>
-//   );
-// }

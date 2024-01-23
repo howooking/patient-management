@@ -8,6 +8,10 @@ import avatarDefault from "@/public/default-avatar.jpg";
 import ApproveColumn from "./approve-column";
 import { NicknameColumn } from "./nickname-column";
 import GroupColumn from "./group-column";
+import PositionColumn from "./position-column";
+import RankColumn from "./rank-column";
+import { Pencil1Icon } from "@radix-ui/react-icons";
+import GroupSetting from "./group-setting";
 
 export type vetsTableColumn = {
   hospitals: {
@@ -30,6 +34,11 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
   {
     accessorKey: "rank",
     header: "서열",
+    cell: ({ row }) => {
+      const rank = row.original.rank;
+      const vet_id = row.original.vet_id;
+      return <RankColumn rank={rank} vetId={vet_id} />;
+    },
   },
   {
     accessorKey: "vets",
@@ -70,17 +79,22 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
   },
   {
     accessorKey: "group",
-    header: ({ column }) => {
+    header: ({ column, table }) => {
+      const groupList = table.getRow("0").original.hospitals?.group_list;
+
       return (
-        <Button
-          size="sm"
-          className="text-sm"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          그룹
-          <LuArrowDown className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            size="sm"
+            className="text-sm"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            그룹
+            <LuArrowDown className="ml-2 h-4 w-4" />
+          </Button>
+          <GroupSetting groupList={groupList ?? []} />
+        </div>
       );
     },
     cell: ({ row }) => {
@@ -95,7 +109,34 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
 
   {
     accessorKey: "position",
-    header: "직급",
+    header: ({ column }) => {
+      return (
+        <div className="flex items-center gap-1">
+          <Button
+            size="sm"
+            className="text-sm"
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            직급
+            <LuArrowDown className="ml-2 h-4 w-4" />
+          </Button>
+          <Pencil1Icon className="text-primary hover:opacity-50 cursor-pointer" />
+        </div>
+      );
+    },
+    cell: ({ row }) => {
+      const position = row.original.position;
+      const positionList = row.original.hospitals?.position_list;
+      const vet_id = row.original.vet_id;
+      return (
+        <PositionColumn
+          position={position}
+          positionList={positionList ?? []}
+          vetId={vet_id}
+        />
+      );
+    },
   },
   {
     accessorKey: "vet_approved",
@@ -111,13 +152,4 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
       );
     },
   },
-
-  // {
-  //   id: "actions",
-  //   cell: ({ row }) => {
-  //     const feed = row.original;
-
-  //     return <TableDropdown feed={feed} />;
-  //   },
-  // },
 ];

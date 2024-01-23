@@ -37,11 +37,11 @@ export default async function HospitalSettingPage({
 
   return (
     <>
-      <div className="flex justify-between">
+      <div className="flex justify-between pb-4">
         <h2 className="text-xl text-primary font-bold">병원직원 설정</h2>
       </div>
 
-      <DataTable columns={columns} data={vets} filterColumn="tag" />
+      <DataTable columns={columns} data={vets} noSearch />
     </>
   );
 }

@@ -24,14 +24,17 @@ import { useState } from "react";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableViewOptions } from "./data-table-view-options";
 import { Input } from "./input";
+import { cn } from "@/lib/utils";
 
 type DataTableProps<TData, TValue> = {
+  noSearch?: boolean;
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  filterColumn: string;
+  filterColumn?: string;
 };
 
 export default function DataTable<TData, TValue>({
+  noSearch,
   columns,
   data,
   filterColumn,
@@ -59,17 +62,22 @@ export default function DataTable<TData, TValue>({
 
   return (
     <>
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="태그 검색"
-          value={
-            (table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn(filterColumn)?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className={cn("flex items-center py-4", noSearch && "hidden")}>
+        {filterColumn ? (
+          <Input
+            placeholder="태그 검색"
+            value={
+              (table.getColumn(filterColumn)?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn(filterColumn)?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
+        ) : (
+          ""
+        )}
+
         <DataTableViewOptions table={table} />
       </div>
 
