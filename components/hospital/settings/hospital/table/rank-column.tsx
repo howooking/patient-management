@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -9,15 +8,14 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { useState } from "react";
 
 type Props = {
   rank: number;
   vetId: string;
+  length: number;
 };
 
-export default function RankColumn({ rank, vetId }: Props) {
-  const [count, setCount] = useState(8);
+export default function RankColumn({ rank, vetId, length }: Props) {
   const supabase = createSupabaseBrowserClient();
 
   const handlePosition = async (value: string) => {
@@ -34,7 +32,7 @@ export default function RankColumn({ rank, vetId }: Props) {
       return;
     }
     toast({
-      title: "서열을 변경하였습니다.",
+      title: "순번을 변경하였습니다.",
     });
   };
 
@@ -46,18 +44,18 @@ export default function RankColumn({ rank, vetId }: Props) {
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {new Array(count).fill(0).map((_, index) => (
+            {new Array(length).fill(0).map((_, index) => (
               <SelectItem value={`${index + 1}`} key={index}>
                 {index + 1}
               </SelectItem>
             ))}
-            <Button
+            {/* <Button
               className="w-full"
               variant="ghost"
-              onClick={() => setCount((prev) => prev + 8)}
+              onClick={() => setCount((prev) => prev + 1)}
             >
               +
-            </Button>
+            </Button> */}
           </SelectGroup>
         </SelectContent>
       </Select>

@@ -35,10 +35,12 @@ export const columns: ColumnDef<vetsTableColumn>[] = [
   {
     accessorKey: "rank",
     header: "순번",
-    cell: ({ row }) => {
+    cell: ({ row, table }) => {
+      const length = table.getFilteredRowModel().rows.length;
+
       const rank = row.original.rank;
       const vet_id = row.original.vet_id;
-      return <RankColumn rank={rank} vetId={vet_id} />;
+      return <RankColumn rank={rank} vetId={vet_id} length={length} />;
     },
   },
   {

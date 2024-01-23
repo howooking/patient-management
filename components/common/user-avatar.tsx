@@ -10,7 +10,7 @@ type Props = {
 export default function UserAvatar({ src, fallback, large }: Props) {
   return (
     <Avatar className={cn("w-8 h-8", large && "w-12 h-12")}>
-      <AvatarImage src={src} />
+      <AvatarImage src={src} referrerPolicy="no-referrer" />
       <AvatarFallback>{fallback}</AvatarFallback>
     </Avatar>
   );
