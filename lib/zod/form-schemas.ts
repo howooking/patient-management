@@ -116,6 +116,7 @@ export const addDrugFormSchema = z.object({
   indication: z.string().optional(),
   description: z.string().optional(),
   side_effect: z.string().optional(),
+  classification: z.string().optional(),
 
   drug_doses: z.array(
     z.object({

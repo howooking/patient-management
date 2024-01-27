@@ -59,9 +59,11 @@ export default function AddDrugForm({
       setValue("indication", drug?.indication!);
       setValue("name", drug?.name!);
       setValue("side_effect", drug?.side_effect!);
+      setValue("classification", drug?.classification!);
       setValue("tag", drug?.tag!);
     }
   }, [
+    drug?.classification,
     drug?.description,
     drug?.indication,
     drug?.name,
@@ -78,8 +80,15 @@ export default function AddDrugForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = async (values: z.infer<typeof addDrugFormSchema>) => {
-    const { drug_doses, indication, side_effect, name, tag, description } =
-      values;
+    const {
+      drug_doses,
+      indication,
+      side_effect,
+      name,
+      tag,
+      description,
+      classification,
+    } = values;
 
     setIsSubmitting(true);
 
@@ -92,6 +101,7 @@ export default function AddDrugForm({
         indication,
         side_effect,
         tag,
+        classification,
       })
       .select()
       .single();
@@ -204,11 +214,9 @@ export default function AddDrugForm({
           name="indication"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                적용증
-              </FormLabel>
+              <FormLabel className="text-sm font-semibold">적용증</FormLabel>
               <FormControl>
-                <Input {...field} className="h-8 text-sm" />
+                <Textarea {...field} className="h-8 text-sm" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
@@ -220,12 +228,12 @@ export default function AddDrugForm({
           control={control}
           name="side_effect"
           render={({ field }) => (
-            <FormItem>
+            <FormItem className="flex flex-col justify-end">
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
                 부작용
               </FormLabel>
               <FormControl>
-                <Input {...field} className="h-8 text-sm" />
+                <Textarea {...field} className="h-8 text-sm" />
               </FormControl>
               <FormMessage className="text-xs" />
             </FormItem>
@@ -233,23 +241,37 @@ export default function AddDrugForm({
         />
 
         {/* 약품설명 */}
-        <div className="col-span-2">
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm font-semibold">
-                  약품설명
-                </FormLabel>
-                <FormControl>
-                  <Textarea className="resize-none" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-sm font-semibold">약품설명</FormLabel>
+              <FormControl>
+                <Textarea {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* 약품분류 */}
+        <FormField
+          control={form.control}
+          name="classification"
+          render={({ field }) => (
+            <FormItem className="flex flex-col justify-end">
+              <FormLabel className="text-sm font-semibold flex items-center gap-2">
+                약품 분류
+                <FormTooltip title="#antibiotics#fluoroquinolone" />
+              </FormLabel>
+              <FormControl>
+                <Textarea {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <DrugDoses
           doseDetail={doseDetail}

@@ -127,6 +127,7 @@ export interface Database {
       }
       drugs: {
         Row: {
+          classification: string | null
           created_at: string
           description: string | null
           hos_id: string | null
@@ -137,6 +138,7 @@ export interface Database {
           tag: string | null
         }
         Insert: {
+          classification?: string | null
           created_at?: string
           description?: string | null
           hos_id?: string | null
@@ -147,6 +149,7 @@ export interface Database {
           tag?: string | null
         }
         Update: {
+          classification?: string | null
           created_at?: string
           description?: string | null
           hos_id?: string | null
@@ -320,6 +323,148 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "vets"
             referencedColumns: ["vet_id"]
+          }
+        ]
+      }
+      icu_chart: {
+        Row: {
+          created_at: string
+          icu_chart_id: number
+          io_id: number
+          make_date: string | null
+          protocol_name: string | null
+          tag: string | null
+          target_date: string | null
+          type: string | null
+        }
+        Insert: {
+          created_at?: string
+          icu_chart_id?: number
+          io_id: number
+          make_date?: string | null
+          protocol_name?: string | null
+          tag?: string | null
+          target_date?: string | null
+          type?: string | null
+        }
+        Update: {
+          created_at?: string
+          icu_chart_id?: number
+          io_id?: number
+          make_date?: string | null
+          protocol_name?: string | null
+          tag?: string | null
+          target_date?: string | null
+          type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_chart_io_id_fkey"
+            columns: ["io_id"]
+            isOneToOne: false
+            referencedRelation: "in_and_out"
+            referencedColumns: ["io_id"]
+          }
+        ]
+      }
+      icu_chart_tx: {
+        Row: {
+          created_at: string
+          data_type: string | null
+          done: string | null
+          icu_chart_tx_id: number
+          io_id: number | null
+          todo: string | null
+          todo_data: string | null
+          todo_info: string | null
+          todo_memo: string | null
+          todo_name: string | null
+          tx_data_id: number | null
+        }
+        Insert: {
+          created_at?: string
+          data_type?: string | null
+          done?: string | null
+          icu_chart_tx_id?: number
+          io_id?: number | null
+          todo?: string | null
+          todo_data?: string | null
+          todo_info?: string | null
+          todo_memo?: string | null
+          todo_name?: string | null
+          tx_data_id?: number | null
+        }
+        Update: {
+          created_at?: string
+          data_type?: string | null
+          done?: string | null
+          icu_chart_tx_id?: number
+          io_id?: number | null
+          todo?: string | null
+          todo_data?: string | null
+          todo_info?: string | null
+          todo_memo?: string | null
+          todo_name?: string | null
+          tx_data_id?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "icu_chart_tx_io_id_fkey"
+            columns: ["io_id"]
+            isOneToOne: false
+            referencedRelation: "in_and_out"
+            referencedColumns: ["io_id"]
+          }
+        ]
+      }
+      in_and_out: {
+        Row: {
+          created_at: string
+          hos_id: string | null
+          in_date: string | null
+          io_id: number
+          make_date: string | null
+          out_date: string | null
+          pet_id: number | null
+          tag: string | null
+          tag_age: number | null
+        }
+        Insert: {
+          created_at?: string
+          hos_id?: string | null
+          in_date?: string | null
+          io_id?: number
+          make_date?: string | null
+          out_date?: string | null
+          pet_id?: number | null
+          tag?: string | null
+          tag_age?: number | null
+        }
+        Update: {
+          created_at?: string
+          hos_id?: string | null
+          in_date?: string | null
+          io_id?: number
+          make_date?: string | null
+          out_date?: string | null
+          pet_id?: number | null
+          tag?: string | null
+          tag_age?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "in_and_out_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "in_and_out_pet_id_fkey"
+            columns: ["pet_id"]
+            isOneToOne: false
+            referencedRelation: "pets"
+            referencedColumns: ["pet_id"]
           }
         ]
       }
