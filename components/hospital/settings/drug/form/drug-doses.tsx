@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { addDrugFormSchema } from "@/lib/zod/form-schemas";
 import { type DrugDose } from "@/types/type";
@@ -74,7 +75,7 @@ export default function DrugDoses({
         return (
           <div
             key={item.id}
-            className="border p-2 rounded-md grid grid-cols-3 gap-2 relative"
+            className="border p-2 rounded-md grid grid-cols-6 gap-2 relative"
           >
             <div className="absolute right-1 top-1">
               <Button
@@ -117,7 +118,7 @@ export default function DrugDoses({
               control={control}
               name={`drug_doses.${index}.species`}
               render={({ field }) => (
-                <FormItem className="space-y-4">
+                <FormItem className="space-y-4 col-span-3">
                   <FormLabel className="text-sm font-semibold">종*</FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -155,7 +156,7 @@ export default function DrugDoses({
               control={control}
               name={`drug_doses.${index}.route`}
               render={({ field }) => (
-                <FormItem className="flex flex-col justify-end">
+                <FormItem className="flex flex-col justify-end  col-span-3">
                   <FormLabel className="text-sm font-semibold flex items-center gap-2">
                     투약경로*
                     <FormTooltip title="#IV#SC#IM#ID#PO#patch#etc" />
@@ -173,26 +174,9 @@ export default function DrugDoses({
 
             <FormField
               control={control}
-              name={`drug_doses.${index}.description`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-semibold">설명</FormLabel>
-                  <FormControl>
-                    <Input
-                      className="h-8 text-sm"
-                      {...register(`drug_doses.${index}.description`)}
-                    />
-                  </FormControl>
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={control}
               name={`drug_doses.${index}.dose_unit`}
               render={({ field }) => (
-                <FormItem className="col-span-1">
+                <FormItem className="col-span-2">
                   <FormLabel className="text-sm font-semibold">
                     용량 단위
                   </FormLabel>
@@ -212,7 +196,7 @@ export default function DrugDoses({
               control={control}
               name={`drug_doses.${index}.bw_unit`}
               render={({ field }) => (
-                <FormItem className="col-span-1">
+                <FormItem className="col-span-2">
                   <FormLabel className="text-sm font-semibold">
                     체중 단위
                   </FormLabel>
@@ -231,7 +215,7 @@ export default function DrugDoses({
               control={control}
               name={`drug_doses.${index}.cri_unit`}
               render={({ field }) => (
-                <FormItem className="col-span-1">
+                <FormItem className="col-span-2">
                   <FormLabel className="text-sm font-semibold">
                     CRI 단위
                   </FormLabel>
@@ -251,7 +235,7 @@ export default function DrugDoses({
               control={control}
               name={`drug_doses.${index}.default_dose`}
               render={({ field }) => (
-                <FormItem className="">
+                <FormItem className="col-span-2">
                   <FormLabel className="text-sm font-semibold">
                     기본 용량
                   </FormLabel>
@@ -271,7 +255,7 @@ export default function DrugDoses({
               control={control}
               name={`drug_doses.${index}.min_dose`}
               render={({ field }) => (
-                <FormItem className="">
+                <FormItem className="col-span-2">
                   <FormLabel className="text-sm font-semibold">
                     최소 용량
                   </FormLabel>
@@ -290,7 +274,7 @@ export default function DrugDoses({
               control={control}
               name={`drug_doses.${index}.max_dose`}
               render={({ field }) => (
-                <FormItem className="">
+                <FormItem className="col-span-2">
                   <FormLabel className="text-sm font-semibold">
                     최대용량
                   </FormLabel>
@@ -299,6 +283,23 @@ export default function DrugDoses({
                       placeholder="6"
                       className="h-8 text-sm"
                       {...register(`drug_doses.${index}.max_dose`)}
+                    />
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={control}
+              name={`drug_doses.${index}.description`}
+              render={({ field }) => (
+                <FormItem className="col-span-6">
+                  <FormLabel className="text-sm font-semibold">설명</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      className="h-8 text-sm"
+                      {...register(`drug_doses.${index}.description`)}
                     />
                   </FormControl>
                   <FormMessage className="text-xs" />

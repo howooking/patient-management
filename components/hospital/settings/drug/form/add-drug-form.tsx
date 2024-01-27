@@ -230,7 +230,7 @@ export default function AddDrugForm({
           render={({ field }) => (
             <FormItem className="flex flex-col justify-end">
               <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                부작용
+                부작용/금기
               </FormLabel>
               <FormControl>
                 <Textarea {...field} className="h-8 text-sm" />
@@ -284,7 +284,7 @@ export default function AddDrugForm({
 
         <div className="flex gap-4 col-span-2 pt-4">
           <Button className="w-full" disabled={isSubmitting}>
-            {edit && !copy ? "검사 수정" : "검사 등록"}
+            {edit && !copy ? "약품원료 수정" : "약품원료 등록"}
             <AiOutlineLoading3Quarters
               className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
             />
