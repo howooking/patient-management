@@ -58,10 +58,10 @@ export function DeleteDrugDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {drug.name} 검사를 삭제하시겠습니까?
+            {drug.name} 약물원료를 삭제하시겠습니까?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            삭제 된 데이터는 복구되지 않습니다.
+            약물원료를 삭제시 하위 상품이 모두 삭제됩니다.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

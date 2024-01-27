@@ -15,7 +15,8 @@ export default async function DrugSettingPage({
   const { data: drugs, error: drugsErrors } = await supabase
     .from("drugs")
     .select()
-    .match({ hos_id });
+    .match({ hos_id })
+    .order("created_at", { ascending: false });
 
   if (drugsErrors) {
     throw new Error(drugsErrors.message);
