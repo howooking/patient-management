@@ -31,6 +31,7 @@ type Props = {
   drug?: DrugTableColumn;
   doseDetail?: DrugDose[];
   copy?: boolean;
+  handleRefetch?: () => void;
 };
 
 export default function AddDrugForm({
@@ -39,6 +40,7 @@ export default function AddDrugForm({
   drug,
   doseDetail,
   copy,
+  handleRefetch,
 }: Props) {
   const form = useForm<z.infer<typeof addDrugFormSchema>>({
     resolver: zodResolver(addDrugFormSchema),
@@ -92,66 +94,68 @@ export default function AddDrugForm({
 
     setIsSubmitting(true);
 
-    // 생성
-    const { data: drugs, error: drugsError } = await supabase
-      .from("drugs")
-      .insert({
-        hos_id: hospitalId,
-        name,
-        description,
-        indication,
-        side_effect,
-        tag,
-        classification,
-      })
-      .select()
-      .single();
-
-    if (drugsError) {
-      toast({
-        variant: "destructive",
-        title: drugsError.message,
-        description: "관리자에게 문의하세요",
-      });
-      return;
-    }
-
-    // drug_doses 삽입
-    const drugId = drugs.id;
-
-    for (let i = 0; i < drug_doses.length; i++) {
-      const dose_unit = drug_doses[i].dose_unit;
-      const bw_unit = drug_doses[i].bw_unit;
-      const cri_unit = drug_doses[i].cri_unit;
-      const default_dose = drug_doses[i].default_dose;
-      const min_dose = drug_doses[i].min_dose;
-      const max_dose = drug_doses[i].max_dose;
-      const route = drug_doses[i].route;
-      const species = drug_doses[i].species;
-      const description = drug_doses[i].description;
-
-      const { error: drugDosesError } = await supabase
-        .from("drug_doses")
+    // 생성 or copy
+    if (!edit || copy) {
+      const { data: drugs, error: drugsError } = await supabase
+        .from("drugs")
         .insert({
-          drug_id: drugId,
-          bw_unit,
-          cri_unit,
-          default_dose,
-          min_dose,
-          max_dose,
-          species,
-          route,
-          dose_unit,
+          hos_id: hospitalId,
+          name,
           description,
-        });
+          indication,
+          side_effect,
+          tag,
+          classification,
+        })
+        .select()
+        .single();
 
-      if (drugDosesError) {
+      if (drugsError) {
         toast({
           variant: "destructive",
-          title: drugDosesError.message,
+          title: drugsError.message,
           description: "관리자에게 문의하세요",
         });
         return;
+      }
+
+      // drug_doses 삽입
+      const drugId = drugs.id;
+
+      for (let i = 0; i < drug_doses.length; i++) {
+        const dose_unit = drug_doses[i].dose_unit;
+        const bw_unit = drug_doses[i].bw_unit;
+        const cri_unit = drug_doses[i].cri_unit;
+        const default_dose = drug_doses[i].default_dose;
+        const min_dose = drug_doses[i].min_dose;
+        const max_dose = drug_doses[i].max_dose;
+        const route = drug_doses[i].route;
+        const species = drug_doses[i].species;
+        const description = drug_doses[i].description;
+
+        const { error: drugDosesError } = await supabase
+          .from("drug_doses")
+          .insert({
+            drug_id: drugId,
+            bw_unit,
+            cri_unit,
+            default_dose,
+            min_dose,
+            max_dose,
+            species,
+            route,
+            dose_unit,
+            description,
+          });
+
+        if (drugDosesError) {
+          toast({
+            variant: "destructive",
+            title: drugDosesError.message,
+            description: "관리자에게 문의하세요",
+          });
+          return;
+        }
       }
     }
 
@@ -159,7 +163,14 @@ export default function AddDrugForm({
     if (edit && !copy) {
       const { error: drugsError } = await supabase
         .from("drugs")
-        .delete()
+        .update({
+          name,
+          description,
+          indication,
+          side_effect,
+          tag,
+          classification,
+        })
         .match({ id: drug?.id });
 
       if (drugsError) {
@@ -170,6 +181,51 @@ export default function AddDrugForm({
         });
         return;
       }
+
+      for (let i = 0; i < drug_doses.length; i++) {
+        const dose_unit = drug_doses[i].dose_unit;
+        const bw_unit = drug_doses[i].bw_unit;
+        const cri_unit = drug_doses[i].cri_unit;
+        const default_dose = drug_doses[i].default_dose;
+        const min_dose = drug_doses[i].min_dose;
+        const max_dose = drug_doses[i].max_dose;
+        const route = drug_doses[i].route;
+        const species = drug_doses[i].species;
+        const description = drug_doses[i].description;
+
+        const { error: drugDosesError } = await supabase
+          .from("drug_doses")
+          .insert({
+            drug_id: drug?.id,
+            bw_unit,
+            cri_unit,
+            default_dose,
+            min_dose,
+            max_dose,
+            species,
+            route,
+            dose_unit,
+            description,
+          });
+
+        if (drugDosesError) {
+          toast({
+            variant: "destructive",
+            title: drugDosesError.message,
+            description: "관리자에게 문의하세요",
+          });
+          return;
+        }
+      }
+      for (let i = 0; i < doseDetail!.length; i++) {
+        await supabase
+          .from("drug_doses")
+          .delete()
+          .match({ dose_id: doseDetail![i].dose_id });
+      }
+
+      // client side data fetching이므로 수동으로 refetch
+      handleRefetch!();
     }
 
     toast({

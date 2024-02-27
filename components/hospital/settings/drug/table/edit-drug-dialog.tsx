@@ -21,6 +21,9 @@ export function EditDrugDialog({
   const [doseDetail, setDoseDetail] = useState<DrugDose[]>([]);
   const supabase = createSupabaseBrowserClient();
 
+  const [refetch, setRefetch] = useState(false);
+  const handleRefetch = () => setRefetch((prev) => !prev);
+
   useEffect(() => {
     const getData = async () => {
       const { data: drugDoses, error: drugsError } = await supabase
@@ -32,7 +35,7 @@ export function EditDrugDialog({
       }
     };
     getData();
-  }, [drug.id, supabase]);
+  }, [drug.id, supabase, refetch]);
 
   return (
     <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
@@ -48,6 +51,7 @@ export function EditDrugDialog({
           edit
           drug={drug}
           doseDetail={doseDetail}
+          handleRefetch={handleRefetch}
         />
       </DialogContent>
     </Dialog>
