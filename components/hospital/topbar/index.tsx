@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/button";
 import { IoChatboxOutline, IoNotificationsOutline } from "react-icons/io5";
 import PetDialog from "./pet-dialog";
 import SelectedPet from "./selected-pet";
+import { Pet } from "@/types/type";
 
-export default function TopBar() {
+export default function TopBar({ pets }: { pets: Pet[] }) {
   return (
-    <nav className=" bg-background shadow-sm sticky top-0">
+    <nav className="bg-background border-b border-input sticky top-0 z-40">
       <div className="flex justify-between items-center px-6 py-2">
         <div>
           <SelectedPet />
@@ -13,7 +14,7 @@ export default function TopBar() {
         <div className="flex items-center gap-2">
           <PetDialog />
 
-          <PetDialog search />
+          <PetDialog search pets={pets} />
 
           <Button size="icon" variant="ghost" className="rounded-full">
             <IoChatboxOutline size={20} />

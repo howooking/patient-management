@@ -9,43 +9,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import useCurrentHospitalId from "@/hooks/useCurrentHospital";
-import useTanstackPets from "@/hooks/useTanstackPet";
 import { useSelectedPet } from "@/lib/store/pets";
 import type { Pet } from "@/types/type";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import EditPetDialog from "./edit-pet-dialog";
 import NoResult from "./no-result";
-import LoadingLogo from "@/components/common/loading-logo";
 
 type Props = {
   setActiveTab: Dispatch<SetStateAction<string>>;
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
+  pets?: Pet[];
 };
 
-export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
+export default function SearchTab({
+  setActiveTab,
+  setDialogOpen,
+  pets,
+}: Props) {
   const { setSelectedPet } = useSelectedPet();
-
-  const hospitalId = useCurrentHospitalId();
-  const { data, error, isFetching, isLoading } = useTanstackPets(hospitalId);
 
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     inputRef.current?.focus();
-  }, [isFetching]);
+  }, []);
 
-  const [filteredPets, setFilteredPets] = useState<Pet[]>(data?.pets ?? []);
+  const [filteredPets, setFilteredPets] = useState<Pet[]>(pets ?? []);
   const [noResult, setNoResult] = useState(false);
 
   const handleSearch = useDebouncedCallback((searchTerm: string) => {
     if (searchTerm === "") {
       setNoResult(false);
-      setFilteredPets(data?.pets ?? []);
+      setFilteredPets(pets ?? []);
       return;
     }
 
-    const filtered = data?.pets?.filter(
+    const filtered = pets?.filter(
       (pet) =>
         pet.hos_pet_id.includes(searchTerm) ||
         pet.name.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())
@@ -60,26 +59,6 @@ export default function SearchTab({ setActiveTab, setDialogOpen }: Props) {
     setNoResult(false);
     setFilteredPets(filtered ?? []);
   }, 300);
-
-  if (data?.petsError) {
-    // eslint-disable-next-line no-console
-    console.error("supabse error", data?.petsError);
-    return "supabase 에러가 발생했습니다.";
-  }
-
-  if (error) {
-    // eslint-disable-next-line no-console
-    console.error("tanstack error", error);
-    return "에러가 발생했습니다.";
-  }
-
-  if (isLoading || isFetching) {
-    return (
-      <div className="h-[480px]">
-        <LoadingLogo />
-      </div>
-    );
-  }
 
   return (
     <div>

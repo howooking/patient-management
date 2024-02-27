@@ -458,6 +458,8 @@ export type Database = {
       in_and_out: {
         Row: {
           created_at: string
+          discharged: boolean
+          group: string | null
           hos_id: string | null
           in_date: string | null
           io_id: number
@@ -468,6 +470,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          discharged?: boolean
+          group?: string | null
           hos_id?: string | null
           in_date?: string | null
           io_id?: number
@@ -478,6 +482,8 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          discharged?: boolean
+          group?: string | null
           hos_id?: string | null
           in_date?: string | null
           io_id?: number

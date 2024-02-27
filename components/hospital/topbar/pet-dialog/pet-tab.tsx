@@ -2,13 +2,15 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AddPetTab from "./add-pet-tab";
 import SearchTab from "./search-tab";
+import { Pet } from "@/types/type";
 
 type Props = {
   search?: boolean;
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
+  pets?: Pet[];
 };
 
-export default function PetTab({ search, setDialogOpen }: Props) {
+export default function PetTab({ search, setDialogOpen, pets }: Props) {
   const [activeTab, setActiveTab] = useState(search ? "search" : "add");
 
   return (
@@ -27,7 +29,11 @@ export default function PetTab({ search, setDialogOpen }: Props) {
       </TabsContent>
 
       <TabsContent value="search" className="mt-0">
-        <SearchTab setActiveTab={setActiveTab} setDialogOpen={setDialogOpen} />
+        <SearchTab
+          setActiveTab={setActiveTab}
+          setDialogOpen={setDialogOpen}
+          pets={pets}
+        />
       </TabsContent>
     </Tabs>
   );
