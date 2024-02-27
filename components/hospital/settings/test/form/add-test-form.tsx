@@ -46,6 +46,7 @@ type Props = {
   test?: TestTableColumn;
   testDetail?: TestSet[];
   copy?: boolean;
+  handleTestSetRefetch?: () => void;
 };
 
 export default function AddTestForm({
@@ -54,6 +55,7 @@ export default function AddTestForm({
   test,
   testDetail,
   copy,
+  handleTestSetRefetch,
 }: Props) {
   const form = useForm<z.infer<typeof addTestFormSchema>>({
     resolver: zodResolver(addTestFormSchema),
@@ -137,115 +139,229 @@ export default function AddTestForm({
 
     setIsSubmitting(true);
 
-    const { data: tests, error: testsError } = await supabase
-      .from("tests")
-      .insert({
-        hos_id: hospitalId,
-        type,
-        category,
-        original_name,
-        name,
-        description,
-        unit,
-        tag,
-      })
-      .select()
-      .single();
+    // 신규 생성이거나 복사인경우
+    if (!edit || copy) {
+      const { data: tests, error: testsError } = await supabase
+        .from("tests")
+        .insert({
+          hos_id: hospitalId,
+          type,
+          category,
+          original_name,
+          name,
+          description,
+          unit,
+          tag,
+        })
+        .select()
+        .single();
 
-    if (testsError) {
-      toast({
-        variant: "destructive",
-        title: testsError.message,
-        description: "관리자에게 문의하세요",
-      });
-      return;
-    }
+      if (testsError) {
+        toast({
+          variant: "destructive",
+          title: testsError.message,
+          description: "관리자에게 문의하세요",
+        });
+        return;
+      }
 
-    // test_set 삽입
-    const testsId = tests.test_id;
+      // test_set 삽입
+      const testsId = tests.test_id;
 
-    // multi range
-    if (type === "범위") {
-      for (let i = 0; i < multiRange.length; i++) {
-        const age_min = multiRange[i].age_min;
-        const age_max = multiRange[i].age_max;
-        const species = multiRange[i].species;
-        const reference_range = multiRange[i].reference_range;
+      // multi range
+      if (type === "범위") {
+        for (let i = 0; i < multiRange.length; i++) {
+          const age_min = multiRange[i].age_min;
+          const age_max = multiRange[i].age_max;
+          const species = multiRange[i].species;
+          const reference_range = multiRange[i].reference_range;
 
-        for (let j = 0; j < multiRange[i].ranges.length; j++) {
-          const { description, diagnosis, ge, gt, interpretation, le, lt } =
-            multiRange[i].ranges[j];
-          const { error: testSetError } = await supabase
-            .from("test_set")
-            .insert({
-              test_id: testsId,
-              age_min,
-              age_max,
-              species,
-              reference_range,
-              description,
-              diagnosis,
-              interpretation,
-              ge,
-              gt,
-              le,
-              lt,
-              order: j,
-            });
+          for (let j = 0; j < multiRange[i].ranges.length; j++) {
+            const { description, diagnosis, ge, gt, interpretation, le, lt } =
+              multiRange[i].ranges[j];
+            const { error: testSetError } = await supabase
+              .from("test_set")
+              .insert({
+                test_id: testsId,
+                age_min,
+                age_max,
+                species,
+                reference_range,
+                description,
+                diagnosis,
+                interpretation,
+                ge,
+                gt,
+                le,
+                lt,
+                order: j,
+              });
 
-          if (testSetError) {
-            toast({
-              variant: "destructive",
-              title: testSetError.message,
-              description: "관리자에게 문의하세요",
-            });
-            return;
+            if (testSetError) {
+              toast({
+                variant: "destructive",
+                title: testSetError.message,
+                description: "관리자에게 문의하세요",
+              });
+              return;
+            }
+          }
+        }
+      }
+
+      //  select
+      if (type === "선택" || type === "다중선택") {
+        for (let i = 0; i < multiSelect.length; i++) {
+          const age_min = multiSelect[i].age_min;
+          const age_max = multiSelect[i].age_max;
+          const species = multiSelect[i].species;
+          const reference_range = multiSelect[i].reference_range;
+
+          for (let j = 0; j < multiSelect[i].selects.length; j++) {
+            const { description, diagnosis, interpretation, select_value } =
+              multiSelect[i].selects[j];
+            const { error: testSetError } = await supabase
+              .from("test_set")
+              .insert({
+                test_id: testsId,
+                age_min,
+                age_max,
+                species,
+                reference_range,
+                select_value,
+                description,
+                diagnosis,
+                interpretation,
+                order: j,
+              });
+
+            if (testSetError) {
+              toast({
+                variant: "destructive",
+                title: testSetError.message,
+                description: "관리자에게 문의하세요",
+              });
+              return;
+            }
           }
         }
       }
     }
 
-    //  select
-    if (type === "선택" || type === "다중선택") {
-      for (let i = 0; i < multiSelect.length; i++) {
-        const age_min = multiSelect[i].age_min;
-        const age_max = multiSelect[i].age_max;
-        const species = multiSelect[i].species;
-        const reference_range = multiSelect[i].reference_range;
-
-        for (let j = 0; j < multiSelect[i].selects.length; j++) {
-          const { description, diagnosis, interpretation, select_value } =
-            multiSelect[i].selects[j];
-          const { error: testSetError } = await supabase
-            .from("test_set")
-            .insert({
-              test_id: testsId,
-              age_min,
-              age_max,
-              species,
-              reference_range,
-              select_value,
-              description,
-              diagnosis,
-              interpretation,
-              order: j,
-            });
-
-          if (testSetError) {
-            toast({
-              variant: "destructive",
-              title: testSetError.message,
-              description: "관리자에게 문의하세요",
-            });
-            return;
-          }
-        }
-      }
-    }
-
-    // 수정인 경우 원본 test를 삭제
+    // 수정인 경우
     if (edit && !copy) {
-      await supabase.from("tests").delete().match({ test_id: test?.test_id });
+      const { error: testsError } = await supabase
+        .from("tests")
+        .update({
+          type,
+          category,
+          original_name,
+          name,
+          description,
+          unit,
+          tag,
+        })
+        .match({ test_id: test?.test_id });
+
+      if (testsError) {
+        toast({
+          variant: "destructive",
+          title: testsError.message,
+          description: "관리자에게 문의하세요",
+        });
+        return;
+      }
+
+      // multi range
+      if (type === "범위") {
+        for (let i = 0; i < multiRange.length; i++) {
+          const age_min = multiRange[i].age_min;
+          const age_max = multiRange[i].age_max;
+          const species = multiRange[i].species;
+          const reference_range = multiRange[i].reference_range;
+
+          for (let j = 0; j < multiRange[i].ranges.length; j++) {
+            const { description, diagnosis, ge, gt, interpretation, le, lt } =
+              multiRange[i].ranges[j];
+
+            const { error: testSetError } = await supabase
+              .from("test_set")
+              .insert({
+                test_id: test?.test_id!,
+                age_min,
+                age_max,
+                species,
+                reference_range,
+                description,
+                diagnosis,
+                interpretation,
+                ge,
+                gt,
+                le,
+                lt,
+                order: j,
+              });
+
+            if (testSetError) {
+              toast({
+                variant: "destructive",
+                title: testSetError.message,
+                description: "관리자에게 문의하세요",
+              });
+              return;
+            }
+          }
+        }
+      }
+
+      //  select
+      if (type === "선택" || type === "다중선택") {
+        for (let i = 0; i < multiSelect.length; i++) {
+          const age_min = multiSelect[i].age_min;
+          const age_max = multiSelect[i].age_max;
+          const species = multiSelect[i].species;
+          const reference_range = multiSelect[i].reference_range;
+
+          for (let j = 0; j < multiSelect[i].selects.length; j++) {
+            const { description, diagnosis, interpretation, select_value } =
+              multiSelect[i].selects[j];
+            const { error: testSetError } = await supabase
+              .from("test_set")
+              .insert({
+                test_id: test?.test_id!,
+                age_min,
+                age_max,
+                species,
+                reference_range,
+                select_value,
+                description,
+                diagnosis,
+                interpretation,
+                order: j,
+              });
+
+            if (testSetError) {
+              toast({
+                variant: "destructive",
+                title: testSetError.message,
+                description: "관리자에게 문의하세요",
+              });
+              return;
+            }
+          }
+        }
+      }
+
+      // 기존 test_set 삭제
+      for (let i = 0; i < testDetail!.length; i++) {
+        await supabase
+          .from("test_set")
+          .delete()
+          .match({ test_set_id: testDetail![i].test_set_id });
+      }
+
+      // client side data fetching이므로 수종으로 refetch
+      handleTestSetRefetch!();
     }
 
     toast({

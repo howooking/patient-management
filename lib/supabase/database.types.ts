@@ -6,7 +6,7 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
       drug_doses: {
@@ -331,31 +331,25 @@ export interface Database {
           created_at: string
           icu_chart_id: number
           io_id: number
-          make_date: string | null
-          protocol_name: string | null
           tag: string | null
           target_date: string | null
-          type: string | null
+          type: string
         }
         Insert: {
           created_at?: string
           icu_chart_id?: number
           io_id: number
-          make_date?: string | null
-          protocol_name?: string | null
           tag?: string | null
           target_date?: string | null
-          type?: string | null
+          type?: string
         }
         Update: {
           created_at?: string
           icu_chart_id?: number
           io_id?: number
-          make_date?: string | null
-          protocol_name?: string | null
           tag?: string | null
           target_date?: string | null
-          type?: string | null
+          type?: string
         }
         Relationships: [
           {
@@ -371,49 +365,93 @@ export interface Database {
         Row: {
           created_at: string
           data_type: string | null
-          done: string | null
+          done: string[] | null
+          drug_id: string | null
+          drug_product_id: string | null
+          feed_id: string | null
           icu_chart_tx_id: number
           io_id: number | null
-          todo: string | null
-          todo_data: string | null
-          todo_info: string | null
+          test_id: string | null
+          test_set_id: number | null
+          todo: string[] | null
+          todo_log: string[] | null
           todo_memo: string | null
           todo_name: string | null
-          tx_data_id: number | null
         }
         Insert: {
           created_at?: string
           data_type?: string | null
-          done?: string | null
+          done?: string[] | null
+          drug_id?: string | null
+          drug_product_id?: string | null
+          feed_id?: string | null
           icu_chart_tx_id?: number
           io_id?: number | null
-          todo?: string | null
-          todo_data?: string | null
-          todo_info?: string | null
+          test_id?: string | null
+          test_set_id?: number | null
+          todo?: string[] | null
+          todo_log?: string[] | null
           todo_memo?: string | null
           todo_name?: string | null
-          tx_data_id?: number | null
         }
         Update: {
           created_at?: string
           data_type?: string | null
-          done?: string | null
+          done?: string[] | null
+          drug_id?: string | null
+          drug_product_id?: string | null
+          feed_id?: string | null
           icu_chart_tx_id?: number
           io_id?: number | null
-          todo?: string | null
-          todo_data?: string | null
-          todo_info?: string | null
+          test_id?: string | null
+          test_set_id?: number | null
+          todo?: string[] | null
+          todo_log?: string[] | null
           todo_memo?: string | null
           todo_name?: string | null
-          tx_data_id?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "icu_chart_tx_drug_id_fkey"
+            columns: ["drug_id"]
+            isOneToOne: false
+            referencedRelation: "drugs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "icu_chart_tx_drug_product_id_fkey"
+            columns: ["drug_product_id"]
+            isOneToOne: false
+            referencedRelation: "drug_products"
+            referencedColumns: ["drug_product_id"]
+          },
+          {
+            foreignKeyName: "icu_chart_tx_feed_id_fkey"
+            columns: ["feed_id"]
+            isOneToOne: false
+            referencedRelation: "feeds"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "icu_chart_tx_io_id_fkey"
             columns: ["io_id"]
             isOneToOne: false
             referencedRelation: "in_and_out"
             referencedColumns: ["io_id"]
+          },
+          {
+            foreignKeyName: "icu_chart_tx_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "tests"
+            referencedColumns: ["test_id"]
+          },
+          {
+            foreignKeyName: "icu_chart_tx_test_set_id_fkey"
+            columns: ["test_set_id"]
+            isOneToOne: false
+            referencedRelation: "test_set"
+            referencedColumns: ["test_set_id"]
           }
         ]
       }
@@ -423,7 +461,6 @@ export interface Database {
           hos_id: string | null
           in_date: string | null
           io_id: number
-          make_date: string | null
           out_date: string | null
           pet_id: number | null
           tag: string | null
@@ -434,7 +471,6 @@ export interface Database {
           hos_id?: string | null
           in_date?: string | null
           io_id?: number
-          make_date?: string | null
           out_date?: string | null
           pet_id?: number | null
           tag?: string | null
@@ -445,7 +481,6 @@ export interface Database {
           hos_id?: string | null
           in_date?: string | null
           io_id?: number
-          make_date?: string | null
           out_date?: string | null
           pet_id?: number | null
           tag?: string | null
@@ -694,6 +729,57 @@ export interface Database {
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
+          }
+        ]
+      }
+      tx: {
+        Row: {
+          created_at: string
+          icu_chart_tx_id: number | null
+          images: string[] | null
+          io_id: number | null
+          log: string[] | null
+          memo: string | null
+          result: string | null
+          time: string | null
+          tx_id: number
+        }
+        Insert: {
+          created_at?: string
+          icu_chart_tx_id?: number | null
+          images?: string[] | null
+          io_id?: number | null
+          log?: string[] | null
+          memo?: string | null
+          result?: string | null
+          time?: string | null
+          tx_id?: number
+        }
+        Update: {
+          created_at?: string
+          icu_chart_tx_id?: number | null
+          images?: string[] | null
+          io_id?: number | null
+          log?: string[] | null
+          memo?: string | null
+          result?: string | null
+          time?: string | null
+          tx_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tx_icu_chart_tx_id_fkey"
+            columns: ["icu_chart_tx_id"]
+            isOneToOne: false
+            referencedRelation: "icu_chart_tx"
+            referencedColumns: ["icu_chart_tx_id"]
+          },
+          {
+            foreignKeyName: "tx_io_id_fkey"
+            columns: ["io_id"]
+            isOneToOne: false
+            referencedRelation: "in_and_out"
+            referencedColumns: ["io_id"]
           }
         ]
       }

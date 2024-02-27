@@ -19,6 +19,8 @@ export function EditTestDialog({
   setIsEditDialogOpen,
 }: Props) {
   const [testDetail, setTestDetail] = useState<TestSet[]>([]);
+  const [refetch, setRefetch] = useState(false);
+  const handleTestSetRefetch = () => setRefetch((prev) => !prev);
 
   const supabase = createSupabaseBrowserClient();
 
@@ -33,7 +35,7 @@ export function EditTestDialog({
       }
     };
     getData();
-  }, [supabase, test.test_id]);
+  }, [supabase, test.test_id, refetch]);
 
   return (
     <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
@@ -49,6 +51,7 @@ export function EditTestDialog({
           edit
           test={test}
           testDetail={testDetail}
+          handleTestSetRefetch={handleTestSetRefetch}
         />
       </DialogContent>
     </Dialog>
