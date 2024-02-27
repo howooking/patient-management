@@ -17,7 +17,7 @@ export function EditFeedDialog({
   return (
     <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
       <DialogContent
-        className="min-w-[calc(100vw-40px)] max-h-[90vh] overflow-y-auto"
+        className="max-w-4xl max-h-[90vh] overflow-y-auto"
         onInteractOutside={(e) => {
           e.preventDefault();
         }}

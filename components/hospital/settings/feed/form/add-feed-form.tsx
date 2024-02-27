@@ -95,32 +95,56 @@ export default function AddFeedForm({
     } = values;
 
     setIsSubmitting(true);
-
-    const { error: feedError } = await supabase.from("feeds").insert({
-      hos_id: hospitalId,
-      species,
-      calory,
-      description,
-      name,
-      price,
-      tag,
-      type,
-      unit,
-      volume,
-    });
-
-    if (feedError) {
-      toast({
-        variant: "destructive",
-        title: feedError.message,
-        description: "관리자에게 문의하세요",
+    // 새로 삽입 or 복사인 경우
+    if (!edit || copy) {
+      const { error: feedError } = await supabase.from("feeds").insert({
+        hos_id: hospitalId,
+        species,
+        calory,
+        description,
+        name,
+        price,
+        tag,
+        type,
+        unit,
+        volume,
       });
-      return;
+
+      if (feedError) {
+        toast({
+          variant: "destructive",
+          title: feedError.message,
+          description: "관리자에게 문의하세요",
+        });
+        return;
+      }
     }
 
-    // 수정인 경우 원본 test를 삭제
+    // 수정인 경우
     if (edit && !copy) {
-      await supabase.from("feeds").delete().match({ id: feed?.id });
+      const { error: feedError } = await supabase
+        .from("feeds")
+        .update({
+          species,
+          calory,
+          description,
+          name,
+          price,
+          tag,
+          type,
+          unit,
+          volume,
+        })
+        .match({ id: feed?.id });
+
+      if (feedError) {
+        toast({
+          variant: "destructive",
+          title: feedError.message,
+          description: "관리자에게 문의하세요",
+        });
+        return;
+      }
     }
 
     toast({

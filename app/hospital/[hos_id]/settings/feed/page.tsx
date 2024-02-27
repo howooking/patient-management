@@ -15,7 +15,8 @@ export default async function FeedSettingPage({
   const { data: feeds, error: feedsError } = await supabase
     .from("feeds")
     .select()
-    .match({ hos_id });
+    .match({ hos_id })
+    .order("created_at", { ascending: false });
 
   if (feedsError) {
     throw new Error(feedsError.message);
