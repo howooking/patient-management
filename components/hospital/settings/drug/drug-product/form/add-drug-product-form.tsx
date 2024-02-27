@@ -112,35 +112,48 @@ export default function AddDrugProductForm({
     } = values;
 
     setIsSubmitting(true);
+    if (!edit || copy) {
+      const { error: drugsError } = await supabase
+        .from("drug_products")
+        .insert({
+          hos_id: hospitalId,
+          name,
+          description,
+          company,
+          drug_id,
+          mass_unit,
+          price,
+          tag,
+          type,
+          unit,
+          volume,
+        });
 
-    const { error: drugsError } = await supabase.from("drug_products").insert({
-      hos_id: hospitalId,
-      name,
-      description,
-      company,
-      drug_id,
-      mass_unit,
-      price,
-      tag,
-      type,
-      unit,
-      volume,
-    });
-
-    if (drugsError) {
-      toast({
-        variant: "destructive",
-        title: drugsError.message,
-        description: "관리자에게 문의하세요",
-      });
-      return;
+      if (drugsError) {
+        toast({
+          variant: "destructive",
+          title: drugsError.message,
+          description: "관리자에게 문의하세요",
+        });
+        return;
+      }
     }
 
-    // 수정인 경우 원본 drug product를 삭제 / 에러 배제
     if (edit && !copy) {
       await supabase
         .from("drug_products")
-        .delete()
+        .update({
+          name,
+          description,
+          company,
+          drug_id,
+          mass_unit,
+          price,
+          tag,
+          type,
+          unit,
+          volume,
+        })
         .match({ drug_product_id: drugProduct?.drug_product_id });
     }
 
