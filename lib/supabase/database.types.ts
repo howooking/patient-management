@@ -328,25 +328,43 @@ export type Database = {
       }
       icu_chart: {
         Row: {
+          caution: string | null
           created_at: string
+          discharged: boolean
+          hos_id: string
           icu_chart_id: number
           io_id: number
+          main_vet: string | null
+          pet_id: number
+          sub_vet: string | null
           tag: string | null
           target_date: string | null
           type: string
         }
         Insert: {
+          caution?: string | null
           created_at?: string
+          discharged?: boolean
+          hos_id: string
           icu_chart_id?: number
           io_id: number
+          main_vet?: string | null
+          pet_id: number
+          sub_vet?: string | null
           tag?: string | null
           target_date?: string | null
           type?: string
         }
         Update: {
+          caution?: string | null
           created_at?: string
+          discharged?: boolean
+          hos_id?: string
           icu_chart_id?: number
           io_id?: number
+          main_vet?: string | null
+          pet_id?: number
+          sub_vet?: string | null
           tag?: string | null
           target_date?: string | null
           type?: string
@@ -358,6 +376,34 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "in_and_out"
             referencedColumns: ["io_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_hos_id_fkey"
+            columns: ["hos_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_main_vet_fkey"
+            columns: ["main_vet"]
+            isOneToOne: false
+            referencedRelation: "vets"
+            referencedColumns: ["vet_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_pet_id_fkey"
+            columns: ["pet_id"]
+            isOneToOne: false
+            referencedRelation: "pets"
+            referencedColumns: ["pet_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_sub_vet_fkey"
+            columns: ["sub_vet"]
+            isOneToOne: false
+            referencedRelation: "vets"
+            referencedColumns: ["vet_id"]
           }
         ]
       }
@@ -458,36 +504,36 @@ export type Database = {
       in_and_out: {
         Row: {
           created_at: string
-          discharged: boolean
-          group: string | null
+          group: string
           hos_id: string | null
-          in_date: string | null
+          in_date: string
           io_id: number
           out_date: string | null
+          out_due_date: string
           pet_id: number | null
           tag: string | null
           tag_age: number | null
         }
         Insert: {
           created_at?: string
-          discharged?: boolean
-          group?: string | null
+          group: string
           hos_id?: string | null
-          in_date?: string | null
+          in_date: string
           io_id?: number
           out_date?: string | null
+          out_due_date?: string
           pet_id?: number | null
           tag?: string | null
           tag_age?: number | null
         }
         Update: {
           created_at?: string
-          discharged?: boolean
-          group?: string | null
+          group?: string
           hos_id?: string | null
-          in_date?: string | null
+          in_date?: string
           io_id?: number
           out_date?: string | null
+          out_due_date?: string
           pet_id?: number | null
           tag?: string | null
           tag_age?: number | null

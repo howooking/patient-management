@@ -4,8 +4,6 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
-  await new Promise((res) => setTimeout(res, 2000));
-
   const supabase = await createSupabaseServerClient(true);
 
   const {

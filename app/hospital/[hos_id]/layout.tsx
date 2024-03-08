@@ -1,5 +1,5 @@
-import Sidebar from "@/components/hospital/sidebar";
-import TopBar from "@/components/hospital/topbar";
+import Sidebar from "@/components/hospital/sidebar/sidebar";
+import TopBar from "@/components/hospital/topbar/top-bar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export default async function layout({
@@ -50,20 +50,12 @@ export default async function layout({
     return "병원 승인 후 참여가 가능합니다.";
   }
 
-  const { data: pets, error: petsError } = await supabase
-    .from("pets")
-    .select()
-    .match({ hos_id });
-
-  if (petsError) {
-    throw new Error(petsError.message);
-  }
-
   return (
     <div className="flex">
       <Sidebar />
+
       <div className="flex-1 h-screen overflow-y-auto">
-        <TopBar pets={pets} />
+        <TopBar hos_id={hos_id} />
 
         <main className="p-2">{children}</main>
       </div>

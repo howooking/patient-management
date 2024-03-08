@@ -3,7 +3,6 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/common/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
-import TanstackProvider from "@/components/common/tanstack-provider";
 
 const font = Nanum_Gothic({
   weight: ["400", "700", "800"],
@@ -29,7 +28,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TanstackProvider>{children}</TanstackProvider>
+          {children}
           <Toaster />
         </ThemeProvider>
       </body>
