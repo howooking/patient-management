@@ -58,6 +58,10 @@
   }
 }
 
+html {
+  font-size: 14px;
+}
+
 /* SCROLL BAR */
 /* ::-webkit-scrollbar {
   width: 0.5rem;

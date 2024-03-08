@@ -7,6 +7,6 @@ type SidebarState = {
 };
 
 export const useSidebarCollapse = create<SidebarState>()((set) => ({
-  collapse: false,
+  collapse: true,
   setCollapse: (collapse) => set(() => ({ collapse })),
 }));

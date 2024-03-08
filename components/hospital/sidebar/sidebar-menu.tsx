@@ -1,16 +1,10 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
-import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 import { Button } from "@/components/ui/button";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
+import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
+import { cn } from "@/lib/utils";
+import { usePathname, useRouter } from "next/navigation";
 
 type Props = {
   title: string;
@@ -31,35 +25,20 @@ export default function SidebarMenu({ icon, ready, title, href }: Props) {
 
   return (
     <li>
-      <TooltipProvider delayDuration={0}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              disabled={!ready}
-              variant="ghost"
-              className={cn(
-                collapse
-                  ? "w-[40px] justify-center"
-                  : "w-[224px] justify-start",
-                currnetRoute === href && "bg-primary/10"
-              )}
-              onClick={() => router.push(`/hospital/${hospitalId}/${href}`)}
-            >
-              <div className="flex items-center gap-4">
-                {icon}
-                <span className={collapse ? "hidden" : "block"}>{title}</span>
-              </div>
-            </Button>
-          </TooltipTrigger>
-
-          <TooltipContent
-            className={cn(collapse ? "block" : "hidden")}
-            side="right"
-          >
-            <p>{title}</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Button
+        disabled={!ready}
+        variant="ghost"
+        className={cn(
+          currnetRoute === href && "bg-primary/10",
+          "duration-500 transition-all p-2 w-full"
+        )}
+        onClick={() => router.push(`/hospital/${hospitalId}/${href}`)}
+      >
+        <div className="flex items-center gap-4 w-full justify-start">
+          <div className="flex-0">{icon}</div>
+          <span className={collapse ? "hidden" : "block"}>{title}</span>
+        </div>
+      </Button>
     </li>
   );
 }

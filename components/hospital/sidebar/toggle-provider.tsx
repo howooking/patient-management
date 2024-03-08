@@ -9,13 +9,15 @@ export default function ToggleProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { collapse } = useSidebarCollapse();
+  const { collapse, setCollapse } = useSidebarCollapse();
+
   return (
     <aside
+      onMouseEnter={() => setCollapse(false)}
+      onMouseLeave={() => setCollapse(true)}
       className={cn(
-        collapse ? "w-[56px]" : "w-[240px]",
-        "transition-all",
-        "shadow-sm"
+        collapse ? "w-[50px]" : "w-[200px]",
+        "transition-all duration-500"
       )}
     >
       {children}
