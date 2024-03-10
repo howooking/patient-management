@@ -33,7 +33,9 @@ export default function IcuDateSelector() {
       </Button>
 
       <div className="flex items-center gap-1">
-        <span className="text-sm">{format(selectedDate, "yyyy-MM-dd")}</span>
+        <span className="text-sm w-20">
+          {format(selectedDate, "yyyy-MM-dd")}
+        </span>
         <IcuDatePicker />
       </div>
 

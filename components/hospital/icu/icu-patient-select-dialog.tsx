@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Pet } from "@/types/type";
