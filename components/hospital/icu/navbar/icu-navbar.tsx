@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import IcuDateSelector from "./icu-date-selector";
 import IcuPatientsList from "./icu-patients-list";
+import SearchRange from "./search-range";
 
 export default async function IcuNavbar({ hos_id }: { hos_id: string }) {
   const supabase = await createSupabaseServerClient(true);
@@ -17,6 +18,7 @@ export default async function IcuNavbar({ hos_id }: { hos_id: string }) {
   return (
     <nav className="fixed flex items-center gap-4 bg-white z-50 top-3.5">
       <IcuDateSelector />
+      <SearchRange />
 
       <IcuPatientsList pets={pets} />
     </nav>
