@@ -16,14 +16,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { calculateAge, cn } from "@/lib/utils";
-import { Pet } from "@/types/type";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { ko } from "date-fns/locale";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import {
   Select,
   SelectContent,
@@ -31,13 +23,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "@/components/ui/use-toast";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
+import useHospitalGroup from "@/hooks/useHospitalGroup";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { calculateAge, cn } from "@/lib/utils";
+import { Pet } from "@/types/type";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
+import { ko } from "date-fns/locale";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { PiCat, PiDog } from "react-icons/pi";
 import { z } from "zod";
 import { VetsOptions } from "../../topbar/pet-dialog/search-tab";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import useCurrentHospitalId from "@/hooks/useCurrentHospital";
-import { toast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
   tag: z.string({ required_error: "입원사유를 #로 입력해주세요" }),
@@ -48,7 +49,7 @@ const formSchema = z.object({
   main_vet: z.string({ required_error: "주치의를 선택해주세요." }),
   sub_vet: z.string().optional(),
   caution: z.string(),
-  group: z.string({ required_error: "과목을 선택해주세요." }),
+  group: z.string({ required_error: "그룹을 선택해주세요." }),
 });
 
 export default function IcuIoDialog({
@@ -129,6 +130,8 @@ export default function IcuIoDialog({
       setIoDialogOpen(false);
     }
   };
+
+  const hospitalGroup = useHospitalGroup(hos_id);
 
   return (
     <Dialog open={ioDialogOpen} onOpenChange={setIoDialogOpen}>
@@ -297,14 +300,15 @@ export default function IcuIoDialog({
               )}
             />
 
-            {/* 과목 */}
+            {/* 그룹 */}
             <FormField
               control={form.control}
               name="group"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                    과목*
+                    그룹*
+                    <FormTooltip title="스테프설정에서 그룹설정을 할 수 있습니다." />
                   </FormLabel>
                   <Select
                     onValueChange={field.onChange}
@@ -312,14 +316,15 @@ export default function IcuIoDialog({
                   >
                     <FormControl>
                       <SelectTrigger className="text-sm h-8">
-                        <SelectValue placeholder="과목 선택" />
+                        <SelectValue placeholder="그룹 선택" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent className="text-sm">
-                      <SelectItem value={"internal"}>내과</SelectItem>
-                      <SelectItem value={"surgery"}>외과</SelectItem>
-                      <SelectItem value={"hotel"}>호텔링</SelectItem>
-                      <SelectItem value={"daily"}>검사대기</SelectItem>
+                      {hospitalGroup.map((element) => (
+                        <SelectItem key={element} value={element}>
+                          {element}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                   <FormMessage />

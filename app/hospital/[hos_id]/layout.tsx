@@ -1,3 +1,4 @@
+import TanstackProvider from "@/components/common/tanstack-provider";
 import Sidebar from "@/components/hospital/sidebar/sidebar";
 import TopBar from "@/components/hospital/topbar/top-bar";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
@@ -57,7 +58,9 @@ export default async function layout({
       <div className="flex-1 h-screen overflow-y-auto">
         <TopBar hos_id={hos_id} />
 
-        <main className="p-2">{children}</main>
+        <main className="p-2">
+          <TanstackProvider>{children}</TanstackProvider>
+        </main>
       </div>
     </div>
   );

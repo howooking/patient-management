@@ -8,7 +8,7 @@ import { useSelectedDate } from "@/lib/store/date";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import GroupSelect from "./group-select";
+import FilterSelect from "./filter-select";
 
 export type IcuPatient =
   | {
@@ -32,7 +32,8 @@ export default function IcuPatientsList({ pets }: { pets: Pet[] }) {
   const [refetch, setRefetch] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [group, setGroup] = useState<string>("모두");
+  const [groupSelect, setGroupSelect] = useState<string>("그룹");
+  const [vetSelect, setVetSelect] = useState<string>("수의사");
 
   useEffect(() => {
     setIsLoading(true);
@@ -74,32 +75,22 @@ export default function IcuPatientsList({ pets }: { pets: Pet[] }) {
   }, [supabase]);
 
   const filteredIcuPatients = useCallback(
-    (group: string) => {
+    (group: string, vet: string) => {
       let filtered = icuPatients?.filter(
         (element) =>
           element.out_date === null ||
           element.out_date!.slice(0, 10) >= format(selectedDate, "yyyy-MM-dd")
       );
-      if (group !== "모두") {
+      if (group !== "그룹") {
         filtered = filtered?.filter((element) => element.group === group);
       }
+      // if (vet !== "수의사") {
+      //   filtered = filtered?.filter((element) => element. === group);
+      // }
       return filtered;
     },
     [icuPatients, selectedDate]
   );
-
-  if (isLoading) {
-    return (
-      <div className="flex gap-2 itmes-center">
-        <Skeleton className="w-10 h-6" />
-        <Skeleton className="w-10 h-6" />
-        <Skeleton className="w-10 h-6" />
-        <Skeleton className="w-10 h-6" />
-        <Skeleton className="w-10 h-6" />
-        <Skeleton className="rounded-full w-6 h-6" />
-      </div>
-    );
-  }
 
   if (!icuPatients || icuPatients?.length === 0) {
     return (
@@ -112,24 +103,41 @@ export default function IcuPatientsList({ pets }: { pets: Pet[] }) {
 
   return (
     <>
-      <GroupSelect
-        group={group}
-        setGroup={setGroup}
-        groupOptions={[
-          ...new Set(icuPatients?.map((element) => element.group)),
-        ]}
+      <FilterSelect
+        select={groupSelect}
+        setSelect={setGroupSelect}
+        options={[...new Set(icuPatients?.map((element) => element.group))]}
+        placeholder="그룹"
       />
 
-      <ul className="flex gap-2 items-center">
-        {filteredIcuPatients(group)?.map((patient) => (
-          <li key={patient.io_id}>
-            <Button size="sm" variant="outline" className="w-10 h-6">
-              {patient.pet_id.name}
-            </Button>
-          </li>
-        ))}
-        <IcuPatientSelectDialog pets={pets} />
-      </ul>
+      <FilterSelect
+        select={vetSelect}
+        setSelect={setVetSelect}
+        options={["김오분", "이구글"]}
+        placeholder="수의사"
+      />
+
+      {isLoading ? (
+        <div className="flex gap-2 itmes-center">
+          <Skeleton className="w-10 h-6" />
+          <Skeleton className="w-10 h-6" />
+          <Skeleton className="w-10 h-6" />
+          <Skeleton className="w-10 h-6" />
+          <Skeleton className="w-10 h-6" />
+          <Skeleton className="rounded-full w-6 h-6" />
+        </div>
+      ) : (
+        <ul className="flex gap-2 items-center">
+          {filteredIcuPatients(groupSelect, vetSelect)?.map((patient) => (
+            <li key={patient.io_id}>
+              <Button size="sm" variant="outline" className="w-10 h-6">
+                {patient.pet_id.name}
+              </Button>
+            </li>
+          ))}
+          <IcuPatientSelectDialog pets={pets} />
+        </ul>
+      )}
     </>
   );
 }

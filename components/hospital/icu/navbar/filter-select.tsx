@@ -7,22 +7,24 @@ import {
 } from "@/components/ui/select";
 import { Dispatch, SetStateAction } from "react";
 
-export default function GroupSelect({
-  group,
-  setGroup,
-  groupOptions,
+export default function FilterSelect({
+  select,
+  setSelect,
+  options,
+  placeholder,
 }: {
-  group: string;
-  setGroup: Dispatch<SetStateAction<string>>;
-  groupOptions: string[];
+  select: string;
+  setSelect: Dispatch<SetStateAction<string>>;
+  options: string[];
+  placeholder: string;
 }) {
   return (
-    <Select value={group} onValueChange={setGroup} defaultValue="모두">
+    <Select value={select} onValueChange={setSelect} defaultValue="모두">
       <SelectTrigger className="text-xs h-6 w-20">
-        <SelectValue placeholder="그룹" />
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {["모두", ...groupOptions].map((element) => (
+        {[placeholder, ...options].map((element) => (
           <SelectItem value={element} key={element}>
             {element}
           </SelectItem>
