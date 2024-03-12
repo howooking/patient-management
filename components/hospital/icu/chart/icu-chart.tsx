@@ -7,7 +7,7 @@ import { useSelectedIchChart } from "@/lib/store/selected-icu-chart";
 import { useMemo } from "react";
 
 export default function IcuChart() {
-  const { icuChart } = useIcuChart();
+  const { icuChart, isLoading } = useIcuChart();
   const { selectedIcuChartId } = useSelectedIchChart();
 
   const selectedChart = useMemo(
@@ -15,6 +15,10 @@ export default function IcuChart() {
       icuChart?.filter((chart) => chart.icu_chart_id === selectedIcuChartId)[0],
     [icuChart, selectedIcuChartId]
   );
+
+  if (isLoading) {
+    return "로딩";
+  }
 
   return (
     <div>

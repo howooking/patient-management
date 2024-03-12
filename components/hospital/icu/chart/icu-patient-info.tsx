@@ -1,6 +1,17 @@
-import { convertDaysToYearsMonths } from "@/lib/utils";
 import { IcuChart } from "@/types/type";
-import { PiCat, PiDog } from "react-icons/pi";
+import {
+  PiBaby,
+  PiCat,
+  PiDog,
+  PiGenderIntersex,
+  PiTag,
+  PiUserGear,
+  PiUser,
+  PiCalendarCheck,
+  PiFaceMask,
+} from "react-icons/pi";
+import IcuPatientInfoCard from "./icu-patient-info-card";
+import { convertDaysToYearsMonths } from "@/lib/utils";
 
 export default function IcuPatientInfo({
   selectedChart,
@@ -8,34 +19,52 @@ export default function IcuPatientInfo({
   selectedChart?: IcuChart;
 }) {
   return (
-    <div className="text-sm">
-      <div>
-        <div className="flex gap-2 items-center text-xl font-bold">
-          <div className="flex items-center gap-1">
-            {selectedChart?.pet_id.species === "canine" ? (
-              <PiDog size={30} />
-            ) : (
-              <PiCat size={30} />
-            )}
-            <p>
-              {selectedChart?.pet_id.name}({selectedChart?.pet_id.breed})
-            </p>
-          </div>
-          <div>{convertDaysToYearsMonths(selectedChart?.io_id.tag_age)}</div>
-          <div>{selectedChart?.pet_id.gender.toUpperCase()}</div>
-        </div>
-      </div>
+    <div className="text-sm p-4 grid grid-cols-4 gap-4">
+      <IcuPatientInfoCard
+        Icon={selectedChart?.pet_id.species === "canine" ? PiDog : PiCat}
+        contents={`${selectedChart?.pet_id.name} (${selectedChart?.pet_id.breed})`}
+        title="이름 (품종)"
+      />
+      <IcuPatientInfoCard
+        Icon={PiGenderIntersex}
+        contents={`${selectedChart?.pet_id.gender.toUpperCase()}`}
+        title="성별"
+      />
+      <IcuPatientInfoCard
+        Icon={PiBaby}
+        contents={`${convertDaysToYearsMonths(selectedChart?.io_id.tag_age)}`}
+        title="나이"
+      />
+      <IcuPatientInfoCard
+        Icon={PiTag}
+        contents={`${selectedChart?.io_id.tag}`}
+        title="입원사유"
+      />
+      <IcuPatientInfoCard
+        Icon={PiUserGear}
+        contents={`${selectedChart?.main_vet.vet_name}`}
+        title="주치의"
+      />
+      <IcuPatientInfoCard
+        Icon={PiUser}
+        contents={`${selectedChart?.sub_vet?.vet_name ?? "없음"}`}
+        title="부주치의"
+      />
+      <IcuPatientInfoCard
+        Icon={PiCalendarCheck}
+        contents={`${selectedChart?.io_id.in_date.slice(
+          0,
+          10
+        )} ~ ${selectedChart?.io_id.out_due_date.slice(5, 10)}`}
+        title="입원일 ~ 퇴원예정일"
+      />
+      <IcuPatientInfoCard
+        Icon={PiFaceMask}
+        contents={`${selectedChart?.io_id.group}`}
+        title="그룹"
+      />
+
       <p>주의사항:{selectedChart?.caution}</p>
-      <p>주치의:{selectedChart?.main_vet.vet_name}</p>
-      <p>부주치의:{selectedChart?.sub_vet?.vet_name ?? "없음"}</p>
-      <p>입원일:{selectedChart?.io_id.in_date}</p>
-      <p>퇴원예정일:{selectedChart?.io_id.out_due_date}</p>
-      <p>퇴원일:{selectedChart?.io_id.out_date ?? "입원중"}</p>
-      <p>입원사유:{selectedChart?.io_id.tag}</p>
-      <p>퇴원여부:{selectedChart?.discharged}</p>
-      <p>차트 타입:{selectedChart?.type}</p>
-      <p>그룹:{selectedChart?.io_id.group}</p>
-      <p>털색:{selectedChart?.pet_id.color}</p>
     </div>
   );
 }
