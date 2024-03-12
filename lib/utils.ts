@@ -1,5 +1,6 @@
 import { type TestSet } from "@/types/type";
 import { clsx, type ClassValue } from "clsx";
+import { differenceInDays, parseISO } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -134,4 +135,45 @@ export function groupMultiRangeTests(testDetail: TestSet[]) {
     }
   );
   return mappedData;
+}
+
+// 입원시 나이 계산
+export function calculateDaysFromNow(birth: string) {
+  const birthToISO = parseISO(birth);
+  const daysFromNow = differenceInDays(new Date(), birthToISO);
+  return daysFromNow;
+}
+
+export function convertDaysToYearsMonths(days?: number | null) {
+  if (!days) {
+    return null;
+  }
+
+  const years = Math.floor(days / 365);
+
+  const remainingDays = days % 365;
+
+  const months = Math.floor(remainingDays / 30);
+
+  let result = "";
+  if (years > 0) {
+    result += `${years}Y `;
+  }
+  if (months > 0) {
+    result += `${months}M`;
+  }
+
+  return result;
+}
+
+// 품종이 너무 긴경우 ... 으로 줄이기
+export function truncateBreed(breed?: string) {
+  if (!breed) {
+    return "";
+  }
+  if (breed.length > 11) {
+    return breed.substring(0, 11) + "...";
+  } else {
+    return breed;
+  }
 }

@@ -1,12 +1,12 @@
 "use client";
 
-import { IcuChart } from "@/components/hospital/icu/icu-tables";
 import { useIcuSearchRange } from "@/lib/store/icu-search-range";
 import { useSelectedIchChart } from "@/lib/store/selected-icu-chart";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { addDays, format } from "date-fns";
 import useCurrentHospitalId from "./useCurrentHospital";
+import { IcuChart } from "@/types/type";
 
 export default function useIcuChart() {
   const { setSelectedIcuChartId } = useSelectedIchChart();
@@ -24,11 +24,12 @@ export default function useIcuChart() {
           *,
           io_id!inner(*),
           pet_id(*),
-          main_vet(*)
+          main_vet(*),
+          sub_vet(*)
         `
         )
         .match({ hos_id })
-        .returns<IcuChart>();
+        .returns<IcuChart[]>();
 
       if (date?.from) {
         // @ts-ignore

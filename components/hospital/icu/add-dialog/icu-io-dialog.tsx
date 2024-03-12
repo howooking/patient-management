@@ -27,7 +27,7 @@ import { toast } from "@/components/ui/use-toast";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import useHospitalGroup from "@/hooks/useHospitalGroup";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { calculateAge, cn } from "@/lib/utils";
+import { calculateAge, calculateDaysFromNow, cn } from "@/lib/utils";
 import { Pet } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
@@ -91,6 +91,7 @@ export default function IcuIoDialog({
           hos_id,
           pet_id: pet.pet_id,
           tag,
+          tag_age: calculateDaysFromNow(pet.birth),
           in_date: date.from.toISOString(),
           out_due_date: date.to.toISOString(),
         })

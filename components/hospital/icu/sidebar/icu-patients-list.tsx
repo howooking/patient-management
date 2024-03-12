@@ -8,7 +8,7 @@ import { useIcuGroupFilter } from "@/lib/store/icu-group-filter";
 import { useIcuVetFilter } from "@/lib/store/icu-vet-filter";
 import { useSelectedIchChart } from "@/lib/store/selected-icu-chart";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { cn } from "@/lib/utils";
+import { cn, truncateBreed } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { useCallback, useEffect } from "react";
@@ -66,7 +66,6 @@ export default function IcuPatientsList() {
 
   // 현재 선택한 환자
   const { selectedIcuChartId, setSelectedIcuChartId } = useSelectedIchChart();
-  console.log(selectedIcuChartId);
 
   if (isLoading) {
     return (
@@ -104,23 +103,10 @@ export default function IcuPatientsList() {
             )}
             onClick={() => setSelectedIcuChartId(chart.icu_chart_id)}
           >
-            {chart.pet_id.name} ({chart.pet_id.breed})
+            {chart.pet_id.name} ( {truncateBreed(chart.pet_id.breed)})
           </Button>
         </li>
       ))}
     </ul>
   );
-}
-{
-  /* <div className="flex items-center ">
-{isLoading ? (
-  <div className="flex gap-2 itmes-center">
-    <Skeleton className="w-10 h-6" />
-    <Skeleton className="w-10 h-6" />
-    <Skeleton className="w-10 h-6" />
-    <Skeleton className="w-10 h-6" />
-    <Skeleton className="w-10 h-6" />
-    <Skeleton className="rounded-full w-6 h-6" />
-  </div>
-) : ( */
 }

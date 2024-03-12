@@ -38,3 +38,18 @@ export type IcuPatient =
       tag_age: number | null;
     }[]
   | null;
+
+export type IcuChart = {
+  caution: string | null;
+  created_at: string;
+  discharged: boolean;
+  hos_id: string;
+  icu_chart_id: number;
+  io_id: InAndOut;
+  main_vet: Vet;
+  pet_id: Pet;
+  sub_vet: Vet;
+  tag: string | null;
+  target_date: string | null;
+  type: string;
+};
