@@ -58,7 +58,7 @@ export default async function layout({
       <div className="flex-1 h-screen overflow-y-auto">
         <TopBar hos_id={hos_id} />
 
-        <main className="p-2">
+        <main>
           <TanstackProvider>{children}</TanstackProvider>
         </main>
       </div>
