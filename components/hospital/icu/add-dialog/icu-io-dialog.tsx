@@ -33,7 +33,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { PiCat, PiDog } from "react-icons/pi";
@@ -55,9 +55,11 @@ const formSchema = z.object({
 export default function IcuIoDialog({
   pet,
   vetOptions,
+  setDialogOpen,
 }: {
   pet: Pet;
   vetOptions: VetsOptions;
+  setDialogOpen: Dispatch<SetStateAction<boolean>>;
 }) {
   const hos_id = useCurrentHospitalId();
 
@@ -89,8 +91,8 @@ export default function IcuIoDialog({
           hos_id,
           pet_id: pet.pet_id,
           tag,
-          in_date: date.from.toDateString(),
-          out_due_date: date.to.toDateString(),
+          in_date: date.from.toISOString(),
+          out_due_date: date.to.toISOString(),
         })
         .select("io_id")
         .single();
@@ -354,7 +356,11 @@ export default function IcuIoDialog({
               )}
             />
 
-            <Button className="col-span-2" disabled={isSubmitting}>
+            <Button
+              className="col-span-2"
+              disabled={isSubmitting}
+              onClick={() => setDialogOpen(false)}
+            >
               입원
               <AiOutlineLoading3Quarters
                 className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}

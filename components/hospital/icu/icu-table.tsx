@@ -6,23 +6,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Pet } from "@/types/type";
 
-export default function IcuTable({
-  io_id,
-  pets,
-}: {
-  io_id: number;
-  pets: Pet | null;
-}) {
+export default function IcuTable() {
   return (
-    <div className="min-h-screen pt-14" id={`${io_id}`}>
-      <div className="flex gap-10">
-        <p>{pets?.name}</p>
-        <p>{pets?.birth}</p>
-        <p>{pets?.breed}</p>
-        <p>{pets?.gender}</p>
-        <p>{pets?.species}</p>
+    <div className="h-screen">
+      <div className="flex gap-2">
+        {/* <p>{selectedIcuPatient?.pet_id.name}</p>
+        <p>{selectedIcuPatient?.pet_id.breed}</p>
+        <p>{selectedIcuPatient?.pet_id.gender}</p>
+        <p>{selectedIcuPatient?.pet_id.memo}</p>
+        <p>{selectedIcuPatient?.pet_id.color}</p>
+        <p>{selectedIcuPatient?.caution}</p>
+        <p>{selectedIcuPatient?.tag}</p> */}
       </div>
       <Table className="border-2">
         <TableHeader>

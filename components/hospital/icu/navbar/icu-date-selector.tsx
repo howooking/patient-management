@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { useSelectedDate } from "@/lib/store/date";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
-import IcuDatePicker from "./icu-date-picker";
 import { format } from "date-fns";
+import IcuDatePicker from "./icu-date-picker";
 
 export default function IcuDateSelector() {
   const { selectedDate, setSelectedDate } = useSelectedDate();

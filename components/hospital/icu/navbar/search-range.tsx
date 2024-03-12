@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useIcuSearchRange } from "@/lib/store/icu-month-range";
+import { useIcuSearchRange } from "@/lib/store/icu-search-range";
 import { cn } from "@/lib/utils";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
@@ -23,7 +23,7 @@ export default function SearchRange() {
           size="sm"
           variant={"outline"}
           className={cn(
-            "justify-start text-left font-normal",
+            "justify-start text-left font-normal h-6",
             !date && "text-muted-foreground"
           )}
         >

@@ -9,15 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { useSelectedPet } from "@/lib/store/pets";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { Pet } from "@/types/type";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import IcuIoDialog from "../../icu/navbar/icu-io-dialog";
+import IcuIoDialog from "../../icu/add-dialog/icu-io-dialog";
 import EditPetDialog from "./edit-pet-dialog";
 import NoResult from "./no-result";
-import useCurrentHospitalId from "@/hooks/useCurrentHospital";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type Props = {
   setActiveTab: Dispatch<SetStateAction<string>>;
@@ -141,7 +141,11 @@ export default function SearchTab({
                   </TableCell>
                   <TableCell className="text-center text-xs">
                     {icu ? (
-                      <IcuIoDialog pet={pet} vetOptions={vetsOptions} />
+                      <IcuIoDialog
+                        pet={pet}
+                        vetOptions={vetsOptions}
+                        setDialogOpen={setDialogOpen}
+                      />
                     ) : (
                       <Button
                         className="px-2 py-0.5 h-6"
