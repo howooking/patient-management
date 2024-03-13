@@ -3,14 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import useIcuChart from "@/hooks/useIcuChart";
-import { useSelectedDate } from "@/lib/store/selected-date";
 import { useIcuGroupFilter } from "@/lib/store/icu-group-filter";
 import { useIcuVetFilter } from "@/lib/store/icu-vet-filter";
+import { useSelectedDate } from "@/lib/store/selected-date";
 import { useSelectedIchChart } from "@/lib/store/selected-icu-chart";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn, truncateBreed } from "@/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
-import { format } from "date-fns";
 import { useCallback, useEffect } from "react";
 
 export default function IcuPatientsList() {
@@ -24,9 +23,7 @@ export default function IcuPatientsList() {
   const filteredIcuCharts = useCallback(
     (group?: string, vet?: string) => {
       let filtered = icuChart?.filter(
-        (element) =>
-          element.io_id.in_date.slice(0, 10) <=
-          format(selectedDate, "yyyy-MM-dd")
+        (element) => element.io_id.in_date <= selectedDate
       );
       if (group !== "그룹") {
         filtered = filtered?.filter((element) => element.io_id.group === group);

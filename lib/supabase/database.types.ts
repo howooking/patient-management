@@ -521,7 +521,7 @@ export type Database = {
           in_date: string
           io_id?: number
           out_date?: string | null
-          out_due_date?: string
+          out_due_date: string
           pet_id?: number | null
           tag?: string | null
           tag_age?: number | null

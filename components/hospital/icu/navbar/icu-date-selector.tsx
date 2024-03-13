@@ -3,8 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { useSelectedDate } from "@/lib/store/selected-date";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
 import IcuDatePicker from "./icu-date-picker";
+import { format } from "date-fns";
 
 export default function IcuDateSelector() {
   const { selectedDate, setSelectedDate } = useSelectedDate();
@@ -12,13 +12,13 @@ export default function IcuDateSelector() {
   const incrementDate = () => {
     const newDate = new Date(selectedDate);
     newDate.setDate(newDate.getDate() + 1);
-    setSelectedDate(newDate);
+    setSelectedDate(format(newDate, "yyyy-MM-dd"));
   };
 
   const decrementDate = () => {
     const newDate = new Date(selectedDate);
     newDate.setDate(newDate.getDate() - 1);
-    setSelectedDate(newDate);
+    setSelectedDate(format(newDate, "yyyy-MM-dd"));
   };
 
   return (
@@ -33,9 +33,7 @@ export default function IcuDateSelector() {
       </Button>
 
       <div className="flex items-center gap-1">
-        <span className="text-sm w-20">
-          {format(selectedDate, "yyyy-MM-dd")}
-        </span>
+        <span className="text-sm w-20">{selectedDate}</span>
         <IcuDatePicker />
       </div>
 

@@ -1,12 +1,13 @@
+import { format } from "date-fns";
 import { create } from "zustand";
 
 type DateState = {
-  selectedDate: Date;
+  selectedDate: string;
   // eslint-disable-next-line unused-imports/no-unused-vars
-  setSelectedDate: (date?: Date) => void;
+  setSelectedDate: (date?: string) => void;
 };
 
 export const useSelectedDate = create<DateState>()((set) => ({
-  selectedDate: new Date(),
+  selectedDate: format(new Date(), "yyyy-MM-dd"),
   setSelectedDate: (newDate) => set(() => ({ selectedDate: newDate })),
 }));

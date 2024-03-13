@@ -94,8 +94,8 @@ export default function IcuIoDialog({
           pet_id: pet.pet_id,
           tag,
           tag_age: calculateDaysFromNow(pet.birth),
-          in_date: date.from.toISOString(),
-          out_due_date: date.to.toISOString(),
+          in_date: format(date.from, "yyyy-MM-dd"),
+          out_due_date: format(date.to, "yyyy-MM-dd"),
         })
         .select("io_id")
         .single();
@@ -129,7 +129,7 @@ export default function IcuIoDialog({
         });
       }
       // 날짜 이동
-      setSelectedDate(date.from);
+      setSelectedDate(format(date.from, "yyyy-MM-dd"));
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);
