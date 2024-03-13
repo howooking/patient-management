@@ -1,7 +1,6 @@
 "use client";
 
 import { useIcuSearchRange } from "@/lib/store/icu-search-range";
-import { useSelectedIchChart } from "@/lib/store/selected-icu-chart";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { addDays, format } from "date-fns";
@@ -9,7 +8,6 @@ import useCurrentHospitalId from "./useCurrentHospital";
 import { IcuChart } from "@/types/type";
 
 export default function useIcuChart() {
-  const { setSelectedIcuChartId } = useSelectedIchChart();
   const hos_id = useCurrentHospitalId();
   const { date } = useIcuSearchRange();
 
@@ -45,10 +43,6 @@ export default function useIcuChart() {
 
       const { data } = await query;
 
-      // 맨처음 차트 선택 차트로 지정
-      if (data) {
-        setSelectedIcuChartId(data[0].icu_chart_id);
-      }
       return data;
     },
   });

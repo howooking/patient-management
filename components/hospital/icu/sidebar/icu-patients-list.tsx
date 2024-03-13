@@ -44,6 +44,8 @@ export default function IcuPatientsList() {
   // 웹소켓
   const supabase = createSupabaseBrowserClient();
   const queryClient = useQueryClient();
+  const { selectedIcuChartId, setSelectedIcuChartId } = useSelectedIchChart();
+
   useEffect(() => {
     const channel = supabase
       .channel("icu_chart")
@@ -55,6 +57,7 @@ export default function IcuPatientsList() {
             queryClient.invalidateQueries({
               queryKey: [`icu_chart`],
             });
+            setSelectedIcuChartId(payload.new.icu_chart_id);
           }
         }
       )
@@ -62,10 +65,16 @@ export default function IcuPatientsList() {
     return () => {
       channel.unsubscribe();
     };
-  }, [queryClient, supabase]);
+  }, [queryClient, setSelectedIcuChartId, supabase]);
 
-  // 현재 선택한 환자
-  const { selectedIcuChartId, setSelectedIcuChartId } = useSelectedIchChart();
+  // 첫방문시에 첫번째 환자 selectedIcuChart로 등록
+  useEffect(() => {
+    if (filteredIcuCharts(group, vet)?.length === 0) {
+      setSelectedIcuChartId(undefined);
+    } else {
+      setSelectedIcuChartId(filteredIcuCharts(group, vet)![0].icu_chart_id);
+    }
+  }, [filteredIcuCharts, group, setSelectedIcuChartId, vet]);
 
   if (isLoading) {
     return (

@@ -131,6 +131,7 @@ export default function IcuIoDialog({
     } finally {
       setIsSubmitting(false);
       setIoDialogOpen(false);
+      setDialogOpen(false);
     }
   };
 
@@ -357,11 +358,7 @@ export default function IcuIoDialog({
               )}
             />
 
-            <Button
-              className="col-span-2"
-              disabled={isSubmitting}
-              onClick={() => setDialogOpen(false)}
-            >
+            <Button className="col-span-2" disabled={isSubmitting}>
               입원
               <AiOutlineLoading3Quarters
                 className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}

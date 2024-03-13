@@ -43,6 +43,7 @@ export default function SearchTab({
   const hos_id = useCurrentHospitalId();
   const [vetsOptions, setVetsOptions] = useState<VetsOptions>(null);
   const supabase = createSupabaseBrowserClient();
+
   useEffect(() => {
     const getVets = async () => {
       const { data: vets } = await supabase

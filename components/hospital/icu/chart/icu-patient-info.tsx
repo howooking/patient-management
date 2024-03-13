@@ -8,7 +8,7 @@ import {
   PiUserGear,
   PiUser,
   PiCalendarCheck,
-  PiFaceMask,
+  PiCirclesFour,
 } from "react-icons/pi";
 import IcuPatientInfoCard from "./icu-patient-info-card";
 import { convertDaysToYearsMonths } from "@/lib/utils";
@@ -59,7 +59,7 @@ export default function IcuPatientInfo({
         title="입원일 ~ 퇴원예정일"
       />
       <IcuPatientInfoCard
-        Icon={PiFaceMask}
+        Icon={PiCirclesFour}
         contents={`${selectedChart?.io_id.group}`}
         title="그룹"
       />

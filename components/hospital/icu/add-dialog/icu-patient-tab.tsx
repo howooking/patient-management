@@ -4,13 +4,15 @@ import { Dispatch, SetStateAction, useState } from "react";
 import AddPetTab from "../../topbar/pet-dialog/add-pet-tab";
 import SearchTab from "../../topbar/pet-dialog/search-tab";
 
-type Props = {
+export default function IcuPatientTab({
+  search,
+  setDialogOpen,
+  pets,
+}: {
   search?: boolean;
   setDialogOpen: Dispatch<SetStateAction<boolean>>;
   pets: Pet[];
-};
-
-export default function IcuPatientTab({ search, setDialogOpen, pets }: Props) {
+}) {
   const [activeTab, setActiveTab] = useState(search ? "search" : "add");
 
   return (
