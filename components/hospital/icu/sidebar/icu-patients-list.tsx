@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import useIcuChart from "@/hooks/useIcuChart";
-import { useSelectedDate } from "@/lib/store/date";
+import { useSelectedDate } from "@/lib/store/selected-date";
 import { useIcuGroupFilter } from "@/lib/store/icu-group-filter";
 import { useIcuVetFilter } from "@/lib/store/icu-vet-filter";
 import { useSelectedIchChart } from "@/lib/store/selected-icu-chart";
@@ -67,15 +67,6 @@ export default function IcuPatientsList() {
     };
   }, [queryClient, setSelectedIcuChartId, supabase]);
 
-  // 첫방문시에 첫번째 환자 selectedIcuChart로 등록
-  useEffect(() => {
-    if (filteredIcuCharts(group, vet)?.length === 0) {
-      setSelectedIcuChartId(undefined);
-    } else {
-      setSelectedIcuChartId(filteredIcuCharts(group, vet)![0].icu_chart_id);
-    }
-  }, [filteredIcuCharts, group, setSelectedIcuChartId, vet]);
-
   if (isLoading) {
     return (
       <div className="flex flex-col gap-0.5">
@@ -100,6 +91,18 @@ export default function IcuPatientsList() {
 
   return (
     <ul className="flex flex-col w-full">
+      <Button
+        size="sm"
+        variant="outline"
+        className={cn(
+          selectedIcuChartId === 0 &&
+            "bg-primary text-white hover:text-white hover:bg-primary/80",
+          "w-full text-left rounded-none"
+        )}
+        onClick={() => setSelectedIcuChartId(0)}
+      >
+        종합현황
+      </Button>
       {filteredIcuCharts(group, vet)?.map((chart) => (
         <li key={chart.icu_chart_id}>
           <Button

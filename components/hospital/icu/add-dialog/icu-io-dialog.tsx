@@ -26,6 +26,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import useHospitalGroup from "@/hooks/useHospitalGroup";
+import { useSelectedDate } from "@/lib/store/selected-date";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { calculateAge, calculateDaysFromNow, cn } from "@/lib/utils";
 import { Pet } from "@/types/type";
@@ -77,6 +78,7 @@ export default function IcuIoDialog({
 
   const supabase = createSupabaseBrowserClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { setSelectedDate } = useSelectedDate();
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     const { caution, date, group, main_vet, tag, sub_vet } = values;
@@ -116,6 +118,7 @@ export default function IcuIoDialog({
         main_vet,
         sub_vet,
         tag,
+        target_date: format(date.from, "yyyy-MM-dd"),
       });
 
       if (icuChartError) {
@@ -125,6 +128,8 @@ export default function IcuIoDialog({
           description: "관리자에게 문의하세요",
         });
       }
+      // 날짜 이동
+      setSelectedDate(date.from);
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error);

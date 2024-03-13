@@ -5,7 +5,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useSelectedDate } from "@/lib/store/date";
+import { useSelectedDate } from "@/lib/store/selected-date";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { ko } from "date-fns/locale";
 import { useState } from "react";

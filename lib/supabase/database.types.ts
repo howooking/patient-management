@@ -338,7 +338,7 @@ export type Database = {
           pet_id: number
           sub_vet: string | null
           tag: string | null
-          target_date: string | null
+          target_date: string
           type: string
         }
         Insert: {
@@ -352,7 +352,7 @@ export type Database = {
           pet_id: number
           sub_vet?: string | null
           tag?: string | null
-          target_date?: string | null
+          target_date: string
           type?: string
         }
         Update: {
@@ -366,23 +366,23 @@ export type Database = {
           pet_id?: number
           sub_vet?: string | null
           tag?: string | null
-          target_date?: string | null
+          target_date?: string
           type?: string
         }
         Relationships: [
-          {
-            foreignKeyName: "icu_chart_io_id_fkey"
-            columns: ["io_id"]
-            isOneToOne: false
-            referencedRelation: "in_and_out"
-            referencedColumns: ["io_id"]
-          },
           {
             foreignKeyName: "public_icu_chart_hos_id_fkey"
             columns: ["hos_id"]
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_io_id_fkey"
+            columns: ["io_id"]
+            isOneToOne: false
+            referencedRelation: "in_and_out"
+            referencedColumns: ["io_id"]
           },
           {
             foreignKeyName: "public_icu_chart_main_vet_fkey"
@@ -479,13 +479,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "icu_chart_tx_io_id_fkey"
-            columns: ["io_id"]
-            isOneToOne: false
-            referencedRelation: "in_and_out"
-            referencedColumns: ["io_id"]
-          },
-          {
             foreignKeyName: "icu_chart_tx_test_id_fkey"
             columns: ["test_id"]
             isOneToOne: false
@@ -498,6 +491,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "test_set"
             referencedColumns: ["test_set_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_io_id_fkey"
+            columns: ["io_id"]
+            isOneToOne: false
+            referencedRelation: "in_and_out"
+            referencedColumns: ["io_id"]
           }
         ]
       }

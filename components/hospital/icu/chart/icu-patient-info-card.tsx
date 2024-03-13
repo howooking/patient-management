@@ -11,7 +11,7 @@ export default function IcuPatientInfoCard({
 }) {
   return (
     <div className="bg-gray-100 rounded-xl p-2 flex gap-2">
-      <Icon className="text-primary w-6 h-6" />
+      <Icon className="text-primary w-5 h-5" />
       <div className="flex flex-col gap-1">
         <div className="text-gray-500">{title}</div>
         <div className="font-bold">{contents}</div>

@@ -7,7 +7,7 @@ type SelectedIcuChart = {
 };
 
 export const useSelectedIchChart = create<SelectedIcuChart>()((set) => ({
-  selectedIcuChartId: undefined,
+  selectedIcuChartId: 0,
   setSelectedIcuChartId: (id?: number) =>
     set(() => ({ selectedIcuChartId: id })),
 }));

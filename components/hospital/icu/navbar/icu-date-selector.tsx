@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useSelectedDate } from "@/lib/store/date";
+import { useSelectedDate } from "@/lib/store/selected-date";
 import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
 import IcuDatePicker from "./icu-date-picker";

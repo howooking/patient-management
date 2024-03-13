@@ -1,10 +1,10 @@
 "use client";
 
 import useIcuChart from "@/hooks/useIcuChart";
-import IcuPatientInfo from "./icu-patient-info";
-import IcuTable from "./icu-table";
 import { useSelectedIchChart } from "@/lib/store/selected-icu-chart";
 import { useMemo } from "react";
+import IcuPatientInfo from "./icu-patient-info";
+import IcuTable from "./icu-table";
 
 export default function IcuChart() {
   const { icuChart, isLoading } = useIcuChart();
@@ -22,7 +22,11 @@ export default function IcuChart() {
 
   return (
     <div>
-      <IcuPatientInfo selectedChart={selectedChart} />
+      {selectedIcuChartId === 0 ? (
+        <>전체현황</>
+      ) : (
+        <IcuPatientInfo selectedChart={selectedChart} />
+      )}
       <IcuTable />
     </div>
   );
