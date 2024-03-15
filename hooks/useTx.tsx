@@ -5,30 +5,27 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { addDays, format } from "date-fns";
 import useCurrentHospitalId from "./useCurrentHospital";
-import { IcuChartJoined } from "@/types/type";
+import { type TxJoined } from "@/types/type";
 
-export default function useIcuChart() {
+export default function useTx() {
   const hos_id = useCurrentHospitalId();
   const { date } = useIcuSearchRange();
 
-  const { data: icuChart, isLoading } = useQuery({
-    queryKey: ["icu_chart", date?.from, date?.to],
+  const { data: tx, isLoading } = useQuery({
+    queryKey: ["tx", date?.from, date?.to],
     queryFn: async () => {
       const supabase = createSupabaseBrowserClient();
       let query = supabase
-        .from("icu_chart")
+        .from("tx")
         .select(
           `
           *,
           io_id!inner(*),
-          pet_id(*),
-          main_vet(*),
-          sub_vet(*)
+          icu_chart_tx_id(*)
         `
         )
-        .match({ hos_id })
-        .order("created_at", { ascending: true })
-        .returns<IcuChartJoined[]>();
+        .eq("io_id.hos_id", hos_id)
+        .returns<TxJoined[]>();
 
       if (date?.from) {
         // @ts-ignore
@@ -45,5 +42,5 @@ export default function useIcuChart() {
     },
   });
 
-  return { icuChart, isLoading };
+  return { tx, isLoading };
 }

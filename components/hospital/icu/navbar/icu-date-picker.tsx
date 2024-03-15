@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/popover";
 import { useSelectedDate } from "@/lib/store/selected-date";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { useState } from "react";
 
@@ -37,9 +38,9 @@ export default function IcuDatePicker() {
           locale={ko}
           mode="single"
           initialFocus
-          selected={selectedDate}
+          selected={new Date(selectedDate)}
           onSelect={(date) => {
-            setSelectedDate(date);
+            setSelectedDate(format(date!, "yyyy-MM-dd"));
             setOpen(false);
           }}
         />

@@ -6,79 +6,118 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+import { type IcuChartTxJoined } from "@/types/type";
+import IcuTableCellInput from "./Icu-table-cell-input";
 
-export default function IcuTable() {
+const TIME = [
+  "01",
+  "02",
+  "03",
+  "04",
+  "05",
+  "06",
+  "07",
+  "08",
+  "09",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+];
+
+export default function IcuTable({
+  selectedChartTx,
+}: {
+  selectedChartTx?: IcuChartTxJoined[];
+}) {
+  // const checklist = useMemo(
+  //   () =>
+  //     selectedChartTx?.filter((element) => element.data_type === "checklist"),
+  //   [selectedChartTx]
+  // );
+  const checklist = selectedChartTx?.filter(
+    (element) => element.data_type === "checklist"
+  );
+
   return (
     <div className="h-screen">
-      <div className="flex gap-2">
-        {/* <p>{selectedIcuPatient?.pet_id.name}</p>
-        <p>{selectedIcuPatient?.pet_id.breed}</p>
-        <p>{selectedIcuPatient?.pet_id.gender}</p>
-        <p>{selectedIcuPatient?.pet_id.memo}</p>
-        <p>{selectedIcuPatient?.pet_id.color}</p>
-        <p>{selectedIcuPatient?.caution}</p>
-        <p>{selectedIcuPatient?.tag}</p> */}
-      </div>
       <Table className="border-2">
         <TableHeader>
-          <TableRow className="divide-x-2">
-            <TableHead className="w-[160px]">처치 목록</TableHead>
-            <TableHead>01</TableHead>
-            <TableHead>02</TableHead>
-            <TableHead>03</TableHead>
-            <TableHead>04</TableHead>
-            <TableHead>05</TableHead>
-            <TableHead>06</TableHead>
-            <TableHead>07</TableHead>
-            <TableHead>08</TableHead>
-            <TableHead>09</TableHead>
-            <TableHead>10</TableHead>
-            <TableHead>11</TableHead>
-            <TableHead>12</TableHead>
-            <TableHead>13</TableHead>
-            <TableHead>14</TableHead>
-            <TableHead>15</TableHead>
-            <TableHead>16</TableHead>
-            <TableHead>17</TableHead>
-            <TableHead>18</TableHead>
-            <TableHead>19</TableHead>
-            <TableHead>20</TableHead>
-            <TableHead>21</TableHead>
-            <TableHead>22</TableHead>
-            <TableHead>23</TableHead>
-            <TableHead>24</TableHead>
+          <TableRow className="divide-x">
+            <IcuTableHead className="w-[200px]">처치 목록</IcuTableHead>
+            {TIME.map((time) => (
+              <IcuTableHead key={time}>{time}</IcuTableHead>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow className="divide-x-2">
-            <TableCell className="font-medium">처치1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell></TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-            <TableCell></TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell></TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell></TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell>1</TableCell>
-            <TableCell></TableCell>
+          {checklist?.map((element) => (
+            <TableRow className="divide-x" key={element.icu_chart_tx_id}>
+              <IcuTableCell>
+                <span className="text-black mr-1">{element.todo_name}</span>
+                <span className="text-[8px] text-gray-500">
+                  {element.todo_memo}
+                </span>
+              </IcuTableCell>
+
+              {TIME.map((time, index) => (
+                <IcuTableCellInput
+                  key={time}
+                  time={index + 1}
+                  // @ts-ignore
+                  result={element[`done_${index + 1}`]?.result ?? ""}
+                  // @ts-ignore
+                  tx_id={element[`done_${index + 1}`]?.tx_id}
+                  icu_chart_tx_id={element.icu_chart_tx_id}
+                  io_id={element.io_id.io_id}
+                />
+              ))}
+            </TableRow>
+          ))}
+
+          {/* icu_chart_tx 처치 추가 */}
+          <TableRow>
+            <IcuTableCell>
+              <span className="text-black mr-1">처치이름</span>
+              <span className="text-[8px] text-gray-500">메모</span>
+            </IcuTableCell>
           </TableRow>
         </TableBody>
       </Table>
     </div>
   );
 }
+
+const IcuTableHead = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => (
+  <TableHead className={cn("h-2 text-center", className)}>{children}</TableHead>
+);
+
+const IcuTableCell = ({
+  children,
+  className,
+}: {
+  children?: React.ReactNode;
+  className?: string;
+}) => (
+  <TableCell className={cn("p-1 h-2 leading-4", className)}>
+    {children}
+  </TableCell>
+);

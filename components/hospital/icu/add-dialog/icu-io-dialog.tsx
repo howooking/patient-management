@@ -24,11 +24,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
+import { DEFAULT_ICU_CHART } from "@/constants/default-icu-chart";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import useHospitalGroup from "@/hooks/useHospitalGroup";
 import { useSelectedDate } from "@/lib/store/selected-date";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { calculateAge, calculateDaysFromNow, cn } from "@/lib/utils";
+import { addIcuChartFormSchema } from "@/lib/zod/form-schemas";
 import { Pet } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
@@ -40,18 +42,6 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { PiCat, PiDog } from "react-icons/pi";
 import { z } from "zod";
 import { VetsOptions } from "../../topbar/pet-dialog/search-tab";
-
-const formSchema = z.object({
-  tag: z.string({ required_error: "입원사유를 #로 입력해주세요" }),
-  date: z.object({
-    from: z.date(),
-    to: z.date(),
-  }),
-  main_vet: z.string({ required_error: "주치의를 선택해주세요." }),
-  sub_vet: z.string().optional(),
-  caution: z.string(),
-  group: z.string({ required_error: "그룹을 선택해주세요." }),
-});
 
 export default function IcuIoDialog({
   pet,
@@ -65,8 +55,9 @@ export default function IcuIoDialog({
   const hos_id = useCurrentHospitalId();
 
   const [ioDialogOpen, setIoDialogOpen] = useState(false);
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+
+  const form = useForm<z.infer<typeof addIcuChartFormSchema>>({
+    resolver: zodResolver(addIcuChartFormSchema),
     defaultValues: {
       caution: pet.memo ?? "",
       date: {
@@ -80,13 +71,13 @@ export default function IcuIoDialog({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { setSelectedDate } = useSelectedDate();
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof addIcuChartFormSchema>) => {
     const { caution, date, group, main_vet, tag, sub_vet } = values;
 
     setIsSubmitting(true);
     try {
       // in_and_out 차트 삽입
-      const { data, error: ioError } = await supabase
+      const { data: inAndOut, error: ioError } = await supabase
         .from("in_and_out")
         .insert({
           group,
@@ -110,16 +101,43 @@ export default function IcuIoDialog({
       }
 
       //icu_chart 삽입
-      const { error: icuChartError } = await supabase.from("icu_chart").insert({
-        io_id: data?.io_id!,
-        hos_id,
-        pet_id: pet.pet_id,
-        caution,
-        main_vet,
-        sub_vet,
-        tag,
-        target_date: format(date.from, "yyyy-MM-dd"),
-      });
+
+      /// 삽입 전 최신 몸무게 조회
+      const { data: weights, error: weightsError } = await supabase
+        .from("test_results")
+        .select("result, created_at")
+        .match({
+          pet_id: pet.pet_id,
+          test_id: "5382e813-9151-4fcb-8e99-4de210f9e129", // 체중 test_id
+        })
+        .order("created_at", { ascending: false });
+
+      if (weightsError) {
+        toast({
+          variant: "destructive",
+          title: weightsError.message,
+          description: "관리자에게 문의하세요",
+        });
+        return;
+      }
+
+      const { data: icuChart, error: icuChartError } = await supabase
+        .from("icu_chart")
+        .insert({
+          io_id: inAndOut?.io_id!,
+          hos_id,
+          pet_id: pet.pet_id,
+          caution,
+          main_vet,
+          sub_vet,
+          target_date: format(date.from, "yyyy-MM-dd"),
+          target_weight:
+            weights.length !== 0
+              ? `${weights[0].result}kg(${weights[0].created_at?.slice(0, 10)})`
+              : null,
+        })
+        .select("icu_chart_id")
+        .single();
 
       if (icuChartError) {
         toast({
@@ -127,7 +145,30 @@ export default function IcuIoDialog({
           title: icuChartError.message,
           description: "관리자에게 문의하세요",
         });
+        return;
       }
+
+      // icu_chart_tx 기본 차트 삽입
+      DEFAULT_ICU_CHART.forEach(async (element) => {
+        const { error: icuChartTxError } = await supabase
+          .from("icu_chart_tx")
+          .insert({
+            todo_name: element.todoName,
+            todo_memo: element.todoMemo,
+            data_type: element.dataType,
+            io_id: inAndOut.io_id,
+            icu_chart_id: icuChart.icu_chart_id,
+          });
+
+        if (icuChartTxError) {
+          toast({
+            variant: "destructive",
+            title: icuChartTxError.message,
+            description: "관리자에게 문의하세요",
+          });
+        }
+      });
+
       // 날짜 이동
       setSelectedDate(format(date.from, "yyyy-MM-dd"));
     } catch (error) {
@@ -342,7 +383,7 @@ export default function IcuIoDialog({
             />
 
             {/* 주의사항 */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="caution"
               render={({ field }) => (
@@ -361,7 +402,7 @@ export default function IcuIoDialog({
                   <FormMessage className="text-xs" />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <Button className="col-span-2" disabled={isSubmitting}>
               입원

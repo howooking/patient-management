@@ -41,7 +41,7 @@ export default function SearchTab({
 }: Props) {
   // 수의사 목록
   const hos_id = useCurrentHospitalId();
-  const [vetsOptions, setVetsOptions] = useState<VetsOptions>(null);
+  const [vetOptions, setVetOptions] = useState<VetsOptions>(null);
   const supabase = createSupabaseBrowserClient();
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function SearchTab({
         .match({ vet_approved: true })
         .order("rank");
 
-      setVetsOptions(vets);
+      setVetOptions(vets);
     };
     getVets();
   }, [hos_id, supabase]);
@@ -144,7 +144,7 @@ export default function SearchTab({
                     {icu ? (
                       <IcuIoDialog
                         pet={pet}
-                        vetOptions={vetsOptions}
+                        vetOptions={vetOptions}
                         setDialogOpen={setDialogOpen}
                       />
                     ) : (

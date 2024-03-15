@@ -335,10 +335,13 @@ export type Database = {
           icu_chart_id: number
           io_id: number
           main_vet: string | null
+          memo_a: string
+          memo_b: string
+          memo_c: string
           pet_id: number
           sub_vet: string | null
-          tag: string | null
           target_date: string
+          target_weight: string | null
           type: string
         }
         Insert: {
@@ -349,10 +352,13 @@ export type Database = {
           icu_chart_id?: number
           io_id: number
           main_vet?: string | null
+          memo_a?: string
+          memo_b?: string
+          memo_c?: string
           pet_id: number
           sub_vet?: string | null
-          tag?: string | null
           target_date: string
+          target_weight?: string | null
           type?: string
         }
         Update: {
@@ -363,10 +369,13 @@ export type Database = {
           icu_chart_id?: number
           io_id?: number
           main_vet?: string | null
+          memo_a?: string
+          memo_b?: string
+          memo_c?: string
           pet_id?: number
           sub_vet?: string | null
-          tag?: string | null
           target_date?: string
+          target_weight?: string | null
           type?: string
         }
         Relationships: [
@@ -410,51 +419,120 @@ export type Database = {
       icu_chart_tx: {
         Row: {
           created_at: string
-          data_type: string | null
-          done: string[] | null
+          data_type: string
+          done_1: number | null
+          done_10: number | null
+          done_11: number | null
+          done_12: number | null
+          done_13: number | null
+          done_14: number | null
+          done_15: number | null
+          done_16: number | null
+          done_17: number | null
+          done_18: number | null
+          done_19: number | null
+          done_2: number | null
+          done_20: number | null
+          done_21: number | null
+          done_22: number | null
+          done_23: number | null
+          done_24: number | null
+          done_3: number | null
+          done_4: number | null
+          done_5: number | null
+          done_6: number | null
+          done_7: number | null
+          done_8: number | null
+          done_9: number | null
           drug_id: string | null
           drug_product_id: string | null
           feed_id: string | null
+          icu_chart_id: number
           icu_chart_tx_id: number
-          io_id: number | null
+          io_id: number
           test_id: string | null
           test_set_id: number | null
-          todo: string[] | null
           todo_log: string[] | null
           todo_memo: string | null
-          todo_name: string | null
+          todo_name: string
         }
         Insert: {
           created_at?: string
-          data_type?: string | null
-          done?: string[] | null
+          data_type: string
+          done_1?: number | null
+          done_10?: number | null
+          done_11?: number | null
+          done_12?: number | null
+          done_13?: number | null
+          done_14?: number | null
+          done_15?: number | null
+          done_16?: number | null
+          done_17?: number | null
+          done_18?: number | null
+          done_19?: number | null
+          done_2?: number | null
+          done_20?: number | null
+          done_21?: number | null
+          done_22?: number | null
+          done_23?: number | null
+          done_24?: number | null
+          done_3?: number | null
+          done_4?: number | null
+          done_5?: number | null
+          done_6?: number | null
+          done_7?: number | null
+          done_8?: number | null
+          done_9?: number | null
           drug_id?: string | null
           drug_product_id?: string | null
           feed_id?: string | null
+          icu_chart_id: number
           icu_chart_tx_id?: number
-          io_id?: number | null
+          io_id: number
           test_id?: string | null
           test_set_id?: number | null
-          todo?: string[] | null
           todo_log?: string[] | null
           todo_memo?: string | null
-          todo_name?: string | null
+          todo_name: string
         }
         Update: {
           created_at?: string
-          data_type?: string | null
-          done?: string[] | null
+          data_type?: string
+          done_1?: number | null
+          done_10?: number | null
+          done_11?: number | null
+          done_12?: number | null
+          done_13?: number | null
+          done_14?: number | null
+          done_15?: number | null
+          done_16?: number | null
+          done_17?: number | null
+          done_18?: number | null
+          done_19?: number | null
+          done_2?: number | null
+          done_20?: number | null
+          done_21?: number | null
+          done_22?: number | null
+          done_23?: number | null
+          done_24?: number | null
+          done_3?: number | null
+          done_4?: number | null
+          done_5?: number | null
+          done_6?: number | null
+          done_7?: number | null
+          done_8?: number | null
+          done_9?: number | null
           drug_id?: string | null
           drug_product_id?: string | null
           feed_id?: string | null
+          icu_chart_id?: number
           icu_chart_tx_id?: number
-          io_id?: number | null
+          io_id?: number
           test_id?: string | null
           test_set_id?: number | null
-          todo?: string[] | null
           todo_log?: string[] | null
           todo_memo?: string | null
-          todo_name?: string | null
+          todo_name?: string
         }
         Relationships: [
           {
@@ -491,6 +569,181 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "test_set"
             referencedColumns: ["test_set_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_1_fkey"
+            columns: ["done_1"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_2_fkey"
+            columns: ["done_2"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_10_fkey"
+            columns: ["done_10"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_11_fkey"
+            columns: ["done_11"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_12_fkey"
+            columns: ["done_12"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_13_fkey"
+            columns: ["done_13"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_14_fkey"
+            columns: ["done_14"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_15_fkey"
+            columns: ["done_15"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_16_fkey"
+            columns: ["done_16"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_17_fkey"
+            columns: ["done_17"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_18_fkey"
+            columns: ["done_18"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_19_fkey"
+            columns: ["done_19"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_20_fkey"
+            columns: ["done_20"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_21_fkey"
+            columns: ["done_21"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_22_fkey"
+            columns: ["done_22"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_23_fkey"
+            columns: ["done_23"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_24_fkey"
+            columns: ["done_24"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_3_fkey"
+            columns: ["done_3"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_4_fkey"
+            columns: ["done_4"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_5_fkey"
+            columns: ["done_5"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_6_fkey"
+            columns: ["done_6"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_7_fkey"
+            columns: ["done_7"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_8_fkey"
+            columns: ["done_8"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_done_9_fkey"
+            columns: ["done_9"]
+            isOneToOne: false
+            referencedRelation: "tx"
+            referencedColumns: ["tx_id"]
+          },
+          {
+            foreignKeyName: "public_icu_chart_tx_icu_chart_id_fkey"
+            columns: ["icu_chart_id"]
+            isOneToOne: false
+            referencedRelation: "icu_chart"
+            referencedColumns: ["icu_chart_id"]
           },
           {
             foreignKeyName: "public_icu_chart_tx_io_id_fkey"
@@ -787,35 +1040,32 @@ export type Database = {
       tx: {
         Row: {
           created_at: string
-          icu_chart_tx_id: number | null
+          icu_chart_tx_id: number
           images: string[] | null
-          io_id: number | null
+          io_id: number
           log: string[] | null
           memo: string | null
           result: string | null
-          time: string | null
           tx_id: number
         }
         Insert: {
           created_at?: string
-          icu_chart_tx_id?: number | null
+          icu_chart_tx_id: number
           images?: string[] | null
-          io_id?: number | null
+          io_id: number
           log?: string[] | null
           memo?: string | null
           result?: string | null
-          time?: string | null
           tx_id?: number
         }
         Update: {
           created_at?: string
-          icu_chart_tx_id?: number | null
+          icu_chart_tx_id?: number
           images?: string[] | null
-          io_id?: number | null
+          io_id?: number
           log?: string[] | null
           memo?: string | null
           result?: string | null
-          time?: string | null
           tx_id?: number
         }
         Relationships: [

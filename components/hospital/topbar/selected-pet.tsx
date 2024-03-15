@@ -18,7 +18,7 @@ export default function SelectedPet() {
         .select("result")
         .match({
           pet_id: selectedPet?.pet_id,
-          test_id: "5a3e166a-4962-4cb9-9cbc-dbc1ce2c8cdc", // 체중 test_id
+          test_id: "5382e813-9151-4fcb-8e99-4de210f9e129", // 체중 test_id
         })
         .order("created_at", { ascending: false });
 

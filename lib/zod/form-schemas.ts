@@ -173,3 +173,15 @@ export const positionListFormSchema = z.object({
 export const groupListFormSchema = z.object({
   groupList: z.array(z.object({ group: z.string() })),
 });
+
+export const addIcuChartFormSchema = z.object({
+  tag: z.string({ required_error: "입원사유를 #로 입력해주세요" }),
+  date: z.object({
+    from: z.date(),
+    to: z.date(),
+  }),
+  main_vet: z.string({ required_error: "주치의를 선택해주세요." }),
+  sub_vet: z.string().optional(),
+  caution: z.string(),
+  group: z.string({ required_error: "그룹을 선택해주세요." }),
+});

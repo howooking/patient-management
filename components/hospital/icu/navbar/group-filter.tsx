@@ -18,6 +18,7 @@ export default function GroupFilter() {
     () => [...new Set(icuChart?.map((element) => element.io_id.group))],
     [icuChart]
   );
+  // TODO : selected date에 맞는 필터, 수의사 필터도
 
   return (
     <Select value={group} onValueChange={setGroup} defaultValue="그룹">

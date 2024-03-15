@@ -7,10 +7,8 @@ import { useIcuGroupFilter } from "@/lib/store/icu-group-filter";
 import { useIcuVetFilter } from "@/lib/store/icu-vet-filter";
 import { useSelectedDate } from "@/lib/store/selected-date";
 import { useSelectedIchChart } from "@/lib/store/selected-icu-chart";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn, truncateBreed } from "@/lib/utils";
-import { useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 
 export default function IcuPatientsList() {
   // 차트 데이터
@@ -37,32 +35,7 @@ export default function IcuPatientsList() {
     },
     [icuChart, selectedDate]
   );
-
-  // 웹소켓
-  const supabase = createSupabaseBrowserClient();
-  const queryClient = useQueryClient();
   const { selectedIcuChartId, setSelectedIcuChartId } = useSelectedIchChart();
-
-  useEffect(() => {
-    const channel = supabase
-      .channel("icu_chart")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "icu_chart" },
-        async (payload) => {
-          if (payload) {
-            queryClient.invalidateQueries({
-              queryKey: [`icu_chart`],
-            });
-            setSelectedIcuChartId(payload.new.icu_chart_id);
-          }
-        }
-      )
-      .subscribe();
-    return () => {
-      channel.unsubscribe();
-    };
-  }, [queryClient, setSelectedIcuChartId, supabase]);
 
   if (isLoading) {
     return (
