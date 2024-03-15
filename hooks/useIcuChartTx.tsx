@@ -1,5 +1,3 @@
-"use client";
-
 import { useIcuSearchRange } from "@/lib/store/icu-search-range";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";

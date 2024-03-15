@@ -16,6 +16,7 @@ import EditWeightDialog from "./edit-dialogs/edit-weight-dialog";
 import EditTagDialog from "./edit-dialogs/edit-tag-dialog";
 import EditVetDialog from "./edit-dialogs/edit_vet-dialog";
 import EditIoDateDialog from "./edit-dialogs/edit-io-date-dialog";
+import EditGroupDialog from "./edit-dialogs/edit-group-dialog";
 
 export default function IcuPatientInfo({
   selectedChart,
@@ -91,7 +92,12 @@ export default function IcuPatientInfo({
         Icon={PiCirclesFour}
         contents={`${selectedChart?.io_id.group}`}
         title="그룹"
-      />
+      >
+        <EditGroupDialog
+          io_id={selectedChart?.io_id.io_id}
+          group={selectedChart?.io_id.group}
+        />
+      </IcuPatientInfoContainer>
 
       <p>주의사항:{selectedChart?.caution}</p>
     </div>

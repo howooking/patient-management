@@ -181,7 +181,7 @@ export default function IcuIoDialog({
     }
   };
 
-  const hospitalGroup = useHospitalGroup(hos_id);
+  const hospitalGroup = useHospitalGroup();
 
   return (
     <Dialog open={ioDialogOpen} onOpenChange={setIoDialogOpen}>

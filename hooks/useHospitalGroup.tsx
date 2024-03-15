@@ -1,9 +1,9 @@
-"use client";
-
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import useCurrentHospitalId from "./useCurrentHospital";
 
-export default function useHospitalGroup(hos_id: string) {
+export default function useHospitalGroup() {
+  const hos_id = useCurrentHospitalId();
   const { data } = useQuery({
     queryKey: [`${hos_id}-group`],
     queryFn: async () => {
