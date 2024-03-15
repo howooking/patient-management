@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { type IconType } from "react-icons";
 
 export default function IcuPatientInfoContainer({
@@ -5,21 +6,28 @@ export default function IcuPatientInfoContainer({
   contents,
   title,
   children,
+  className,
 }: {
   Icon: IconType;
-  contents: string;
+  contents?: string;
   title: string;
   children?: React.ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="bg-gray-100 rounded-xl p-2 flex gap-2 relative">
-      <Icon className="text-primary w-5 h-5 shrink-0" />
-      <div className="flex flex-col gap-1">
-        <div className="text-gray-500">{title}</div>
-        <div className="font-bold">{contents}</div>
+    <div
+      className={cn(
+        "bg-gray-100 rounded-lg p-2 flex flex-col relative",
+        className
+      )}
+    >
+      <div className="flex gap-2 items-center">
+        <Icon className="text-primary w-5 h-5 shrink-0" />
+        <span className="text-gray-500 text-xs">{title}</span>
+        <span className="font-bold">{contents}</span>
       </div>
 
-      {/* edit dialog */}
+      {/* edit dialog or textarea */}
       {children}
     </div>
   );
