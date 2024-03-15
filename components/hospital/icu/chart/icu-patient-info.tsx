@@ -15,6 +15,7 @@ import { convertDaysToYearsMonths } from "@/lib/utils";
 import EditWeightDialog from "./edit-dialogs/edit-weight-dialog";
 import EditTagDialog from "./edit-dialogs/edit-tag-dialog";
 import EditVetDialog from "./edit-dialogs/edit_vet-dialog";
+import EditIoDateDialog from "./edit-dialogs/edit-io-date-dialog";
 
 export default function IcuPatientInfo({
   selectedChart,
@@ -78,7 +79,14 @@ export default function IcuPatientInfo({
           10
         )} ~ ${selectedChart?.io_id.out_due_date.slice(5, 10)}`}
         title="입원일 ~ 퇴원예정일"
-      />
+      >
+        <EditIoDateDialog
+          io_id={selectedChart?.io_id.io_id}
+          in_date={selectedChart?.io_id.in_date}
+          out_due_date={selectedChart?.io_id.out_due_date}
+        />
+      </IcuPatientInfoContainer>
+
       <IcuPatientInfoContainer
         Icon={PiCirclesFour}
         contents={`${selectedChart?.io_id.group}`}
