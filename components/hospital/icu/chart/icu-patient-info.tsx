@@ -72,7 +72,10 @@ export default function IcuPatientInfo({
         contents={`${selectedChart?.io_id.tag}`}
         title="입원사유"
       >
-        <EditTagDialog io_id={selectedChart?.io_id.io_id} />
+        <EditTagDialog
+          io_id={selectedChart?.io_id.io_id}
+          tag={selectedChart?.io_id.tag}
+        />
       </IcuPatientInfoContainer>
 
       <IcuPatientInfoContainer

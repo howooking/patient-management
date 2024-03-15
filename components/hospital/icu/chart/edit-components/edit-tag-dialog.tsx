@@ -21,7 +21,7 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { z } from "zod";
@@ -34,17 +34,31 @@ export const icuChartTagFormSchema = z.object({
     .min(1, { message: "입원사유를 입력해주세요." }),
 });
 
-export default function EditTagDialog({ io_id }: { io_id?: number }) {
+export default function EditTagDialog({
+  io_id,
+  tag,
+}: {
+  io_id?: number;
+  tag?: string | null;
+}) {
   const form = useForm<z.infer<typeof icuChartTagFormSchema>>({
     resolver: zodResolver(icuChartTagFormSchema),
     defaultValues: {
-      tag: undefined,
+      tag: tag ?? "",
     },
   });
 
   const supabase = createSupabaseBrowserClient();
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (tag) {
+      form.reset({
+        tag: tag ?? "",
+      });
+    }
+  }, [form, tag]);
 
   const onSubmit = async (values: z.infer<typeof icuChartTagFormSchema>) => {
     setIsSubmitting(true);

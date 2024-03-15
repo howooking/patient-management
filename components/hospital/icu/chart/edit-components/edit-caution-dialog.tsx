@@ -20,7 +20,7 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { z } from "zod";
@@ -50,6 +50,14 @@ export default function EditCautionDialog({
   const supabase = createSupabaseBrowserClient();
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (caution) {
+      form.reset({
+        caution: caution ?? "",
+      });
+    }
+  }, [caution, form]);
 
   const onSubmit = async (
     values: z.infer<typeof icuChartCautionFormSchema>
