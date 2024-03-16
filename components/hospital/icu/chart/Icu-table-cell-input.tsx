@@ -95,7 +95,7 @@ export default function IcuTableCellInput({
         }}
         value={input}
         onChange={(event) => setInput(event.target.value)}
-        className="rounded-none focus:border-2 focus:border-rose-400 px-1"
+        className="rounded-none px-1 focus-visible:border-2 focus-visible:border-rose-400 focus-visible:ring-0"
       />
     </TableCell>
   );

@@ -126,7 +126,11 @@ export default function IcuPatientInfo({
         title="메모_A"
         className="col-span-4"
       >
-        <EditIcuChartTextarea text={selectedChart?.memo_a} />
+        <EditIcuChartTextarea
+          text={selectedChart?.memo_a}
+          memoType="a"
+          icu_chart_id={selectedChart?.icu_chart_id}
+        />
       </IcuPatientInfoContainer>
 
       <IcuPatientInfoContainer
@@ -134,7 +138,11 @@ export default function IcuPatientInfo({
         title="메모_B"
         className="col-span-4"
       >
-        <EditIcuChartTextarea text={selectedChart?.memo_b} />
+        <EditIcuChartTextarea
+          text={selectedChart?.memo_b}
+          memoType="b"
+          icu_chart_id={selectedChart?.icu_chart_id}
+        />
       </IcuPatientInfoContainer>
 
       <IcuPatientInfoContainer
@@ -142,7 +150,11 @@ export default function IcuPatientInfo({
         title="메모_C"
         className="col-span-4"
       >
-        <EditIcuChartTextarea text={selectedChart?.memo_c} />
+        <EditIcuChartTextarea
+          text={selectedChart?.memo_c}
+          memoType="c"
+          icu_chart_id={selectedChart?.icu_chart_id}
+        />
       </IcuPatientInfoContainer>
     </div>
   );

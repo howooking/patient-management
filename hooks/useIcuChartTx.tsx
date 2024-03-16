@@ -46,7 +46,7 @@ export default function useIcuChartTx() {
           `
         )
         .eq("io_id.hos_id", hos_id)
-        .order("icu_chart_tx_id")
+        .order("todo_name")
         .returns<IcuChartTxJoined[]>();
 
       if (date?.from) {
