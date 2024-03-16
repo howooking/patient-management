@@ -9,6 +9,7 @@ import {
 import { cn } from "@/lib/utils";
 import { type IcuChartTxJoined } from "@/types/type";
 import IcuTableCellInput from "./Icu-table-cell-input";
+import { useMemo } from "react";
 
 const TIME = [
   "01",
@@ -42,13 +43,10 @@ export default function IcuTable({
 }: {
   selectedChartTx?: IcuChartTxJoined[];
 }) {
-  // const checklist = useMemo(
-  //   () =>
-  //     selectedChartTx?.filter((element) => element.data_type === "checklist"),
-  //   [selectedChartTx]
-  // );
-  const checklist = selectedChartTx?.filter(
-    (element) => element.data_type === "checklist"
+  const checklist = useMemo(
+    () =>
+      selectedChartTx?.filter((element) => element.data_type === "checklist"),
+    [selectedChartTx]
   );
 
   return (

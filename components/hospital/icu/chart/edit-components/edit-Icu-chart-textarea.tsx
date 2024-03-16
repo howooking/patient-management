@@ -54,7 +54,7 @@ export default function EditIcuChartTextarea({
       disabled={isSubmitting}
       onBlur={handleUpdateMemo}
       rows={10}
-      value={isSubmitting ? "저장 중..." : input}
+      value={isSubmitting ? "저장중..." : input}
       onChange={(event) => setInput(event.target.value)}
       className={
         "w-full mt-1 p-1 text-xs focus-visible:ring-2 focus-visible:ring-rose-400 break-keep"
