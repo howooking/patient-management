@@ -6,8 +6,8 @@ type SelectedIcuChart = {
   setSelectedIcuChartId: (id?: number) => void;
 };
 
-export const useSelectedIchChart = create<SelectedIcuChart>()((set) => ({
-  selectedIcuChartId: 0,
+export const useSelectedIcuChart = create<SelectedIcuChart>()((set) => ({
+  selectedIcuChartId: undefined,
   setSelectedIcuChartId: (id?: number) =>
     set(() => ({ selectedIcuChartId: id })),
 }));
