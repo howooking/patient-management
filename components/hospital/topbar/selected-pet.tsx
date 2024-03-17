@@ -1,6 +1,6 @@
 "use client";
 
-import { useSelectedPet } from "@/lib/store/pets";
+import { useSelectedPet } from "@/lib/store/selected-pets";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 import SelectedPetDialog from "./selected-pet-dialog";

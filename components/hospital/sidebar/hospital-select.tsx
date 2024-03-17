@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
-import { useSelectedPet } from "@/lib/store/pets";
+import { useSelectedPet } from "@/lib/store/selected-pets";
 import { useSidebarCollapse } from "@/lib/store/sidebar-collapse";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";

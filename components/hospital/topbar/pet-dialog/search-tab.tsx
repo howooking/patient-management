@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
-import { useSelectedPet } from "@/lib/store/pets";
+import { useSelectedPet } from "@/lib/store/selected-pets";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { Pet } from "@/types/type";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";

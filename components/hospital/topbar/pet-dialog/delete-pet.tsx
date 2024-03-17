@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { useSelectedPet } from "@/lib/store/pets";
+import { useSelectedPet } from "@/lib/store/selected-pets";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useState } from "react";

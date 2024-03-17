@@ -34,7 +34,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { CANINE_BREEDS, COLORS, FELINE_BREEDS } from "@/constants/breeds";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
-import { useSelectedPet } from "@/lib/store/pets";
+import { useSelectedPet } from "@/lib/store/selected-pets";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { addAndEditPetFormSchema } from "@/lib/zod/form-schemas";
