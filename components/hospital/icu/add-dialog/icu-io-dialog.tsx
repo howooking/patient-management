@@ -73,7 +73,6 @@ export default function IcuIoDialog({
 
   const onSubmit = async (values: z.infer<typeof addIcuChartFormSchema>) => {
     const { caution, date, group, main_vet, tag, sub_vet } = values;
-
     setIsSubmitting(true);
     try {
       // in_and_out 차트 삽입
@@ -101,7 +100,6 @@ export default function IcuIoDialog({
       }
 
       //icu_chart 삽입
-
       /// 삽입 전 최신 몸무게 조회
       const { data: weights, error: weightsError } = await supabase
         .from("test_results")
@@ -360,10 +358,7 @@ export default function IcuIoDialog({
                     그룹*
                     <FormTooltip title="스테프설정에서 그룹설정을 할 수 있습니다." />
                   </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    // defaultValue={edit ? feed?.type : field.value}
-                  >
+                  <Select onValueChange={field.onChange}>
                     <FormControl>
                       <SelectTrigger className="text-sm h-8">
                         <SelectValue placeholder="그룹 선택" />
@@ -381,28 +376,6 @@ export default function IcuIoDialog({
                 </FormItem>
               )}
             />
-
-            {/* 주의사항 */}
-            {/* <FormField
-              control={form.control}
-              name="caution"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                    주의사항
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      className="h-8 text-sm"
-                      placeholder="물림 주의, 뛰처나옴 주의 등..."
-                    />
-                  </FormControl>
-
-                  <FormMessage className="text-xs" />
-                </FormItem>
-              )}
-            /> */}
 
             <Button className="col-span-2" disabled={isSubmitting}>
               입원

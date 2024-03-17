@@ -27,7 +27,7 @@ export default function IcuPatientInfo({
   selectedChart?: IcuChartJoined;
 }) {
   return (
-    <div className="text-sm p-4 grid grid-cols-12 gap-2">
+    <div className="text-sm p-2 grid grid-cols-12 gap-2">
       <IcuPatientInfoContainer
         className="col-span-3"
         Icon={selectedChart?.pet_id.species === "canine" ? PiDog : PiCat}

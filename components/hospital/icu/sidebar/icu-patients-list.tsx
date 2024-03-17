@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import useIcuChart from "@/hooks/useIcuChart";
 import { useIcuGroupFilter } from "@/lib/store/icu-group-filter";
+import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
 import { useIcuVetFilter } from "@/lib/store/icu-vet-filter";
 import { useSelectedDate } from "@/lib/store/selected-date";
-import { useSelectedIchChart } from "@/lib/store/selected-icu-chart";
+import { useSelectedIcuChart } from "@/lib/store/selected-icu-chart";
 import { cn, truncateBreed } from "@/lib/utils";
 import { useCallback } from "react";
 
@@ -20,9 +21,12 @@ export default function IcuPatientsList() {
   const { vet } = useIcuVetFilter();
   const filteredIcuCharts = useCallback(
     (group?: string, vet?: string) => {
-      let filtered = icuChart?.filter(
-        (element) => element.io_id.in_date <= selectedDate
-      );
+      let filtered = icuChart
+        ?.filter((element) => element.io_id.in_date <= selectedDate)
+        .filter(
+          (element) =>
+            !element.io_id.out_date || element.io_id.out_date >= selectedDate
+        );
       if (group !== "그룹") {
         filtered = filtered?.filter((element) => element.io_id.group === group);
       }
@@ -35,7 +39,9 @@ export default function IcuPatientsList() {
     },
     [icuChart, selectedDate]
   );
-  const { selectedIcuChartId, setSelectedIcuChartId } = useSelectedIchChart();
+
+  const { setSelectedIcuChartId } = useSelectedIcuChart();
+  const { selectedIcuIoId, setSelectedIcuIoId } = useSelectedIcuIo();
 
   if (isLoading) {
     return (
@@ -65,11 +71,14 @@ export default function IcuPatientsList() {
         size="sm"
         variant="outline"
         className={cn(
-          selectedIcuChartId === 0 &&
+          !selectedIcuIoId &&
             "bg-primary text-white hover:text-white hover:bg-primary/80",
           "w-full text-left rounded-none"
         )}
-        onClick={() => setSelectedIcuChartId(0)}
+        onClick={() => {
+          setSelectedIcuChartId(undefined);
+          setSelectedIcuIoId(undefined);
+        }}
       >
         종합현황
       </Button>
@@ -79,11 +88,15 @@ export default function IcuPatientsList() {
             size="sm"
             variant="outline"
             className={cn(
-              chart.icu_chart_id === selectedIcuChartId &&
+              chart.io_id.io_id === selectedIcuIoId &&
                 "bg-primary text-white hover:text-white hover:bg-primary/80",
-              "w-full text-left rounded-none"
+              "w-full text-left rounded-none ",
+              chart.io_id.out_date === selectedDate && "line-through"
             )}
-            onClick={() => setSelectedIcuChartId(chart.icu_chart_id)}
+            onClick={() => {
+              setSelectedIcuIoId(chart.io_id.io_id);
+              setSelectedIcuChartId(chart.icu_chart_id);
+            }}
           >
             {chart.pet_id.name} ( {truncateBreed(chart.pet_id.breed)})
           </Button>

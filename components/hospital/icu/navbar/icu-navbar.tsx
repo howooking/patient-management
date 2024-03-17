@@ -17,7 +17,7 @@ export default async function IcuNavbar({ hos_id }: { hos_id: string }) {
     throw new Error(petsError.message);
   }
   return (
-    <nav className="fixed flex items-center gap-2 z-50 top-3.5">
+    <nav className="fixed flex items-center gap-2 z-50 top-3.5 px-2">
       <IcuDateSelector />
       <SearchRange />
       <GroupFilter />

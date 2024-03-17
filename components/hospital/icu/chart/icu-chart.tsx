@@ -2,18 +2,22 @@
 
 import useIcuChart from "@/hooks/useIcuChart";
 import useIcuChartTx from "@/hooks/useIcuChartTx";
-import { useSelectedIchChart } from "@/lib/store/selected-icu-chart";
+import { useSelectedIcuChart } from "@/lib/store/selected-icu-chart";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import IcuPatientInfo from "./icu-patient-info";
 import IcuTable from "./icu-table";
+import { useSelectedDate } from "@/lib/store/selected-date";
+import IcuChartActions from "./icu-chart-actions";
+import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
 
 export default function IcuChart() {
   // 웹소켓
   const supabase = createSupabaseBrowserClient();
   const queryClient = useQueryClient();
-  const { selectedIcuChartId, setSelectedIcuChartId } = useSelectedIchChart();
+  const { selectedIcuChartId, setSelectedIcuChartId } = useSelectedIcuChart();
+  const { selectedIcuIoId, setSelectedIcuIoId } = useSelectedIcuIo();
 
   // in_and_out
   useEffect(() => {
@@ -30,11 +34,22 @@ export default function IcuChart() {
           }
         }
       )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "in_and_out" },
+        async (payload) => {
+          if (payload) {
+            queryClient.invalidateQueries({
+              queryKey: [`icu_chart`],
+            });
+          }
+        }
+      )
       .subscribe();
     return () => {
       channel.unsubscribe();
     };
-  }, [queryClient, setSelectedIcuChartId, supabase]);
+  }, [queryClient, supabase]);
 
   // icu_chart
   useEffect(() => {
@@ -48,6 +63,7 @@ export default function IcuChart() {
             queryClient.invalidateQueries({
               queryKey: [`icu_chart`],
             });
+            setSelectedIcuIoId(payload.new.io_id);
             setSelectedIcuChartId(payload.new.icu_chart_id);
           }
         }
@@ -60,7 +76,6 @@ export default function IcuChart() {
             queryClient.invalidateQueries({
               queryKey: [`icu_chart`],
             });
-            setSelectedIcuChartId(payload.new.icu_chart_id);
           }
         }
       )
@@ -68,7 +83,7 @@ export default function IcuChart() {
     return () => {
       channel.unsubscribe();
     };
-  }, [queryClient, setSelectedIcuChartId, supabase]);
+  }, [queryClient, supabase]);
 
   // icu_chart_tx
   useEffect(() => {
@@ -100,7 +115,7 @@ export default function IcuChart() {
     return () => {
       channel.unsubscribe();
     };
-  }, [queryClient, setSelectedIcuChartId, supabase]);
+  }, [queryClient, supabase]);
 
   // tx
   useEffect(() => {
@@ -132,7 +147,7 @@ export default function IcuChart() {
     return () => {
       channel.unsubscribe();
     };
-  }, [queryClient, setSelectedIcuChartId, supabase]);
+  }, [queryClient, supabase]);
 
   // test_results
   useEffect(() => {
@@ -164,13 +179,26 @@ export default function IcuChart() {
     return () => {
       channel.unsubscribe();
     };
-  }, [queryClient, setSelectedIcuChartId, supabase]);
+  }, [queryClient, supabase]);
 
   // chart
+  const { selectedDate } = useSelectedDate();
   const { icuChart, isLoading: icuChartLoading } = useIcuChart();
   const selectedChart = useMemo(
-    () => icuChart?.find((chart) => chart.icu_chart_id === selectedIcuChartId),
-    [icuChart, selectedIcuChartId]
+    () =>
+      icuChart
+        ?.filter((chart) => chart.target_date === selectedDate)
+        .find((chart) => chart.icu_chart_id === selectedIcuChartId),
+    [icuChart, selectedDate, selectedIcuChartId]
+  );
+
+  // io
+  const selectedIo = useMemo(
+    () =>
+      icuChart
+        ?.filter((chart) => chart.io_id.in_date <= selectedDate)
+        .find((chart) => chart.io_id.io_id === selectedIcuIoId),
+    [icuChart, selectedDate, selectedIcuIoId]
   );
 
   // chart_tx
@@ -182,6 +210,7 @@ export default function IcuChart() {
       ),
     [icuChartTx, selectedIcuChartId]
   );
+  // console.log(selectedChartTx);
 
   // // tx
   // const { tx, isLoading: txLoading } = useTx();
@@ -193,16 +222,34 @@ export default function IcuChart() {
   //   [selectedIcuChartId, tx]
   // );
 
+  // console.log({
+  //   selectedIo,
+  //   selectedChart,
+  //   selectedIcuIoId,
+  //   selectedIcuChartId,
+  // });
+
+  // useEffect(() => {
+  //   if (!selectedIo && !selectedChart) {
+  //     setSelectedIcuChartId(undefined);
+  //     setSelectedIcuIoId(undefined);
+  //   }
+  // }, [selectedChart, selectedIo, setSelectedIcuChartId, setSelectedIcuIoId]);
+
+  if (!selectedIcuIoId) {
+    return <>전체현황</>;
+  }
+
   return (
     <div>
-      {selectedIcuChartId === 0 ? (
-        <>전체현황</>
-      ) : (
+      <IcuChartActions selectedIo={selectedIo} hasChart={!!selectedChart} />
+
+      {selectedChart ? (
         <>
           <IcuPatientInfo selectedChart={selectedChart} />
           <IcuTable selectedChartTx={selectedChartTx} />
         </>
-      )}
+      ) : null}
     </div>
   );
 }

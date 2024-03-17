@@ -15,7 +15,7 @@ export default function VetFilter() {
   const { vet, setVet } = useIcuVetFilter();
   const { icuChart } = useIcuChart();
   const vets = icuChart?.map((element) => {
-    return { id: element.main_vet.vet_id, name: element.main_vet.vet_name };
+    return { id: element.main_vet?.vet_id, name: element.main_vet?.vet_name };
   });
 
   const vetOptions: { id: string; name: string }[] = useMemo(
