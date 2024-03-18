@@ -11,6 +11,8 @@ import IcuTable from "./table/icu-table";
 import { useSelectedDate } from "@/lib/store/selected-date";
 import IcuChartActions from "./icu-chart-actions";
 import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
+import { type IcuChartJoined, type IcuChartTxJoined } from "@/types/type";
+import IcuMemo from "./icu-memo";
 
 export default function IcuChart() {
   // 웹소켓
@@ -197,7 +199,7 @@ export default function IcuChart() {
   const { icuChart, isLoading: icuChartLoading } = useIcuChart();
   const selectedChart = useMemo(
     () =>
-      icuChart
+      (icuChart as IcuChartJoined[] | null)
         ?.filter((chart) => chart.target_date === selectedDate)
         .find((chart) => chart.icu_chart_id === selectedIcuChartId),
     [icuChart, selectedDate, selectedIcuChartId]
@@ -206,7 +208,7 @@ export default function IcuChart() {
   // io
   const selectedIo = useMemo(
     () =>
-      icuChart
+      (icuChart as IcuChartJoined[] | null)
         ?.filter((chart) => chart.io_id.in_date <= selectedDate)
         .find((chart) => chart.io_id.io_id === selectedIcuIoId),
     [icuChart, selectedDate, selectedIcuIoId]
@@ -216,7 +218,7 @@ export default function IcuChart() {
   const { icuChartTx, isLoading: icuChartTxLoading } = useIcuChartTx();
   const selectedChartTx = useMemo(
     () =>
-      icuChartTx?.filter(
+      (icuChartTx as IcuChartTxJoined[] | null)?.filter(
         (element) => element.icu_chart_id === selectedIcuChartId
       ),
     [icuChartTx, selectedIcuChartId]

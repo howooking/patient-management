@@ -33,11 +33,11 @@ import { z } from "zod";
 export const chartTxFormSchema = z.object({
   todo_name: z
     .string({
-      required_error: "오더를 입력해주세요.",
+      required_error: "처치를 입력해주세요.",
     })
-    .min(1, { message: "오더를 입력해주세요." }),
+    .min(1, { message: "처치를 입력해주세요." }),
   todo_memo: z.string().optional(),
-  data_type: z.string({ required_error: "오더타입을 선택해주세요." }),
+  data_type: z.string({ required_error: "처치타입을 선택해주세요." }),
   todo_1: z.boolean().default(false),
   todo_2: z.boolean().default(false),
   todo_3: z.boolean().default(false),
@@ -64,41 +64,47 @@ export const chartTxFormSchema = z.object({
   todo_24: z.boolean().default(false),
 });
 
-export default function IcuChartTxEditDialog({
+export default function IcuChartTxDialog({
   chartTx,
+  edit,
+  io_id,
+  icu_chart_id,
 }: {
-  chartTx: IcuChartTxJoined;
+  chartTx?: IcuChartTxJoined;
+  edit?: boolean;
+  io_id?: number;
+  icu_chart_id?: number;
 }) {
   const form = useForm<z.infer<typeof chartTxFormSchema>>({
     resolver: zodResolver(chartTxFormSchema),
     defaultValues: {
-      todo_name: chartTx.todo_name,
-      todo_memo: chartTx.todo_memo ?? "",
-      data_type: chartTx.data_type,
-      todo_1: chartTx.todo[0] === "1",
-      todo_2: chartTx.todo[1] === "1",
-      todo_3: chartTx.todo[2] === "1",
-      todo_4: chartTx.todo[3] === "1",
-      todo_5: chartTx.todo[4] === "1",
-      todo_6: chartTx.todo[5] === "1",
-      todo_7: chartTx.todo[6] === "1",
-      todo_8: chartTx.todo[7] === "1",
-      todo_9: chartTx.todo[8] === "1",
-      todo_10: chartTx.todo[9] === "1",
-      todo_11: chartTx.todo[10] === "1",
-      todo_12: chartTx.todo[11] === "1",
-      todo_13: chartTx.todo[12] === "1",
-      todo_14: chartTx.todo[13] === "1",
-      todo_15: chartTx.todo[14] === "1",
-      todo_16: chartTx.todo[15] === "1",
-      todo_17: chartTx.todo[16] === "1",
-      todo_18: chartTx.todo[17] === "1",
-      todo_19: chartTx.todo[18] === "1",
-      todo_20: chartTx.todo[19] === "1",
-      todo_21: chartTx.todo[20] === "1",
-      todo_22: chartTx.todo[21] === "1",
-      todo_23: chartTx.todo[22] === "1",
-      todo_24: chartTx.todo[23] === "1",
+      todo_name: chartTx?.todo_name,
+      todo_memo: chartTx?.todo_memo ?? "",
+      data_type: chartTx?.data_type,
+      todo_1: chartTx?.todo[0] === "1",
+      todo_2: chartTx?.todo[1] === "1",
+      todo_3: chartTx?.todo[2] === "1",
+      todo_4: chartTx?.todo[3] === "1",
+      todo_5: chartTx?.todo[4] === "1",
+      todo_6: chartTx?.todo[5] === "1",
+      todo_7: chartTx?.todo[6] === "1",
+      todo_8: chartTx?.todo[7] === "1",
+      todo_9: chartTx?.todo[8] === "1",
+      todo_10: chartTx?.todo[9] === "1",
+      todo_11: chartTx?.todo[10] === "1",
+      todo_12: chartTx?.todo[11] === "1",
+      todo_13: chartTx?.todo[12] === "1",
+      todo_14: chartTx?.todo[13] === "1",
+      todo_15: chartTx?.todo[14] === "1",
+      todo_16: chartTx?.todo[15] === "1",
+      todo_17: chartTx?.todo[16] === "1",
+      todo_18: chartTx?.todo[17] === "1",
+      todo_19: chartTx?.todo[18] === "1",
+      todo_20: chartTx?.todo[19] === "1",
+      todo_21: chartTx?.todo[20] === "1",
+      todo_22: chartTx?.todo[21] === "1",
+      todo_23: chartTx?.todo[22] === "1",
+      todo_24: chartTx?.todo[23] === "1",
     },
   });
 
@@ -112,12 +118,11 @@ export default function IcuChartTxEditDialog({
 
   const handleDeleteChartTx = async () => {
     setIsSubmitting(true);
-
     try {
       const { error } = await supabase
         .from("icu_chart_tx")
         .delete()
-        .match({ icu_chart_tx_id: chartTx.icu_chart_tx_id });
+        .match({ icu_chart_tx_id: chartTx?.icu_chart_tx_id });
       if (error) {
         toast({
           variant: "destructive",
@@ -129,7 +134,7 @@ export default function IcuChartTxEditDialog({
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "오더 삭제 중 에러발생",
+        title: "처치 삭제 중 에러발생",
         description: "관리자에게 문의하세요",
       });
     } finally {
@@ -167,18 +172,18 @@ export default function IcuChartTxEditDialog({
       values.todo_24 ? "1" : "0",
     ];
 
+    // 수정
     try {
-      const { error } = await supabase
-        .from("icu_chart_tx")
-        .update({
-          data_type: values.data_type,
-          todo_name: values.todo_name,
-          todo_memo: values.todo_memo,
-          todo,
-        })
-        .match({
-          icu_chart_tx_id: chartTx.icu_chart_tx_id,
-        });
+      const { error } = await supabase.from("icu_chart_tx").upsert({
+        data_type: values.data_type,
+        todo_name: values.todo_name,
+        todo_memo: values.todo_memo,
+        todo,
+        icu_chart_id: icu_chart_id!,
+        io_id: io_id!,
+        icu_chart_tx_id: chartTx?.icu_chart_tx_id,
+      });
+
       if (error) {
         toast({
           variant: "destructive",
@@ -190,7 +195,7 @@ export default function IcuChartTxEditDialog({
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "오더 수정 중 에러발생",
+        title: "처치 수정 중 에러발생",
         description: "관리자에게 문의하세요",
       });
     } finally {
@@ -202,13 +207,23 @@ export default function IcuChartTxEditDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
-        <Pencil1Icon className="text-primary cursor-pointer hover:scale-110 transition w-3 h-3 absolute right-2 top-3" />
+        {edit ? (
+          <>
+            <Pencil1Icon className="text-primary cursor-pointer hover:scale-110 transition w-3 h-3 absolute right-2 top-3" />
+          </>
+        ) : (
+          <>
+            <Button size="sm" className="h-6 px-2">
+              추가
+            </Button>
+          </>
+        )}
       </DialogTrigger>
 
       <DialogContent className="max-w-3xl">
-        <DialogTitle className="font-normal">
-          <span className="text-xl font-bold">{chartTx.todo_name}</span> 오더
-          변경
+        <DialogTitle>
+          <span className="text-xl">{chartTx?.todo_name}</span> 처치{" "}
+          {edit ? "변경" : "추가"}
         </DialogTitle>
 
         <Form {...form}>
@@ -222,7 +237,7 @@ export default function IcuChartTxEditDialog({
               render={({ field }) => (
                 <FormItem className="col-span-2">
                   <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                    오더 타입 설정
+                    처치 타입 설정
                   </FormLabel>
                   <FormControl>
                     <RadioGroup
@@ -250,14 +265,14 @@ export default function IcuChartTxEditDialog({
               )}
             />
 
-            {/* 오더내용 */}
+            {/* 처치내용 */}
             <FormField
               control={form.control}
               name="todo_name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                    오더
+                    처치명
                   </FormLabel>
                   <FormControl>
                     <Input {...field} className="h-8 text-sm" />
@@ -268,14 +283,14 @@ export default function IcuChartTxEditDialog({
               )}
             />
 
-            {/* 오더메모 */}
+            {/* 처치메모 */}
             <FormField
               control={form.control}
               name="todo_memo"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                    오더 추가 설명
+                    처치 메모
                   </FormLabel>
                   <FormControl>
                     <Input {...field} className="h-8 text-sm" />
@@ -286,8 +301,8 @@ export default function IcuChartTxEditDialog({
               )}
             />
 
-            {/* 오더 시간 */}
-            <div className="text-sm font-semibold">오더 시간 설정</div>
+            {/* 처치 시간 */}
+            <div className="text-sm font-semibold">처치 시간 설정</div>
             <div className="flex w-full col-span-2">
               {TIME.map((element) => (
                 <FormField
@@ -319,7 +334,7 @@ export default function IcuChartTxEditDialog({
 
             <div className="flex gap-2 col-span-2 justify-end">
               <Button disabled={isSubmitting}>
-                수정
+                {edit ? "수정" : "추가"}
                 <AiOutlineLoading3Quarters
                   className={cn(
                     "ml-2",
@@ -332,6 +347,7 @@ export default function IcuChartTxEditDialog({
                 onClick={handleDeleteChartTx}
                 disabled={isSubmitting}
                 variant="destructive"
+                className={edit ? "block" : "hidden"}
               >
                 삭제
                 <AiOutlineLoading3Quarters
