@@ -12,6 +12,7 @@ export default function IcuTableCellInput({
   icu_chart_tx_id,
   io_id,
   time,
+  hasTodo,
 }: {
   className?: string;
   result: string;
@@ -19,6 +20,7 @@ export default function IcuTableCellInput({
   icu_chart_tx_id: number;
   io_id: number;
   time: number;
+  hasTodo: boolean;
 }) {
   const [input, setInput] = useState(result);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -113,7 +115,10 @@ export default function IcuTableCellInput({
         disabled={isSubmitting}
         value={isSubmitting ? "저장중..." : input}
         onChange={(event) => setInput(event.target.value)}
-        className="rounded-none px-1 focus-visible:border-2 focus-visible:border-rose-400 focus-visible:ring-0"
+        className={cn(
+          "rounded-none px-1 focus-visible:border-2 focus-visible:border-rose-400 focus-visible:ring-0",
+          hasTodo && "bg-green-200"
+        )}
       />
     </TableCell>
   );
