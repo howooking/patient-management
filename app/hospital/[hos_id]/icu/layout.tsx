@@ -14,7 +14,7 @@ export default function IcuLayout({
       <IcuNavbar hos_id={params.hos_id} />
 
       <IcuSidebar />
-      <main className="pl-36">{children}</main>
+      <main className="pl-32">{children}</main>
     </div>
   );
 }
