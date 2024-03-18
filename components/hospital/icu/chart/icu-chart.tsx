@@ -7,7 +7,7 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
 import IcuPatientInfo from "./icu-patient-info";
-import IcuTable from "./icu-table";
+import IcuTable from "./table/icu-table";
 import { useSelectedDate } from "@/lib/store/selected-date";
 import IcuChartActions from "./icu-chart-actions";
 import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
@@ -83,7 +83,7 @@ export default function IcuChart() {
     return () => {
       channel.unsubscribe();
     };
-  }, [queryClient, supabase]);
+  }, [queryClient, setSelectedIcuChartId, setSelectedIcuIoId, supabase]);
 
   // icu_chart_tx
   useEffect(() => {
@@ -103,6 +103,17 @@ export default function IcuChart() {
       .on(
         "postgres_changes",
         { event: "UPDATE", schema: "public", table: "icu_chart_tx" },
+        async (payload) => {
+          if (payload) {
+            queryClient.invalidateQueries({
+              queryKey: [`icu_chart_tx`],
+            });
+          }
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "icu_chart_tx" },
         async (payload) => {
           if (payload) {
             queryClient.invalidateQueries({

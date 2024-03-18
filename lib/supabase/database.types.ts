@@ -452,6 +452,7 @@ export type Database = {
           io_id: number
           test_id: string | null
           test_set_id: number | null
+          todo: string[]
           todo_log: string[] | null
           todo_memo: string | null
           todo_name: string
@@ -491,6 +492,7 @@ export type Database = {
           io_id: number
           test_id?: string | null
           test_set_id?: number | null
+          todo?: string[]
           todo_log?: string[] | null
           todo_memo?: string | null
           todo_name: string
@@ -530,6 +532,7 @@ export type Database = {
           io_id?: number
           test_id?: string | null
           test_set_id?: number | null
+          todo?: string[]
           todo_log?: string[] | null
           todo_memo?: string | null
           todo_name?: string

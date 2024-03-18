@@ -5,18 +5,12 @@ export const NAV_MENUS = [
 ];
 
 import {
-  FaHospital,
-  FaStethoscope,
   FaClipboardCheck,
-  FaMaskFace,
+  FaHospital,
   FaListCheck,
+  FaMaskFace,
+  FaStethoscope,
 } from "react-icons/fa6";
-import {
-  PiBowlFoodFill,
-  PiPillFill,
-  PiTestTubeFill,
-  PiUserFill,
-} from "react-icons/pi";
 
 export const SIDEBAR_NAV_MENUS = [
   {

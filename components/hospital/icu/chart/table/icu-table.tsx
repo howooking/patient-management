@@ -1,15 +1,13 @@
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 import { type IcuChartTxJoined } from "@/types/type";
 import IcuTableCellInput from "./Icu-table-cell-input";
-import { useMemo } from "react";
+import IcuTableCellTitle from "./icu-table-cell-title";
 
 const TIME = [
   "01",
@@ -43,35 +41,48 @@ export default function IcuTable({
 }: {
   selectedChartTx?: IcuChartTxJoined[];
 }) {
-  const checklist = useMemo(
-    () =>
-      selectedChartTx?.filter((element) => element.data_type === "checklist"),
-    [selectedChartTx]
-  );
+  // const checklist = useMemo(
+  //   () =>
+  //     selectedChartTx?.filter((element) => element.data_type === "checklist"),
+  //   [selectedChartTx]
+  // );
+
+  // const feeds = useMemo(
+  //   () => selectedChartTx?.filter((element) => element.data_type === "feed"),
+  //   [selectedChartTx]
+  // );
+
+  // const elseTx = useMemo(
+  //   () =>
+  //     selectedChartTx?.filter(
+  //       (element) =>
+  //         element.data_type !== "checklist" && element.data_type !== "feed"
+  //     ),
+  //   [selectedChartTx]
+  // );
 
   return (
     <div className="h-screen">
       <Table className="border-2">
         <TableHeader>
           <TableRow className="divide-x">
-            <IcuTableHead className="w-[200px]">처치 목록</IcuTableHead>
+            <TableHead className="w-[240px] h-2 text-center">
+              처치 목록
+            </TableHead>
             {TIME.map((time) => (
-              <IcuTableHead key={time}>{time}</IcuTableHead>
+              <TableHead className="h-2 text-center" key={time}>
+                {time}
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {checklist?.map((element) => (
+          {selectedChartTx?.map((element) => (
             <TableRow className="divide-x" key={element.icu_chart_tx_id}>
-              <IcuTableCell>
-                <span className="text-black mr-1">{element.todo_name}</span>
-                <span className="text-[8px] text-gray-500">
-                  {element.todo_memo}
-                </span>
-              </IcuTableCell>
-
+              <IcuTableCellTitle chartTx={element} />
               {TIME.map((time, index) => (
                 <IcuTableCellInput
+                  hasTodo={element.todo[index] === "1"}
                   key={time}
                   time={index + 1}
                   // @ts-ignore
@@ -86,36 +97,11 @@ export default function IcuTable({
           ))}
 
           {/* icu_chart_tx 처치 추가 */}
-          <TableRow>
-            <IcuTableCell>
-              <span className="text-black mr-1">처치이름</span>
-              <span className="text-[8px] text-gray-500">메모</span>
-            </IcuTableCell>
-          </TableRow>
+          {/* <TableRow>
+            <IcuTableCellTitle todoName="투두" todoMemo="메모" />
+          </TableRow> */}
         </TableBody>
       </Table>
     </div>
   );
 }
-
-const IcuTableHead = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => (
-  <TableHead className={cn("h-2 text-center", className)}>{children}</TableHead>
-);
-
-const IcuTableCell = ({
-  children,
-  className,
-}: {
-  children?: React.ReactNode;
-  className?: string;
-}) => (
-  <TableCell className={cn("p-1 h-2 leading-4", className)}>
-    {children}
-  </TableCell>
-);
