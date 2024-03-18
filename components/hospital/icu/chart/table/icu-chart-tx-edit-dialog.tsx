@@ -179,8 +179,8 @@ export default function IcuChartTxDialog({
         todo_name: values.todo_name,
         todo_memo: values.todo_memo,
         todo,
-        icu_chart_id: icu_chart_id!,
-        io_id: io_id!,
+        icu_chart_id: edit ? chartTx?.icu_chart_id! : icu_chart_id!,
+        io_id: edit ? chartTx?.io_id.io_id! : io_id!,
         icu_chart_tx_id: chartTx?.icu_chart_tx_id,
       });
 
