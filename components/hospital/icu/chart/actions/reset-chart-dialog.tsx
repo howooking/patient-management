@@ -127,7 +127,7 @@ export default function ResetChartDialog({
               {selectedDate}일 {selectedIo?.pet_id.name}
             </span>{" "}
             <span className="font-normal">
-              오더 및 처치기록이 초기화됩니다.
+              의 처치기록이 모두 초기화됩니다.
             </span>
           </DialogTitle>
           <DialogDescription>

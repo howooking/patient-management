@@ -259,6 +259,7 @@ export default function IcuChart() {
         <>
           <IcuPatientInfo selectedChart={selectedChart} />
           <IcuTable selectedChartTx={selectedChartTx} />
+          <IcuMemo selectedChart={selectedChart} />
         </>
       ) : null}
     </div>

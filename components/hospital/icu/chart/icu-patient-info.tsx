@@ -7,19 +7,17 @@ import {
   PiCat,
   PiCirclesFour,
   PiDog,
-  PiNote,
   PiTag,
   PiUser,
   PiWarningCircle,
 } from "react-icons/pi";
-import EditIcuChartTextarea from "./edit-components/edit-Icu-chart-textarea";
+import EditCautionDialog from "./edit-components/edit-caution-dialog";
 import EditGroupDialog from "./edit-components/edit-group-dialog";
 import EditIoDateDialog from "./edit-components/edit-io-date-dialog";
 import EditTagDialog from "./edit-components/edit-tag-dialog";
-import EditWeightDialog from "./edit-components/edit-weight-dialog";
 import EditVetDialog from "./edit-components/edit-vet-dialog";
+import EditWeightDialog from "./edit-components/edit-weight-dialog";
 import IcuPatientInfoContainer from "./icu-patient-info-container";
-import EditCautionDialog from "./edit-components/edit-caution-dialog";
 
 export default function IcuPatientInfo({
   selectedChart,
@@ -118,42 +116,6 @@ export default function IcuPatientInfo({
         <EditGroupDialog
           io_id={selectedChart?.io_id.io_id}
           group={selectedChart?.io_id.group}
-        />
-      </IcuPatientInfoContainer>
-
-      <IcuPatientInfoContainer
-        Icon={PiNote}
-        title="메모_A"
-        className="col-span-4"
-      >
-        <EditIcuChartTextarea
-          text={selectedChart?.memo_a}
-          memoType="a"
-          icu_chart_id={selectedChart?.icu_chart_id}
-        />
-      </IcuPatientInfoContainer>
-
-      <IcuPatientInfoContainer
-        Icon={PiNote}
-        title="메모_B"
-        className="col-span-4"
-      >
-        <EditIcuChartTextarea
-          text={selectedChart?.memo_b}
-          memoType="b"
-          icu_chart_id={selectedChart?.icu_chart_id}
-        />
-      </IcuPatientInfoContainer>
-
-      <IcuPatientInfoContainer
-        Icon={PiNote}
-        title="메모_C"
-        className="col-span-4"
-      >
-        <EditIcuChartTextarea
-          text={selectedChart?.memo_c}
-          memoType="c"
-          icu_chart_id={selectedChart?.icu_chart_id}
         />
       </IcuPatientInfoContainer>
     </div>
