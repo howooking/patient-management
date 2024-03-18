@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/components/ui/use-toast";
 import { ICU_CHART_TX_DATA_TYPE } from "@/constants/icu-chart-tx-data-type";
+import { TIME } from "@/constants/time";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import { type IcuChartTxJoined } from "@/types/type";
@@ -28,11 +29,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { z } from "zod";
-
-const INDEX = [
-  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-  23, 24,
-];
 
 export const chartTxFormSchema = z.object({
   todo_name: z
@@ -293,7 +289,7 @@ export default function IcuChartTxEditDialog({
             {/* 오더 시간 */}
             <div className="text-sm font-semibold">오더 시간 설정</div>
             <div className="flex w-full col-span-2">
-              {INDEX.map((element) => (
+              {TIME.map((element) => (
                 <FormField
                   key={element}
                   control={form.control}

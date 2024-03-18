@@ -8,78 +8,44 @@ import {
 import { type IcuChartTxJoined } from "@/types/type";
 import IcuTableCellInput from "./Icu-table-cell-input";
 import IcuTableCellTitle from "./icu-table-cell-title";
-
-const TIME = [
-  "01",
-  "02",
-  "03",
-  "04",
-  "05",
-  "06",
-  "07",
-  "08",
-  "09",
-  "10",
-  "11",
-  "12",
-  "13",
-  "14",
-  "15",
-  "16",
-  "17",
-  "18",
-  "19",
-  "20",
-  "21",
-  "22",
-  "23",
-  "24",
-];
+import { TIME } from "@/constants/time";
+import { useMemo } from "react";
 
 export default function IcuTable({
   selectedChartTx,
 }: {
   selectedChartTx?: IcuChartTxJoined[];
 }) {
-  // const checklist = useMemo(
-  //   () =>
-  //     selectedChartTx?.filter((element) => element.data_type === "checklist"),
-  //   [selectedChartTx]
-  // );
-
-  // const feeds = useMemo(
-  //   () => selectedChartTx?.filter((element) => element.data_type === "feed"),
-  //   [selectedChartTx]
-  // );
-
-  // const elseTx = useMemo(
-  //   () =>
-  //     selectedChartTx?.filter(
-  //       (element) =>
-  //         element.data_type !== "checklist" && element.data_type !== "feed"
-  //     ),
-  //   [selectedChartTx]
-  // );
+  const sortedChartTx = useMemo(() => {
+    const dataTypeOrder = ["checklist", "manual", "injection", "feed"];
+    return selectedChartTx?.sort(
+      (a, b) =>
+        dataTypeOrder.indexOf(a.data_type) - dataTypeOrder.indexOf(b.data_type)
+    );
+  }, [selectedChartTx]);
 
   return (
     <div className="h-screen">
       <Table className="border-2">
         <TableHeader>
           <TableRow className="divide-x">
-            <TableHead className="w-[240px] h-2 text-center">
+            <TableHead className="w-[220px] h-2 text-center">
               처치 목록
             </TableHead>
             {TIME.map((time) => (
               <TableHead className="h-2 text-center" key={time}>
-                {time}
+                {time.toString().padStart(2, "0")}
               </TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {selectedChartTx?.map((element) => (
+          {sortedChartTx?.map((element) => (
             <TableRow className="divide-x" key={element.icu_chart_tx_id}>
-              <IcuTableCellTitle chartTx={element} />
+              <IcuTableCellTitle
+                chartTx={element}
+                dataType={element.data_type}
+              />
               {TIME.map((time, index) => (
                 <IcuTableCellInput
                   hasTodo={element.todo[index] === "1"}
