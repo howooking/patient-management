@@ -49,4 +49,4 @@ export const DEFAULT_ICU_CHART = [
     todoMemo: "",
     dataType: "feed",
   },
-];
+] as const;

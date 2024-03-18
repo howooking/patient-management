@@ -19,4 +19,4 @@ export const ICU_CHART_TX_DATA_TYPE = [
     title: "직접입력",
     value: "manual",
   },
-];
+] as const;
