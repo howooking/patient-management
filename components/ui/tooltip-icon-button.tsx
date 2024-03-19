@@ -21,8 +21,13 @@ export default function TooltipIconButton({
     <TooltipProvider delayDuration={100}>
       <Tooltip>
         <TooltipTrigger tabIndex={-1} asChild>
-          <Button variant="outline" size="icon" onClick={() => setOpen(true)}>
-            <Icon />
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setOpen(true)}
+            className="w-8 h-8"
+          >
+            <Icon className="w-4 h-4" />
           </Button>
         </TooltipTrigger>
         <TooltipContent side="top">{description}</TooltipContent>
