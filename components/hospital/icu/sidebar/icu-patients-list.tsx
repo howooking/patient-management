@@ -9,7 +9,7 @@ import { useIcuVetFilter } from "@/lib/store/icu-vet-filter";
 import { useSelectedDate } from "@/lib/store/selected-date";
 import { useSelectedIcuChart } from "@/lib/store/selected-icu-chart";
 import { cn, truncateBreed } from "@/lib/utils";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 
 export default function IcuPatientsList() {
   // 차트 데이터
@@ -21,12 +21,10 @@ export default function IcuPatientsList() {
   const { vet } = useIcuVetFilter();
   const filteredIcuCharts = useCallback(
     (group?: string, vet?: string) => {
-      let filtered = icuChart
-        ?.filter((element) => element.io_id.in_date <= selectedDate)
-        .filter(
-          (element) =>
-            !element.io_id.out_date || element.io_id.out_date >= selectedDate
-        );
+      let filtered = icuChart?.filter(
+        (element) => element.target_date === selectedDate
+      );
+
       if (group !== "그룹") {
         filtered = filtered?.filter((element) => element.io_id.group === group);
       }
@@ -42,6 +40,14 @@ export default function IcuPatientsList() {
 
   const { setSelectedIcuChartId } = useSelectedIcuChart();
   const { selectedIcuIoId, setSelectedIcuIoId } = useSelectedIcuIo();
+
+  // 선택일자에 해당하는 chart로 바꿈
+  useEffect(() => {
+    const currentDateChartId = filteredIcuCharts(group, vet)?.find(
+      (element) => element.io_id.io_id === selectedIcuIoId
+    )?.icu_chart_id;
+    setSelectedIcuChartId(currentDateChartId);
+  }, [filteredIcuCharts, group, selectedIcuIoId, setSelectedIcuChartId, vet]);
 
   if (isLoading) {
     return (
