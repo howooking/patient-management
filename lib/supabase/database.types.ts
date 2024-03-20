@@ -59,7 +59,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "drugs"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
       drug_products: {
@@ -122,7 +122,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
-          }
+          },
         ]
       }
       drugs: {
@@ -166,7 +166,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
-          }
+          },
         ]
       }
       feeds: {
@@ -219,7 +219,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
-          }
+          },
         ]
       }
       hos_vet_mapping: {
@@ -270,7 +270,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "vets"
             referencedColumns: ["vet_id"]
-          }
+          },
         ]
       }
       hospitals: {
@@ -323,14 +323,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "vets"
             referencedColumns: ["vet_id"]
-          }
+          },
         ]
       }
       icu_chart: {
         Row: {
-          caution: string | null
+          caution: string
           created_at: string
-          discharged: boolean
           hos_id: string
           icu_chart_id: number
           io_id: number
@@ -345,9 +344,8 @@ export type Database = {
           type: string
         }
         Insert: {
-          caution?: string | null
+          caution?: string
           created_at?: string
-          discharged?: boolean
           hos_id: string
           icu_chart_id?: number
           io_id: number
@@ -362,9 +360,8 @@ export type Database = {
           type?: string
         }
         Update: {
-          caution?: string | null
+          caution?: string
           created_at?: string
-          discharged?: boolean
           hos_id?: string
           icu_chart_id?: number
           io_id?: number
@@ -413,7 +410,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "vets"
             referencedColumns: ["vet_id"]
-          }
+          },
         ]
       }
       icu_chart_tx: {
@@ -754,7 +751,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "in_and_out"
             referencedColumns: ["io_id"]
-          }
+          },
         ]
       }
       in_and_out: {
@@ -808,7 +805,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "pets"
             referencedColumns: ["pet_id"]
-          }
+          },
         ]
       }
       pets: {
@@ -867,7 +864,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
-          }
+          },
         ]
       }
       test_results: {
@@ -922,7 +919,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "tests"
             referencedColumns: ["test_id"]
-          }
+          },
         ]
       }
       test_set: {
@@ -987,7 +984,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "tests"
             referencedColumns: ["test_id"]
-          }
+          },
         ]
       }
       tests: {
@@ -1037,7 +1034,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "hospitals"
             referencedColumns: ["hos_id"]
-          }
+          },
         ]
       }
       tx: {
@@ -1085,7 +1082,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "in_and_out"
             referencedColumns: ["io_id"]
-          }
+          },
         ]
       }
       vets: {
@@ -1136,7 +1133,7 @@ export type Database = {
             isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
-          }
+          },
         ]
       }
     }
@@ -1155,14 +1152,16 @@ export type Database = {
   }
 }
 
+type PublicSchema = Database[Extract<keyof Database, "public">]
+
 export type Tables<
   PublicTableNameOrOptions extends
-    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | keyof (PublicSchema["Tables"] & PublicSchema["Views"])
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -1170,67 +1169,67 @@ export type Tables<
     }
     ? R
     : never
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
-      Database["public"]["Views"])
-  ? (Database["public"]["Tables"] &
-      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
-      Row: infer R
-    }
-    ? R
+  : PublicTableNameOrOptions extends keyof (PublicSchema["Tables"] &
+        PublicSchema["Views"])
+    ? (PublicSchema["Tables"] &
+        PublicSchema["Views"])[PublicTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
     : never
-  : never
 
 export type TablesInsert<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Insert: infer I
     }
     ? I
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Insert: infer I
-    }
-    ? I
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
     : never
-  : never
 
 export type TablesUpdate<
   PublicTableNameOrOptions extends
-    | keyof Database["public"]["Tables"]
+    | keyof PublicSchema["Tables"]
     | { schema: keyof Database },
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
-    : never = never
+    : never = never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
       Update: infer U
     }
     ? U
     : never
-  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
-  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-      Update: infer U
-    }
-    ? U
+  : PublicTableNameOrOptions extends keyof PublicSchema["Tables"]
+    ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
     : never
-  : never
 
 export type Enums<
   PublicEnumNameOrOptions extends
-    | keyof Database["public"]["Enums"]
+    | keyof PublicSchema["Enums"]
     | { schema: keyof Database },
   EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
     ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
-    : never = never
+    : never = never,
 > = PublicEnumNameOrOptions extends { schema: keyof Database }
   ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
-  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
-  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
-  : never
+  : PublicEnumNameOrOptions extends keyof PublicSchema["Enums"]
+    ? PublicSchema["Enums"][PublicEnumNameOrOptions]
+    : never

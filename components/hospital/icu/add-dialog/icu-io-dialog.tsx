@@ -59,7 +59,6 @@ export default function IcuIoDialog({
   const form = useForm<z.infer<typeof addIcuChartFormSchema>>({
     resolver: zodResolver(addIcuChartFormSchema),
     defaultValues: {
-      caution: pet.memo ?? "",
       date: {
         from: new Date(),
         to: new Date(),
@@ -72,7 +71,7 @@ export default function IcuIoDialog({
   const { setSelectedDate } = useSelectedDate();
 
   const onSubmit = async (values: z.infer<typeof addIcuChartFormSchema>) => {
-    const { caution, date, group, main_vet, tag, sub_vet } = values;
+    const { date, group, main_vet, tag, sub_vet } = values;
     setIsSubmitting(true);
     try {
       // in_and_out 차트 삽입
@@ -119,13 +118,13 @@ export default function IcuIoDialog({
         return;
       }
 
+      // 당일 차트 삽입
       const { data: icuChart, error: icuChartError } = await supabase
         .from("icu_chart")
         .insert({
           io_id: inAndOut?.io_id!,
           hos_id,
           pet_id: pet.pet_id,
-          caution,
           main_vet,
           sub_vet,
           target_date: format(date.from, "yyyy-MM-dd"),

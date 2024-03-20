@@ -85,7 +85,7 @@ export default function DeleteIoDialog({
               className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
             />
           </Button>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="outline">취소</Button>
           </DialogClose>
         </DialogFooter>

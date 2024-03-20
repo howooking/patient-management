@@ -27,17 +27,13 @@ import { toast } from "@/components/ui/use-toast";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { icuChartVetFormSchema } from "@/lib/zod/form-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { z } from "zod";
-
-export const icuChartVetFormSchema = z.object({
-  main_vet: z.string({ required_error: "주치의를 선택해주세요." }),
-  sub_vet: z.string().optional(),
-});
 
 export default function EditVetDialog({
   main_vet,

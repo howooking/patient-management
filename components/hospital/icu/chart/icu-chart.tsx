@@ -2,17 +2,16 @@
 
 import useIcuChart from "@/hooks/useIcuChart";
 import useIcuChartTx from "@/hooks/useIcuChartTx";
+import { useSelectedDate } from "@/lib/store/selected-date";
 import { useSelectedIcuChart } from "@/lib/store/selected-icu-chart";
+import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo } from "react";
+import IcuChartActions from "./icu-chart-actions";
+import IcuMemo from "./icu-memo";
 import IcuPatientInfo from "./icu-patient-info";
 import IcuTable from "./table/icu-table";
-import { useSelectedDate } from "@/lib/store/selected-date";
-import IcuChartActions from "./icu-chart-actions";
-import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
-import { type IcuChartJoined, type IcuChartTxJoined } from "@/types/type";
-import IcuMemo from "./icu-memo";
 
 export default function IcuChart() {
   // 웹소켓
@@ -199,7 +198,7 @@ export default function IcuChart() {
   const { icuChart, isLoading: icuChartLoading } = useIcuChart();
   const selectedChart = useMemo(
     () =>
-      (icuChart as IcuChartJoined[] | null)
+      icuChart
         ?.filter((chart) => chart.target_date === selectedDate)
         .find((chart) => chart.icu_chart_id === selectedIcuChartId),
     [icuChart, selectedDate, selectedIcuChartId]
@@ -208,22 +207,23 @@ export default function IcuChart() {
   // io
   const selectedIo = useMemo(
     () =>
-      (icuChart as IcuChartJoined[] | null)
+      icuChart
         ?.filter((chart) => chart.io_id.in_date <= selectedDate)
         .find((chart) => chart.io_id.io_id === selectedIcuIoId),
     [icuChart, selectedDate, selectedIcuIoId]
   );
 
+  // console.log({ selectedIo, selectedChart });
+
   // chart_tx
   const { icuChartTx, isLoading: icuChartTxLoading } = useIcuChartTx();
   const selectedChartTx = useMemo(
     () =>
-      (icuChartTx as IcuChartTxJoined[] | null)?.filter(
+      icuChartTx?.filter(
         (element) => element.icu_chart_id === selectedIcuChartId
       ),
     [icuChartTx, selectedIcuChartId]
   );
-  // console.log(selectedChartTx);
 
   // // tx
   // const { tx, isLoading: txLoading } = useTx();
@@ -249,13 +249,24 @@ export default function IcuChart() {
   //   }
   // }, [selectedChart, selectedIo, setSelectedIcuChartId, setSelectedIcuIoId]);
 
+  useEffect(() => {
+    if (!selectedIo) {
+      setSelectedIcuIoId(undefined);
+    }
+  }, [selectedChart, selectedIo, setSelectedIcuIoId]);
+
   if (!selectedIcuIoId) {
     return <>전체현황</>;
   }
 
   return (
     <div>
-      <IcuChartActions selectedIo={selectedIo} hasChart={!!selectedChart} />
+      <IcuChartActions
+        selectedIo={selectedIo}
+        hasInAndOut={!!selectedIo}
+        hasChart={!!selectedChart}
+        selectedChart={selectedChart}
+      />
 
       {selectedChart ? (
         <>

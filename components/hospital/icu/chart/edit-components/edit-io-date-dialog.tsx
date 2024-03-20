@@ -24,6 +24,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { icuChartIoDateFormSchema } from "@/lib/zod/form-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon, Pencil1Icon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
@@ -32,13 +33,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { z } from "zod";
-
-export const icuChartIoDateFormSchema = z.object({
-  date: z.object({
-    from: z.date(),
-    to: z.date(),
-  }),
-});
 
 export default function EditIoDateDialog({
   io_id,

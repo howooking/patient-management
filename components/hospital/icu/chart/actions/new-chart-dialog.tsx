@@ -18,12 +18,14 @@ import { cn } from "@/lib/utils";
 import { type IcuChartJoined } from "@/types/type";
 import { useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { PiArrowCounterClockwise } from "react-icons/pi";
+import { PiArrowCounterClockwise, PiMagicWand } from "react-icons/pi";
 
-export default function ResetChartDialog({
+export default function NewChartDialog({
   selectedIo,
+  hasChart,
 }: {
   selectedIo?: IcuChartJoined;
+  hasChart: boolean;
 }) {
   const supabase = createSupabaseBrowserClient();
   const [open, setOpen] = useState(false);
@@ -32,21 +34,23 @@ export default function ResetChartDialog({
   const { latestWeight, weighedDate } = useLatestWeight(
     selectedIo?.pet_id.pet_id
   );
-  const handleOut = async () => {
+  const handleNewChart = async () => {
     setIsSubmitting(true);
     try {
-      // 해당일 icu_chart 삭제
-      const { error } = await supabase
-        .from("icu_chart")
-        .delete()
-        .match({ icu_chart_id: selectedIo?.icu_chart_id });
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: error.message,
-          description: "관리자에게 문의하세요",
-        });
-        return;
+      if (hasChart) {
+        // 해당일 icu_chart 삭제
+        const { error } = await supabase
+          .from("icu_chart")
+          .delete()
+          .match({ icu_chart_id: selectedIo?.icu_chart_id });
+        if (error) {
+          toast({
+            variant: "destructive",
+            title: error.message,
+            description: "관리자에게 문의하세요",
+          });
+          return;
+        }
       }
 
       // 기본 차트 생성
@@ -58,14 +62,12 @@ export default function ResetChartDialog({
           pet_id: selectedIo?.pet_id.pet_id!,
           caution: selectedIo?.caution,
           main_vet: selectedIo?.main_vet.vet_id,
-          sub_vet: selectedIo?.sub_vet?.vet_id ?? null,
+          sub_vet: selectedIo?.sub_vet?.vet_id,
           target_date: selectedDate,
-          memo_a: selectedIo?.memo_a,
-          memo_b: selectedIo?.memo_b,
-          memo_c: selectedIo?.memo_c,
-          target_weight: latestWeight
-            ? `${latestWeight}kg(${weighedDate})`
-            : null,
+          memo_a: "",
+          memo_b: "",
+          memo_c: "",
+          target_weight: selectedIo?.target_weight,
         })
         .select("icu_chart_id")
         .single();
@@ -115,8 +117,8 @@ export default function ResetChartDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <TooltipIconButton
-        Icon={PiArrowCounterClockwise}
-        description="차트 초기화"
+        Icon={hasChart ? PiArrowCounterClockwise : PiMagicWand}
+        description={hasChart ? "차트 초기화" : "기본차트 생성"}
         setOpen={setOpen}
       />
 
@@ -127,25 +129,28 @@ export default function ResetChartDialog({
               {selectedDate}일 {selectedIo?.pet_id.name}
             </span>{" "}
             <span className="font-normal">
-              의 처치기록이 모두 초기화됩니다.
+              의{" "}
+              {hasChart
+                ? "처치기록이 모두 초기화됩니다."
+                : "기본차트가 생성됩니다."}
             </span>
           </DialogTitle>
           <DialogDescription>
-            초기화된 차트는 복구가 불가능합니다.
+            {hasChart && "초기화된 차트는 복구가 불가능합니다."}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button
-            variant="destructive"
-            onClick={handleOut}
+            variant={hasChart ? "destructive" : "default"}
+            onClick={handleNewChart}
             disabled={isSubmitting}
           >
-            초기화
+            {hasChart ? "초기화" : "생성"}
             <AiOutlineLoading3Quarters
               className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
             />
           </Button>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="outline">취소</Button>
           </DialogClose>
         </DialogFooter>

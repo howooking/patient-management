@@ -35,7 +35,7 @@ export default function IcuTable({
       <TableHeader>
         <TableRow className="divide-x">
           <TableHead className="w-[220px] h-10 text-center">
-            처치 목록{" "}
+            처치{" "}
             <IcuChartTxDialog
               io_id={selectedIcuIoId}
               icu_chart_id={selectedIcuChartId}

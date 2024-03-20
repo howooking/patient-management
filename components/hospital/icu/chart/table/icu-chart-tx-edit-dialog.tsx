@@ -22,6 +22,7 @@ import { ICU_CHART_TX_DATA_TYPE } from "@/constants/icu-chart-tx-data-type";
 import { TIME } from "@/constants/time";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { chartTxFormSchema } from "@/lib/zod/form-schemas";
 import { type IcuChartTxJoined } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil1Icon } from "@radix-ui/react-icons";
@@ -29,40 +30,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { z } from "zod";
-
-export const chartTxFormSchema = z.object({
-  todo_name: z
-    .string({
-      required_error: "처치를 입력해주세요.",
-    })
-    .min(1, { message: "처치를 입력해주세요." }),
-  todo_memo: z.string().optional(),
-  data_type: z.string({ required_error: "처치타입을 선택해주세요." }),
-  todo_1: z.boolean().default(false),
-  todo_2: z.boolean().default(false),
-  todo_3: z.boolean().default(false),
-  todo_4: z.boolean().default(false),
-  todo_5: z.boolean().default(false),
-  todo_6: z.boolean().default(false),
-  todo_7: z.boolean().default(false),
-  todo_8: z.boolean().default(false),
-  todo_9: z.boolean().default(false),
-  todo_10: z.boolean().default(false),
-  todo_11: z.boolean().default(false),
-  todo_12: z.boolean().default(false),
-  todo_13: z.boolean().default(false),
-  todo_14: z.boolean().default(false),
-  todo_15: z.boolean().default(false),
-  todo_16: z.boolean().default(false),
-  todo_17: z.boolean().default(false),
-  todo_18: z.boolean().default(false),
-  todo_19: z.boolean().default(false),
-  todo_20: z.boolean().default(false),
-  todo_21: z.boolean().default(false),
-  todo_22: z.boolean().default(false),
-  todo_23: z.boolean().default(false),
-  todo_24: z.boolean().default(false),
-});
 
 export default function IcuChartTxDialog({
   chartTx,
@@ -172,7 +139,6 @@ export default function IcuChartTxDialog({
       values.todo_24 ? "1" : "0",
     ];
 
-    // 수정
     try {
       const { error } = await supabase.from("icu_chart_tx").upsert({
         data_type: values.data_type,
@@ -213,9 +179,9 @@ export default function IcuChartTxDialog({
           </>
         ) : (
           <>
-            <Button size="sm" className="h-6 px-2">
+            <div className="h-6 px-2 bg-primary text-white flex items-center justify-center rounded-md hover:bg-primary/70">
               추가
-            </Button>
+            </div>
           </>
         )}
       </DialogTrigger>

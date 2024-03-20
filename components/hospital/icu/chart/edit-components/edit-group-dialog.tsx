@@ -25,16 +25,13 @@ import { toast } from "@/components/ui/use-toast";
 import useHospitalGroup from "@/hooks/useHospitalGroup";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { icuChartGroupFormSchema } from "@/lib/zod/form-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { z } from "zod";
-
-export const icuChartGroupFormSchema = z.object({
-  group: z.string({ required_error: "주치의를 선택해주세요." }),
-});
 
 export default function EditGroupDialog({
   io_id,

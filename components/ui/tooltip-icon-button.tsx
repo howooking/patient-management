@@ -25,7 +25,7 @@ export default function TooltipIconButton({
             variant="outline"
             size="icon"
             onClick={() => setOpen(true)}
-            className="w-8 h-8"
+            className="w-8 h-8 rounded-none border-l-0"
           >
             <Icon className="w-4 h-4" />
           </Button>

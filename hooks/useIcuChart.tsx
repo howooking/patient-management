@@ -17,12 +17,12 @@ export default function useIcuChart() {
         .from("icu_chart")
         .select(
           `
-          *,
-          io_id!inner(*),
-          pet_id(*),
-          main_vet(*),
-          sub_vet(*)
-        `
+            *,
+            io_id!inner(*),
+            pet_id(*),
+            main_vet(*),
+            sub_vet(*)
+          `
         )
         .match({ hos_id })
         .order("created_at", { ascending: true })
