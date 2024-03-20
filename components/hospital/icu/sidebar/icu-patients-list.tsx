@@ -46,20 +46,22 @@ export default function IcuPatientsList() {
   }, [group, icuChart, selectedDate, vet]);
 
   // { io_id1 : [ "2023-03-22", "2023-03-23" ], io_id2 : [ "2023-03-23", "2023-03-24" ] }
-  const ioIdToTargetDateObj: { [key: number]: string[] } = {};
+  const ioIdToTargetDateObj = useMemo(() => {
+    const tempObj: { [key: number]: string[] } = {};
+    filteredIcuCharts?.forEach((element) => {
+      const {
+        io_id: { io_id },
+        target_date,
+      } = element;
 
-  filteredIcuCharts?.forEach((element) => {
-    const {
-      io_id: { io_id },
-      target_date,
-    } = element;
-
-    if (ioIdToTargetDateObj[io_id]) {
-      ioIdToTargetDateObj[io_id].push(target_date);
-    } else {
-      ioIdToTargetDateObj[io_id] = [target_date];
-    }
-  });
+      if (tempObj[io_id]) {
+        tempObj[io_id].push(target_date);
+      } else {
+        tempObj[io_id] = [target_date];
+      }
+    });
+    return tempObj;
+  }, [filteredIcuCharts]);
 
   const filteredResult = useMemo(
     () =>
