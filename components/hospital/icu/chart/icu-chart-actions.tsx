@@ -38,6 +38,7 @@ export default function IcuChartActions({
                 isOut={isOut}
                 io_id={selectedIo?.io_id.io_id}
                 patientName={selectedIo?.pet_id.name}
+                outDate={selectedChart?.target_date}
               />
 
               <DeleteIoDialog

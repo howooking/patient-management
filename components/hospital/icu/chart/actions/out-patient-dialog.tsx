@@ -21,10 +21,12 @@ export default function OutPatientDialog({
   io_id,
   patientName,
   isOut,
+  outDate,
 }: {
   io_id?: number;
   patientName?: string;
   isOut: boolean;
+  outDate?: string;
 }) {
   const supabase = createSupabaseBrowserClient();
   const [open, setOpen] = useState(false);
@@ -75,7 +77,7 @@ export default function OutPatientDialog({
             <span className="font-normal">
               {isOut
                 ? "의 퇴원을 취소하시겠습니까?"
-                : "을(를) 퇴원시키겠습니까?"}
+                : `이(가) ${outDate}날 퇴원합니다.`}
             </span>
           </DialogTitle>
           <DialogDescription>
