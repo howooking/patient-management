@@ -1,9 +1,9 @@
-import IcuPatientsList from "./icu-patients-list";
+import SelectedDatePatientList from "./selected-date-patients-list";
 
-export default async function IcuSidebar() {
+export default function IcuSidebar() {
   return (
     <div className="w-32 h-[calc(100vh-48px)] border-r border-input fixed">
-      <IcuPatientsList />
+      <SelectedDatePatientList />
     </div>
   );
 }

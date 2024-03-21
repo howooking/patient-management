@@ -14,13 +14,12 @@ import IcuPatientInfo from "./icu-patient-info";
 import IcuTable from "./table/icu-table";
 
 export default function IcuChart() {
-  // 웹소켓
   const supabase = createSupabaseBrowserClient();
   const queryClient = useQueryClient();
   const { selectedIcuChartId, setSelectedIcuChartId } = useSelectedIcuChart();
   const { selectedIcuIoId, setSelectedIcuIoId } = useSelectedIcuIo();
 
-  // in_and_out
+  // in_and_out websocket
   useEffect(() => {
     const channel = supabase
       .channel("in_and_out")
@@ -52,7 +51,7 @@ export default function IcuChart() {
     };
   }, [queryClient, supabase]);
 
-  // icu_chart
+  // icu_chart websocket
   useEffect(() => {
     const channel = supabase
       .channel("icu_chart")
@@ -86,7 +85,7 @@ export default function IcuChart() {
     };
   }, [queryClient, setSelectedIcuChartId, setSelectedIcuIoId, supabase]);
 
-  // icu_chart_tx
+  // icu_chart_tx websocket
   useEffect(() => {
     const channel = supabase
       .channel("icu_chart_tx")
@@ -129,7 +128,7 @@ export default function IcuChart() {
     };
   }, [queryClient, supabase]);
 
-  // tx
+  // tx websocket
   useEffect(() => {
     const channel = supabase
       .channel("tx")
@@ -161,7 +160,7 @@ export default function IcuChart() {
     };
   }, [queryClient, supabase]);
 
-  // test_results, 몸무게 실시간 반영하기 위해
+  // test_results websocket / for realtime patient's weight
   useEffect(() => {
     const channel = supabase
       .channel("test_results")
@@ -193,21 +192,20 @@ export default function IcuChart() {
     };
   }, [queryClient, supabase]);
 
-  // chart
-  const { icuChart, isLoading: icuChartLoading } = useIcuChart();
+  const { icuChart } = useIcuChart();
+  const { icuChartTx } = useIcuChartTx();
+
   const selectedChart = useMemo(
     () => icuChart?.find((chart) => chart.icu_chart_id === selectedIcuChartId),
     [icuChart, selectedIcuChartId]
   );
 
-  // io
   const selectedIo = useMemo(
     () => icuChart?.find((chart) => chart.io_id.io_id === selectedIcuIoId),
     [icuChart, selectedIcuIoId]
   );
 
-  // chart_tx
-  const { icuChartTx, isLoading: icuChartTxLoading } = useIcuChartTx();
+  // tx data of selected chart
   const selectedChartTx = useMemo(
     () =>
       icuChartTx?.filter(
@@ -215,8 +213,6 @@ export default function IcuChart() {
       ),
     [icuChartTx, selectedIcuChartId]
   );
-
-  // console.log({ icuChartLoading, icuChartTxLoading });
 
   // // tx
   // const { tx, isLoading: txLoading } = useTx();
@@ -234,19 +230,6 @@ export default function IcuChart() {
   //   selectedIcuIoId,
   //   selectedIcuChartId,
   // });
-
-  // useEffect(() => {
-  //   if (!selectedIo && !selectedChart) {
-  //     setSelectedIcuChartId(undefined);
-  //     setSelectedIcuIoId(undefined);
-  //   }
-  // }, [selectedChart, selectedIo, setSelectedIcuChartId, setSelectedIcuIoId]);
-
-  useEffect(() => {
-    if (!selectedIo) {
-      setSelectedIcuIoId(undefined);
-    }
-  }, [selectedChart, selectedIo, setSelectedIcuIoId]);
 
   const chartState = useCallback(() => {
     if (!selectedChart?.target_date) {
