@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -109,87 +108,85 @@ export default function EditIoDateDialog({
 
       <DialogContent className="max-w-lg">
         <DialogTitle>입원일, 퇴원예정일 변경</DialogTitle>
-        <DialogDescription>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-4"
-            >
-              {/* 입원일 ~ 퇴원예정일 */}
-              <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                      입원일 ~ 퇴원예정일*
-                    </FormLabel>
-                    <FormControl>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button
-                            id="date"
-                            variant={"outline"}
-                            className={cn(
-                              "h-8 w-full text-sm justify-start text-left font-normal",
-                              !field.value.from && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value.from ? (
-                              field.value.to ? (
-                                <>
-                                  {format(field.value.from, "yyyy-MM-dd")} ~{" "}
-                                  {format(field.value.to, "MM-dd")}
-                                </>
-                              ) : (
-                                format(field.value.from, "yyyy-MM-dd")
-                              )
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            {/* 입원일 ~ 퇴원예정일 */}
+            <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel className="text-sm font-semibold flex items-center gap-2">
+                    입원일 ~ 퇴원예정일*
+                  </FormLabel>
+                  <FormControl>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          id="date"
+                          variant={"outline"}
+                          className={cn(
+                            "h-8 w-full text-sm justify-start text-left font-normal",
+                            !field.value.from && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value.from ? (
+                            field.value.to ? (
+                              <>
+                                {format(field.value.from, "yyyy-MM-dd")} ~{" "}
+                                {format(field.value.to, "MM-dd")}
+                              </>
                             ) : (
-                              <span>입퇴원일 선택</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            locale={ko}
-                            initialFocus
-                            mode="range"
-                            defaultMonth={field.value.from}
-                            selected={{
-                              from: field.value.from,
-                              to: field.value.to,
-                            }}
-                            onSelect={field.onChange}
-                            numberOfMonths={2}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </FormControl>
-                    <FormMessage className="text-xs" />
-                  </FormItem>
-                )}
-              />
+                              format(field.value.from, "yyyy-MM-dd")
+                            )
+                          ) : (
+                            <span>입퇴원일 선택</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          locale={ko}
+                          initialFocus
+                          mode="range"
+                          defaultMonth={field.value.from}
+                          selected={{
+                            from: field.value.from,
+                            to: field.value.to,
+                          }}
+                          onSelect={field.onChange}
+                          numberOfMonths={2}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </FormControl>
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
 
-              <div className="flex gap-2 justify-end">
-                <Button disabled={isSubmitting}>
-                  수정
-                  <AiOutlineLoading3Quarters
-                    className={cn(
-                      "ml-2",
-                      isSubmitting ? "animate-spin" : "hidden"
-                    )}
-                  />
+            <div className="flex gap-2 justify-end">
+              <Button disabled={isSubmitting}>
+                수정
+                <AiOutlineLoading3Quarters
+                  className={cn(
+                    "ml-2",
+                    isSubmitting ? "animate-spin" : "hidden"
+                  )}
+                />
+              </Button>
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  닫기
                 </Button>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">
-                    닫기
-                  </Button>
-                </DialogClose>
-              </div>
-            </form>
-          </Form>
-        </DialogDescription>
+              </DialogClose>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -4,7 +4,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -115,93 +114,88 @@ export default function EditVetDialog({
 
       <DialogContent className="max-w-lg">
         <DialogTitle>주치의/부주치의 변경</DialogTitle>
-        <DialogDescription>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-4"
-            >
-              {/* 주치의 */}
-              <FormField
-                control={form.control}
-                name="main_vet"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                      주치의*
-                    </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={main_vet}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="text-sm h-8">
-                          <SelectValue placeholder="주치의 선택" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="text-sm">
-                        {vetOptions?.map((option) => (
-                          <SelectItem key={option.vet_id} value={option.vet_id}>
-                            {option.nickname}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* 부주치의 */}
-              <FormField
-                control={form.control}
-                name="sub_vet"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-semibold flex items-center gap-2">
-                      부주치의
-                    </FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={sub_vet}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="text-sm h-8">
-                          <SelectValue placeholder="부주치의 선택" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="text-sm">
-                        <SelectItem value="null">없음</SelectItem>
-                        {vetOptions?.map((option) => (
-                          <SelectItem key={option.vet_id} value={option.vet_id}>
-                            {option.nickname}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            {/* 주치의 */}
+            <FormField
+              control={form.control}
+              name="main_vet"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-semibold flex items-center gap-2">
+                    주치의*
+                  </FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={main_vet}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="text-sm h-8">
+                        <SelectValue placeholder="주치의 선택" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="text-sm">
+                      {vetOptions?.map((option) => (
+                        <SelectItem key={option.vet_id} value={option.vet_id}>
+                          {option.nickname}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* 부주치의 */}
+            <FormField
+              control={form.control}
+              name="sub_vet"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-semibold flex items-center gap-2">
+                    부주치의
+                  </FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={sub_vet}>
+                    <FormControl>
+                      <SelectTrigger className="text-sm h-8">
+                        <SelectValue placeholder="부주치의 선택" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="text-sm">
+                      <SelectItem value="null">없음</SelectItem>
+                      {vetOptions?.map((option) => (
+                        <SelectItem key={option.vet_id} value={option.vet_id}>
+                          {option.nickname}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-              <div className="flex gap-2 justify-end">
-                <Button disabled={isSubmitting}>
-                  수정
-                  <AiOutlineLoading3Quarters
-                    className={cn(
-                      "ml-2",
-                      isSubmitting ? "animate-spin" : "hidden"
-                    )}
-                  />
+            <div className="flex gap-2 justify-end">
+              <Button disabled={isSubmitting}>
+                수정
+                <AiOutlineLoading3Quarters
+                  className={cn(
+                    "ml-2",
+                    isSubmitting ? "animate-spin" : "hidden"
+                  )}
+                />
+              </Button>
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  닫기
                 </Button>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">
-                    닫기
-                  </Button>
-                </DialogClose>
-              </div>
-            </form>
-          </Form>
-        </DialogDescription>
+              </DialogClose>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -94,49 +93,47 @@ export default function EditCautionDialog({
 
       <DialogContent className="max-w-lg">
         <DialogTitle>주의사항 변경</DialogTitle>
-        <DialogDescription>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-4"
-            >
-              <FormField
-                control={form.control}
-                name="caution"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        className="h-8 text-sm"
-                        placeholder="물림주의, 사나움"
-                      />
-                    </FormControl>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <FormField
+              control={form.control}
+              name="caution"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      className="h-8 text-sm"
+                      placeholder="물림주의, 사나움"
+                    />
+                  </FormControl>
 
-                    <FormMessage className="text-xs" />
-                  </FormItem>
-                )}
-              />
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
 
-              <div className="flex gap-2 justify-end">
-                <Button disabled={isSubmitting}>
-                  수정
-                  <AiOutlineLoading3Quarters
-                    className={cn(
-                      "ml-2",
-                      isSubmitting ? "animate-spin" : "hidden"
-                    )}
-                  />
+            <div className="flex gap-2 justify-end">
+              <Button disabled={isSubmitting}>
+                수정
+                <AiOutlineLoading3Quarters
+                  className={cn(
+                    "ml-2",
+                    isSubmitting ? "animate-spin" : "hidden"
+                  )}
+                />
+              </Button>
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  닫기
                 </Button>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">
-                    닫기
-                  </Button>
-                </DialogClose>
-              </div>
-            </form>
-          </Form>
-        </DialogDescription>
+              </DialogClose>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

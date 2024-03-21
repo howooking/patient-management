@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
@@ -94,52 +93,50 @@ export default function EditTagDialog({
 
       <DialogContent className="max-w-lg">
         <DialogTitle>입원사유 변경</DialogTitle>
-        <DialogDescription>
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="flex flex-col gap-4"
-            >
-              <FormField
-                control={form.control}
-                name="tag"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-semibold">
-                      입원사유 앞에 #를 반드시 붙여주세요
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        className="h-8 text-sm"
-                        placeholder="#췌장염"
-                      />
-                    </FormControl>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
+          >
+            <FormField
+              control={form.control}
+              name="tag"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-sm font-semibold">
+                    입원사유 앞에 #를 반드시 붙여주세요
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      className="h-8 text-sm"
+                      placeholder="#췌장염"
+                    />
+                  </FormControl>
 
-                    <FormMessage className="text-xs" />
-                  </FormItem>
-                )}
-              />
+                  <FormMessage className="text-xs" />
+                </FormItem>
+              )}
+            />
 
-              <div className="flex gap-2 justify-end">
-                <Button disabled={isSubmitting}>
-                  수정
-                  <AiOutlineLoading3Quarters
-                    className={cn(
-                      "ml-2",
-                      isSubmitting ? "animate-spin" : "hidden"
-                    )}
-                  />
+            <div className="flex gap-2 justify-end">
+              <Button disabled={isSubmitting}>
+                수정
+                <AiOutlineLoading3Quarters
+                  className={cn(
+                    "ml-2",
+                    isSubmitting ? "animate-spin" : "hidden"
+                  )}
+                />
+              </Button>
+              <DialogClose asChild>
+                <Button type="button" variant="outline">
+                  닫기
                 </Button>
-                <DialogClose asChild>
-                  <Button type="button" variant="outline">
-                    닫기
-                  </Button>
-                </DialogClose>
-              </div>
-            </form>
-          </Form>
-        </DialogDescription>
+              </DialogClose>
+            </div>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );
