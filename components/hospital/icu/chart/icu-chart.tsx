@@ -2,7 +2,6 @@
 
 import useIcuChart from "@/hooks/useIcuChart";
 import useIcuChartTx from "@/hooks/useIcuChartTx";
-import { useSelectedDate } from "@/lib/store/selected-date";
 import { useSelectedIcuChart } from "@/lib/store/selected-icu-chart";
 import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
@@ -195,26 +194,17 @@ export default function IcuChart() {
   }, [queryClient, supabase]);
 
   // chart
-  const { selectedDate } = useSelectedDate();
   const { icuChart, isLoading: icuChartLoading } = useIcuChart();
   const selectedChart = useMemo(
-    () =>
-      icuChart
-        ?.filter((chart) => chart.target_date === selectedDate)
-        .find((chart) => chart.icu_chart_id === selectedIcuChartId),
-    [icuChart, selectedDate, selectedIcuChartId]
+    () => icuChart?.find((chart) => chart.icu_chart_id === selectedIcuChartId),
+    [icuChart, selectedIcuChartId]
   );
 
   // io
   const selectedIo = useMemo(
-    () =>
-      icuChart
-        ?.filter((chart) => chart.io_id.in_date <= selectedDate)
-        .find((chart) => chart.io_id.io_id === selectedIcuIoId),
-    [icuChart, selectedDate, selectedIcuIoId]
+    () => icuChart?.find((chart) => chart.io_id.io_id === selectedIcuIoId),
+    [icuChart, selectedIcuIoId]
   );
-
-  // console.log({ selectedIo, selectedChart });
 
   // chart_tx
   const { icuChartTx, isLoading: icuChartTxLoading } = useIcuChartTx();
@@ -225,6 +215,8 @@ export default function IcuChart() {
       ),
     [icuChartTx, selectedIcuChartId]
   );
+
+  // console.log({ icuChartLoading, icuChartTxLoading });
 
   // // tx
   // const { tx, isLoading: txLoading } = useTx();

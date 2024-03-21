@@ -24,9 +24,8 @@ export default function IcuChartActions({
         <div className="">
           {!isFirstDay && (
             <CopyPrevChartDialog
-              selectedIo={selectedIo}
+              petName={selectedIo?.pet_id.name}
               hasChart={hasChart}
-              selectedChart={selectedChart}
             />
           )}
 

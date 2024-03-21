@@ -13,22 +13,21 @@ import { toast } from "@/components/ui/use-toast";
 import useIcuChart from "@/hooks/useIcuChart";
 import useIcuChartTx from "@/hooks/useIcuChartTx";
 import { useSelectedDate } from "@/lib/store/selected-date";
+import { useSelectedIcuChart } from "@/lib/store/selected-icu-chart";
+import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
-import { type IcuChartJoined } from "@/types/type";
 import { format, parseISO, subDays } from "date-fns";
 import { useMemo, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { PiClipboardText } from "react-icons/pi";
 
 export default function CopyPrevChartDialog({
-  selectedIo,
+  petName,
   hasChart,
-  selectedChart,
 }: {
-  selectedIo?: IcuChartJoined;
+  petName?: string;
   hasChart: boolean;
-  selectedChart?: IcuChartJoined;
 }) {
   const supabase = createSupabaseBrowserClient();
   const [open, setOpen] = useState(false);
@@ -36,18 +35,22 @@ export default function CopyPrevChartDialog({
   const { icuChart } = useIcuChart();
   const { icuChartTx } = useIcuChartTx();
   const { selectedDate } = useSelectedDate();
+  const { selectedIcuIoId } = useSelectedIcuIo();
+  const { selectedIcuChartId } = useSelectedIcuChart();
 
   // 전날 icu_chart 정보 가져오기
   const prevDateChart = useMemo(
     () =>
-      icuChart?.find((element) => {
-        const prevDate = format(
-          subDays(parseISO(selectedDate), 1),
-          "yyyy-MM-dd"
-        );
-        return element.target_date === prevDate;
-      }),
-    [icuChart, selectedDate]
+      icuChart
+        ?.filter((element) => element.io_id.io_id === selectedIcuIoId)
+        .find((element) => {
+          const prevDate = format(
+            subDays(parseISO(selectedDate), 1),
+            "yyyy-MM-dd"
+          );
+          return element.target_date === prevDate;
+        }),
+    [icuChart, selectedDate, selectedIcuIoId]
   );
 
   // 전달 ich_chart_tx 정보 가져오기
@@ -67,7 +70,7 @@ export default function CopyPrevChartDialog({
         const { error } = await supabase
           .from("icu_chart")
           .delete()
-          .match({ icu_chart_id: selectedChart?.icu_chart_id });
+          .match({ icu_chart_id: selectedIcuChartId });
 
         if (error) {
           toast({
@@ -149,7 +152,7 @@ export default function CopyPrevChartDialog({
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>
-            <span className="text-xl">{selectedIo?.pet_id.name}</span>{" "}
+            <span className="text-xl">{petName}</span>{" "}
             <span className="font-normal">
               의 전일 차트를 복사하시겠습니까?
             </span>
