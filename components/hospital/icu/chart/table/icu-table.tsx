@@ -13,6 +13,7 @@ import { useMemo } from "react";
 import IcuTableCellInput from "./Icu-table-cell-input";
 import IcuChartTxDialog from "./icu-chart-tx-edit-dialog";
 import IcuTableCellTitle from "./icu-table-cell-title";
+import { ICU_CHART_TX_DATA_TYPE } from "@/constants/icu-chart-tx-data-type";
 
 export default function IcuTable({
   selectedChartTx,
@@ -22,10 +23,18 @@ export default function IcuTable({
   chartState?: "past" | "today";
 }) {
   const sortedChartTx = useMemo(() => {
-    const dataTypeOrder = ["checklist", "fluid", "injection", "manual", "feed"];
+    const dataTypeOrder = ICU_CHART_TX_DATA_TYPE.map(
+      (element) => element.value
+    );
+
     return selectedChartTx?.sort(
       (a, b) =>
-        dataTypeOrder.indexOf(a.data_type) - dataTypeOrder.indexOf(b.data_type)
+        dataTypeOrder.indexOf(
+          a.data_type as (typeof ICU_CHART_TX_DATA_TYPE)[number]["value"]
+        ) -
+        dataTypeOrder.indexOf(
+          b.data_type as (typeof ICU_CHART_TX_DATA_TYPE)[number]["value"]
+        )
     );
   }, [selectedChartTx]);
 

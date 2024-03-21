@@ -4,6 +4,10 @@ export const ICU_CHART_TX_DATA_TYPE = [
     value: "checklist",
   },
   {
+    title: "수액",
+    value: "fluid",
+  },
+  {
     title: "주사",
     value: "injection",
   },
@@ -12,11 +16,11 @@ export const ICU_CHART_TX_DATA_TYPE = [
     value: "test",
   },
   {
-    title: "식이",
-    value: "feed",
-  },
-  {
     title: "직접입력",
     value: "manual",
+  },
+  {
+    title: "식이",
+    value: "feed",
   },
 ] as const;
