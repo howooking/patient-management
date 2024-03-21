@@ -58,7 +58,6 @@ export default function CopyPrevChartDialog({
       ),
     [icuChartTx, prevDateChart?.icu_chart_id]
   );
-  console.log(prevDateChartTx);
 
   const handleCopy = async () => {
     setIsSubmitting(true);

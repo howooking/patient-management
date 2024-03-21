@@ -17,6 +17,15 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import { ICU_CHART_TX_DATA_TYPE } from "@/constants/icu-chart-tx-data-type";
 import { TIME } from "@/constants/time";
@@ -26,7 +35,7 @@ import { chartTxFormSchema } from "@/lib/zod/form-schemas";
 import { type IcuChartTxJoined } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { z } from "zod";
@@ -44,40 +53,7 @@ export default function IcuChartTxDialog({
 }) {
   const form = useForm<z.infer<typeof chartTxFormSchema>>({
     resolver: zodResolver(chartTxFormSchema),
-    defaultValues: {
-      todo_name: chartTx?.todo_name,
-      todo_memo: chartTx?.todo_memo ?? "",
-      data_type: chartTx?.data_type,
-      todo_1: chartTx?.todo[0] === "1",
-      todo_2: chartTx?.todo[1] === "1",
-      todo_3: chartTx?.todo[2] === "1",
-      todo_4: chartTx?.todo[3] === "1",
-      todo_5: chartTx?.todo[4] === "1",
-      todo_6: chartTx?.todo[5] === "1",
-      todo_7: chartTx?.todo[6] === "1",
-      todo_8: chartTx?.todo[7] === "1",
-      todo_9: chartTx?.todo[8] === "1",
-      todo_10: chartTx?.todo[9] === "1",
-      todo_11: chartTx?.todo[10] === "1",
-      todo_12: chartTx?.todo[11] === "1",
-      todo_13: chartTx?.todo[12] === "1",
-      todo_14: chartTx?.todo[13] === "1",
-      todo_15: chartTx?.todo[14] === "1",
-      todo_16: chartTx?.todo[15] === "1",
-      todo_17: chartTx?.todo[16] === "1",
-      todo_18: chartTx?.todo[17] === "1",
-      todo_19: chartTx?.todo[18] === "1",
-      todo_20: chartTx?.todo[19] === "1",
-      todo_21: chartTx?.todo[20] === "1",
-      todo_22: chartTx?.todo[21] === "1",
-      todo_23: chartTx?.todo[22] === "1",
-      todo_24: chartTx?.todo[23] === "1",
-    },
   });
-
-  // useEffect(() => {
-  //   form.reset();
-  // }, [form]);
 
   const supabase = createSupabaseBrowserClient();
   const [open, setOpen] = useState(false);
@@ -110,7 +86,9 @@ export default function IcuChartTxDialog({
     }
   };
 
-  const onSubmit = async (values: z.infer<typeof chartTxFormSchema>) => {
+  const handleIcuChartTx = async (
+    values: z.infer<typeof chartTxFormSchema>
+  ) => {
     setIsSubmitting(true);
     const todo = [
       values.todo_1 ? "1" : "0",
@@ -170,6 +148,61 @@ export default function IcuChartTxDialog({
     }
   };
 
+  const [startTime, setStartTime] = useState<string | undefined>(undefined);
+  const [timeTerm, setTimeTerm] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const start = Number(startTime);
+    const term = Number(timeTerm);
+
+    const indicesToSetTrue = [];
+    for (let i = start; i <= 24; i += term) {
+      indicesToSetTrue.push(i);
+    }
+
+    for (let i = 1; i <= 24; i++) {
+      form.setValue(
+        `todo_${i}` as keyof z.infer<typeof chartTxFormSchema>,
+        indicesToSetTrue.includes(i)
+      );
+    }
+  }, [form, startTime, timeTerm]);
+
+  // Reset form when opening or closing dialog
+  useEffect(() => {
+    form.reset({
+      todo_name: chartTx?.todo_name,
+      todo_memo: chartTx?.todo_memo ?? "",
+      data_type: chartTx?.data_type,
+      todo_1: chartTx?.todo[0] === "1",
+      todo_2: chartTx?.todo[1] === "1",
+      todo_3: chartTx?.todo[2] === "1",
+      todo_4: chartTx?.todo[3] === "1",
+      todo_5: chartTx?.todo[4] === "1",
+      todo_6: chartTx?.todo[5] === "1",
+      todo_7: chartTx?.todo[6] === "1",
+      todo_8: chartTx?.todo[7] === "1",
+      todo_9: chartTx?.todo[8] === "1",
+      todo_10: chartTx?.todo[9] === "1",
+      todo_11: chartTx?.todo[10] === "1",
+      todo_12: chartTx?.todo[11] === "1",
+      todo_13: chartTx?.todo[12] === "1",
+      todo_14: chartTx?.todo[13] === "1",
+      todo_15: chartTx?.todo[14] === "1",
+      todo_16: chartTx?.todo[15] === "1",
+      todo_17: chartTx?.todo[16] === "1",
+      todo_18: chartTx?.todo[17] === "1",
+      todo_19: chartTx?.todo[18] === "1",
+      todo_20: chartTx?.todo[19] === "1",
+      todo_21: chartTx?.todo[20] === "1",
+      todo_22: chartTx?.todo[21] === "1",
+      todo_23: chartTx?.todo[22] === "1",
+      todo_24: chartTx?.todo[23] === "1",
+    });
+    setStartTime(undefined);
+    setTimeTerm(undefined);
+  }, [chartTx, form, open]);
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
@@ -194,7 +227,7 @@ export default function IcuChartTxDialog({
 
         <Form {...form}>
           <form
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(handleIcuChartTx)}
             className="grid grid-cols-2 gap-4"
           >
             <FormField
@@ -268,19 +301,64 @@ export default function IcuChartTxDialog({
             />
 
             {/* 처치 시간 */}
-            <div className="text-sm font-semibold">처치 시간 설정</div>
+            <div className="text-sm font-semibold flex gap-2 items-center">
+              <div>처치 시간 설정</div>
+              <div>
+                <Select onValueChange={setStartTime} value={startTime}>
+                  <SelectTrigger className="h-6">
+                    <SelectValue placeholder="시작시간" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {TIME.map((element) => (
+                        <SelectItem
+                          value={element.toString()}
+                          key={element}
+                          className="h-6 text-sm"
+                        >
+                          {element}시 시작
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Select onValueChange={setTimeTerm} value={timeTerm}>
+                  <SelectTrigger className="h-6">
+                    <SelectValue placeholder="시간간격" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>시간간격</SelectLabel>
+                      {["1", "2", "3", "4", "6", "8", "12", "24"].map(
+                        (element) => (
+                          <SelectItem
+                            value={element.toString()}
+                            key={element}
+                            className="h-6 text-sm"
+                          >
+                            {element}시간 간격
+                          </SelectItem>
+                        )
+                      )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
             <div className="flex w-full col-span-2">
               {TIME.map((element) => (
                 <FormField
                   key={element}
                   control={form.control}
-                  name={`todo_${element}` as "todo_1"}
+                  name={`todo_${element}`}
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel
                         className={cn(
                           "border h-8 w-full flex items-center justify-center cursor-pointer hover:opacity-70 transition",
-                          field.value ? "bg-green-200" : "bg-red-200"
+                          field.value ? "bg-green-200" : "bg-red-100"
                         )}
                       >
                         {element}
