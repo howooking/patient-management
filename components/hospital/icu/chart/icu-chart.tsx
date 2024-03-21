@@ -7,7 +7,8 @@ import { useSelectedIcuChart } from "@/lib/store/selected-icu-chart";
 import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo } from "react";
+import { format } from "date-fns";
+import { useCallback, useEffect, useMemo } from "react";
 import IcuChartActions from "./icu-chart-actions";
 import IcuMemo from "./icu-memo";
 import IcuPatientInfo from "./icu-patient-info";
@@ -255,6 +256,19 @@ export default function IcuChart() {
     }
   }, [selectedChart, selectedIo, setSelectedIcuIoId]);
 
+  const chartState = useCallback(() => {
+    if (!selectedChart?.target_date) {
+      return undefined;
+    }
+    const today = format(new Date(), "yyyy-MM-dd");
+    if (selectedChart?.target_date === today) {
+      return "today";
+    }
+    if (selectedChart?.target_date < today) {
+      return "past";
+    }
+  }, [selectedChart?.target_date]);
+
   if (!selectedIcuIoId) {
     return <>전체현황</>;
   }
@@ -271,7 +285,10 @@ export default function IcuChart() {
       {selectedChart ? (
         <>
           <IcuPatientInfo selectedChart={selectedChart} />
-          <IcuTable selectedChartTx={selectedChartTx} />
+          <IcuTable
+            selectedChartTx={selectedChartTx}
+            chartState={chartState()}
+          />
           <IcuMemo selectedChart={selectedChart} />
         </>
       ) : null}

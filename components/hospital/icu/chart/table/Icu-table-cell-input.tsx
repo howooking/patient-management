@@ -13,6 +13,7 @@ export default function IcuTableCellInput({
   io_id,
   time,
   hasTodo,
+  chartState,
 }: {
   className?: string;
   result: string;
@@ -21,9 +22,19 @@ export default function IcuTableCellInput({
   io_id: number;
   time: number;
   hasTodo: boolean;
+  chartState?: "past" | "today";
 }) {
   const [input, setInput] = useState(result);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentHour, setCurrentHour] = useState(new Date().getHours());
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentHour(new Date().getHours());
+    }, 60000); // update currentHour every minute
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     setInput(result);
@@ -117,7 +128,12 @@ export default function IcuTableCellInput({
         onChange={(event) => setInput(event.target.value)}
         className={cn(
           "rounded-none px-1 focus-visible:border-2 focus-visible:border-rose-400 focus-visible:ring-0",
-          hasTodo && "bg-green-200"
+          hasTodo && "bg-green-200",
+          chartState === "past" && !hasTodo && "bg-gray-200",
+          chartState === "today" &&
+            currentHour > time &&
+            !hasTodo &&
+            "bg-gray-200"
         )}
       />
     </TableCell>
