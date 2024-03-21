@@ -42,7 +42,7 @@ export const DEFAULT_ICU_CHART = [
   {
     todoName: "수액",
     todoMemo: "",
-    dataType: "injection",
+    dataType: "fluid",
   },
   {
     todoName: "사료",
