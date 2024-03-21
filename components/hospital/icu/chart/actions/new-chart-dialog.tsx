@@ -11,7 +11,6 @@ import {
 import TooltipIconButton from "@/components/ui/tooltip-icon-button";
 import { toast } from "@/components/ui/use-toast";
 import { DEFAULT_ICU_CHART } from "@/constants/default-icu-chart";
-import useLatestWeight from "@/hooks/useLatestWeight";
 import { useSelectedDate } from "@/lib/store/selected-date";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -31,9 +30,6 @@ export default function NewChartDialog({
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { selectedDate } = useSelectedDate();
-  const { latestWeight, weighedDate } = useLatestWeight(
-    selectedIo?.pet_id.pet_id
-  );
   const handleNewChart = async () => {
     setIsSubmitting(true);
     try {

@@ -2,7 +2,7 @@ import { IcuChartJoined } from "@/types/type";
 import DeleteIoDialog from "./actions/delete-io-dialog";
 import OutPatientDialog from "./actions/out-patient-dialog";
 import NewChartDialog from "./actions/new-chart-dialog";
-import CopyPrevDialog from "./actions/copy-prev-dialog";
+import CopyPrevChartDialog from "./actions/copy-prev-chart-dialog";
 
 export default function IcuChartActions({
   selectedIo,
@@ -22,7 +22,13 @@ export default function IcuChartActions({
     <>
       {hasInAndOut && (
         <div className="">
-          {!isFirstDay && <CopyPrevDialog selectedIo={selectedIo} />}
+          {!isFirstDay && (
+            <CopyPrevChartDialog
+              selectedIo={selectedIo}
+              hasChart={hasChart}
+              selectedChart={selectedChart}
+            />
+          )}
 
           <NewChartDialog selectedIo={selectedIo} hasChart={hasChart} />
 

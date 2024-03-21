@@ -161,7 +161,7 @@ export default function IcuChart() {
     };
   }, [queryClient, supabase]);
 
-  // test_results
+  // test_results, 몸무게 실시간 반영하기 위해
   useEffect(() => {
     const channel = supabase
       .channel("test_results")
