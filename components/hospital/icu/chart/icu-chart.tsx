@@ -192,8 +192,8 @@ export default function IcuChart() {
     };
   }, [queryClient, supabase]);
 
-  const { icuChart, icuChartFetching } = useIcuChart();
-  const { icuChartTx, icuChartTxFetching } = useIcuChartTx();
+  const { icuChart } = useIcuChart();
+  const { icuChartTx } = useIcuChartTx();
 
   const selectedChart = useMemo(
     () => icuChart?.find((chart) => chart.icu_chart_id === selectedIcuChartId),
@@ -212,12 +212,6 @@ export default function IcuChart() {
         (element) => element.icu_chart_id === selectedIcuChartId
       ),
     [icuChartTx, selectedIcuChartId]
-  );
-
-  // 차트 복사 혹은 최기화시에 refetching과정 로딩 boolean
-  const icuChartOrIcuChartTxFetching = useMemo(
-    () => icuChartFetching || icuChartTxFetching,
-    [icuChartFetching, icuChartTxFetching]
   );
 
   // // tx
@@ -268,7 +262,6 @@ export default function IcuChart() {
         <>
           <IcuPatientInfo selectedChart={selectedChart} />
           <IcuTable
-            icuChartOrIcuChartTxFetching={icuChartOrIcuChartTxFetching}
             selectedChartTx={selectedChartTx}
             chartState={chartState()}
           />
