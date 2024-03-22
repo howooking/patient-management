@@ -63,8 +63,6 @@ export default function IcuChart() {
             queryClient.invalidateQueries({
               queryKey: [`icu_chart`],
             });
-            setSelectedIcuIoId(payload.new.io_id);
-            setSelectedIcuChartId(payload.new.icu_chart_id);
           }
         }
       )
@@ -200,11 +198,6 @@ export default function IcuChart() {
     [icuChart, selectedIcuChartId]
   );
 
-  const selectedIo = useMemo(
-    () => icuChart?.find((chart) => chart.io_id.io_id === selectedIcuIoId),
-    [icuChart, selectedIcuIoId]
-  );
-
   // tx data of selected chart
   const selectedChartTx = useMemo(
     () =>
@@ -251,14 +244,10 @@ export default function IcuChart() {
 
   return (
     <div>
-      <IcuChartActions
-        selectedIo={selectedIo}
-        hasInAndOut={!!selectedIo}
-        hasChart={!!selectedChart}
-        selectedChart={selectedChart}
-      />
+      <IcuChartActions selectedChart={selectedChart} />
 
-      {selectedChart && (
+      {/* 임시차트는 보여주지 않음 */}
+      {selectedChart && !selectedChart.isNext && (
         <>
           <IcuPatientInfo selectedChart={selectedChart} />
           <IcuTable

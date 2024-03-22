@@ -13,21 +13,18 @@ import { toast } from "@/components/ui/use-toast";
 import useIcuChart from "@/hooks/useIcuChart";
 import useIcuChartTx from "@/hooks/useIcuChartTx";
 import { useSelectedDate } from "@/lib/store/selected-date";
-import { useSelectedIcuChart } from "@/lib/store/selected-icu-chart";
-import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { cn } from "@/lib/utils";
-import { format, parseISO, subDays } from "date-fns";
+import { addNextDayChart, cn } from "@/lib/utils";
+import { type IcuChartJoined } from "@/types/type";
+import { addDays, format, parseISO, subDays } from "date-fns";
 import { useMemo, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { PiClipboardText } from "react-icons/pi";
 
 export default function CopyPrevChartDialog({
-  petName,
-  hasChart,
+  selectedChart,
 }: {
-  petName?: string;
-  hasChart: boolean;
+  selectedChart?: IcuChartJoined;
 }) {
   const supabase = createSupabaseBrowserClient();
   const [open, setOpen] = useState(false);
@@ -35,14 +32,14 @@ export default function CopyPrevChartDialog({
   const { icuChart } = useIcuChart();
   const { icuChartTx } = useIcuChartTx();
   const { selectedDate } = useSelectedDate();
-  const { selectedIcuIoId } = useSelectedIcuIo();
-  const { selectedIcuChartId } = useSelectedIcuChart();
 
   // 전날 icu_chart 정보 가져오기
   const prevDateChart = useMemo(
     () =>
       icuChart
-        ?.filter((element) => element.io_id.io_id === selectedIcuIoId)
+        ?.filter(
+          (element) => element.io_id.io_id === selectedChart?.io_id.io_id
+        )
         .find((element) => {
           const prevDate = format(
             subDays(parseISO(selectedDate), 1),
@@ -50,10 +47,10 @@ export default function CopyPrevChartDialog({
           );
           return element.target_date === prevDate;
         }),
-    [icuChart, selectedDate, selectedIcuIoId]
+    [icuChart, selectedChart?.io_id.io_id, selectedDate]
   );
 
-  // 전달 ich_chart_tx 정보 가져오기
+  // 전날 ich_chart_tx 정보 가져오기
   const prevDateChartTx = useMemo(
     () =>
       icuChartTx?.filter(
@@ -66,20 +63,18 @@ export default function CopyPrevChartDialog({
     setIsSubmitting(true);
     try {
       // 해당일의 차트가 있는 경우 삭제
-      if (hasChart) {
-        const { error } = await supabase
-          .from("icu_chart")
-          .delete()
-          .match({ icu_chart_id: selectedIcuChartId });
+      const { error } = await supabase
+        .from("icu_chart")
+        .delete()
+        .match({ icu_chart_id: selectedChart?.icu_chart_id });
 
-        if (error) {
-          toast({
-            variant: "destructive",
-            title: error.message,
-            description: "관리자에게 문의하세요",
-          });
-          return;
-        }
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: error.message,
+          description: "관리자에게 문의하세요",
+        });
+        return;
       }
 
       // 전날 icu_chart 정보 삽입
@@ -129,6 +124,20 @@ export default function CopyPrevChartDialog({
         });
         await Promise.all(promises);
       }
+
+      // 임시 차트인경우만 익일 임시차트 생성
+      if (selectedChart?.isNext) {
+        addNextDayChart(
+          supabase,
+          selectedChart?.io_id.io_id!,
+          selectedChart?.hos_id!,
+          selectedChart?.pet_id.pet_id!,
+          selectedChart?.main_vet.vet_id!,
+          selectedChart?.sub_vet.vet_id,
+          format(addDays(new Date(selectedDate), 1), "yyyy-MM-dd"),
+          selectedChart?.target_weight ?? null
+        );
+      }
     } catch (error) {
       toast({
         variant: "destructive",
@@ -152,13 +161,13 @@ export default function CopyPrevChartDialog({
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>
-            <span className="text-xl">{petName}</span>{" "}
+            <span className="text-xl">{selectedChart?.pet_id.name}</span>
             <span className="font-normal">
               의 전일 차트를 복사하시겠습니까?
             </span>
           </DialogTitle>
           <DialogDescription>
-            이미 작성된 처치내용은 삭제됩니다.
+            {!selectedChart?.isNext && "이미 작성된 처치내용은 삭제됩니다."}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

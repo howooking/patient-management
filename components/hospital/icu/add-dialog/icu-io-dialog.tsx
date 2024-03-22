@@ -25,16 +25,22 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
 import { DEFAULT_ICU_CHART } from "@/constants/default-icu-chart";
+import { WEIGHT_TEST_ID } from "@/constants/weight-test-id";
 import useCurrentHospitalId from "@/hooks/useCurrentHospital";
 import useHospitalGroup from "@/hooks/useHospitalGroup";
 import { useSelectedDate } from "@/lib/store/selected-date";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { calculateAge, calculateDaysFromNow, cn } from "@/lib/utils";
+import {
+  addNextDayChart,
+  calculateAge,
+  calculateDaysFromNow,
+  cn,
+} from "@/lib/utils";
 import { addIcuChartFormSchema } from "@/lib/zod/form-schemas";
 import { Pet } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CalendarIcon } from "@radix-ui/react-icons";
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -105,7 +111,7 @@ export default function IcuIoDialog({
         .select("result, created_at")
         .match({
           pet_id: pet.pet_id,
-          test_id: "5382e813-9151-4fcb-8e99-4de210f9e129", // 체중 test_id
+          test_id: WEIGHT_TEST_ID,
         })
         .order("created_at", { ascending: false });
 
@@ -145,6 +151,20 @@ export default function IcuIoDialog({
         return;
       }
 
+      // 다음날 차트 삽입
+      addNextDayChart(
+        supabase,
+        inAndOut.io_id,
+        hos_id,
+        pet.pet_id,
+        main_vet,
+        sub_vet,
+        format(addDays(date.from, 1), "yyyy-MM-dd"),
+        weights.length !== 0
+          ? `${weights[0].result}kg(${weights[0].created_at?.slice(0, 10)})`
+          : null
+      );
+
       // icu_chart_tx 기본 차트 삽입
       DEFAULT_ICU_CHART.forEach(async (element) => {
         const { error: icuChartTxError } = await supabase
@@ -169,8 +189,11 @@ export default function IcuIoDialog({
       // 날짜 이동
       setSelectedDate(format(date.from, "yyyy-MM-dd"));
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "차트 생성 중 에러발생",
+        description: "관리자에게 문의하세요",
+      });
     } finally {
       setIsSubmitting(false);
       setIoDialogOpen(false);

@@ -333,6 +333,7 @@ export type Database = {
           hos_id: string
           icu_chart_id: number
           io_id: number
+          isNext: boolean
           main_vet: string | null
           memo_a: string
           memo_b: string
@@ -349,6 +350,7 @@ export type Database = {
           hos_id: string
           icu_chart_id?: number
           io_id: number
+          isNext?: boolean
           main_vet?: string | null
           memo_a?: string
           memo_b?: string
@@ -365,6 +367,7 @@ export type Database = {
           hos_id?: string
           icu_chart_id?: number
           io_id?: number
+          isNext?: boolean
           main_vet?: string | null
           memo_a?: string
           memo_b?: string

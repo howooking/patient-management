@@ -1,3 +1,4 @@
+import { toast } from "@/components/ui/use-toast";
 import { type TestSet } from "@/types/type";
 import { clsx, type ClassValue } from "clsx";
 import { differenceInDays, parseISO } from "date-fns";
@@ -175,5 +176,37 @@ export function truncateBreed(breed?: string) {
     return breed.substring(0, 11) + "...";
   } else {
     return breed;
+  }
+}
+
+// 다음날 차트 삽입
+export async function addNextDayChart(
+  supabase: any,
+  io_id: number,
+  hos_id: string,
+  pet_id: number,
+  main_vet: string,
+  sub_vet: string | undefined,
+  target_date: string,
+  target_weight: string | null
+) {
+  const { error: icuChartNextError } = await supabase.from("icu_chart").insert({
+    io_id,
+    hos_id,
+    pet_id,
+    main_vet,
+    sub_vet,
+    target_date,
+    target_weight,
+    isNext: true,
+  });
+
+  if (icuChartNextError) {
+    toast({
+      variant: "destructive",
+      title: icuChartNextError.message,
+      description: "관리자에게 문의하세요",
+    });
+    return;
   }
 }

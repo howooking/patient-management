@@ -1,55 +1,44 @@
 import { IcuChartJoined } from "@/types/type";
+import { useMemo } from "react";
+import CopyPrevChartDialog from "./actions/copy-prev-chart-dialog";
 import DeleteIoDialog from "./actions/delete-io-dialog";
 import OutPatientDialog from "./actions/out-patient-dialog";
 import NewChartDialog from "./actions/new-chart-dialog";
-import CopyPrevChartDialog from "./actions/copy-prev-chart-dialog";
 
 export default function IcuChartActions({
-  selectedIo,
-  hasInAndOut,
-  hasChart,
   selectedChart,
 }: {
-  selectedIo?: IcuChartJoined;
-  hasInAndOut: boolean;
-  hasChart: boolean;
   selectedChart?: IcuChartJoined;
 }) {
-  const isOut = !!selectedIo?.io_id.out_date;
-  const isFirstDay = selectedIo?.io_id.in_date === selectedChart?.target_date;
+  const isOut = useMemo(
+    () => !!selectedChart?.io_id.out_date,
+    [selectedChart?.io_id.out_date]
+  );
+  const isFirstDay = useMemo(
+    () => selectedChart?.io_id.in_date === selectedChart?.target_date,
+    [selectedChart?.io_id.in_date, selectedChart?.target_date]
+  );
 
   return (
     <>
-      {hasInAndOut && (
-        <div className="">
-          {!isFirstDay && (
-            <CopyPrevChartDialog
-              petName={selectedIo?.pet_id.name}
-              hasChart={hasChart}
+      <div className="">
+        {!isFirstDay && <CopyPrevChartDialog selectedChart={selectedChart} />}
+
+        <NewChartDialog selectedChart={selectedChart} />
+
+        {!selectedChart?.isNext && (
+          <>
+            {!isOut && <OutPatientDialog selectedChart={selectedChart} />}
+
+            <DeleteIoDialog
+              io_id={selectedChart?.io_id.io_id}
+              patientName={selectedChart?.pet_id.name}
             />
-          )}
+          </>
+        )}
 
-          <NewChartDialog selectedIo={selectedIo} hasChart={hasChart} />
-
-          {hasChart && (
-            <>
-              <OutPatientDialog
-                isOut={isOut}
-                io_id={selectedIo?.io_id.io_id}
-                patientName={selectedIo?.pet_id.name}
-                outDate={selectedChart?.target_date}
-              />
-
-              <DeleteIoDialog
-                io_id={selectedIo?.io_id.io_id}
-                patientName={selectedIo?.pet_id.name}
-              />
-            </>
-          )}
-
-          {/* <TooltipIconButton Icon={PiBookmarkSimple} description="북마크등록" /> */}
-        </div>
-      )}
+        {/* <TooltipIconButton Icon={PiBookmarkSimple} description="북마크등록" /> */}
+      </div>
     </>
   );
 }

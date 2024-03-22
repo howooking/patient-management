@@ -13,57 +13,46 @@ import { toast } from "@/components/ui/use-toast";
 import { DEFAULT_ICU_CHART } from "@/constants/default-icu-chart";
 import { useSelectedDate } from "@/lib/store/selected-date";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
-import { cn } from "@/lib/utils";
+import { addNextDayChart, cn } from "@/lib/utils";
 import { type IcuChartJoined } from "@/types/type";
-import { useState } from "react";
+import { addDays, format } from "date-fns";
+import { useMemo, useState } from "react";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { PiArrowCounterClockwise, PiMagicWand } from "react-icons/pi";
 
 export default function NewChartDialog({
-  selectedIo,
-  hasChart,
+  selectedChart,
 }: {
-  selectedIo?: IcuChartJoined;
-  hasChart: boolean;
+  selectedChart?: IcuChartJoined;
 }) {
   const supabase = createSupabaseBrowserClient();
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { selectedDate } = useSelectedDate();
+
+  const isNext = useMemo(
+    () => !!selectedChart?.isNext,
+    [selectedChart?.isNext]
+  );
+
   const handleNewChart = async () => {
     setIsSubmitting(true);
     try {
-      if (hasChart) {
-        // 해당일 icu_chart 삭제
-        const { error } = await supabase
-          .from("icu_chart")
-          .delete()
-          .match({ icu_chart_id: selectedIo?.icu_chart_id });
-        if (error) {
-          toast({
-            variant: "destructive",
-            title: error.message,
-            description: "관리자에게 문의하세요",
-          });
-          return;
-        }
-      }
-
-      // 기본 차트 생성
+      // 차트 생성
       const { data: icuChart, error: icuChartError } = await supabase
         .from("icu_chart")
         .insert({
-          io_id: selectedIo?.io_id.io_id!,
-          hos_id: selectedIo?.hos_id!,
-          pet_id: selectedIo?.pet_id.pet_id!,
-          caution: selectedIo?.caution,
-          main_vet: selectedIo?.main_vet.vet_id,
-          sub_vet: selectedIo?.sub_vet?.vet_id,
+          io_id: selectedChart?.io_id.io_id!,
+          hos_id: selectedChart?.hos_id!,
+          pet_id: selectedChart?.pet_id.pet_id!,
+          caution: selectedChart?.caution,
+          main_vet: selectedChart?.main_vet.vet_id,
+          sub_vet: selectedChart?.sub_vet?.vet_id,
           target_date: selectedDate,
           memo_a: "",
           memo_b: "",
           memo_c: "",
-          target_weight: selectedIo?.target_weight,
+          target_weight: selectedChart?.target_weight,
         })
         .select("icu_chart_id")
         .single();
@@ -77,6 +66,20 @@ export default function NewChartDialog({
         return;
       }
 
+      // 임시 차트인경우만 익일 임시차트 생성
+      if (selectedChart?.isNext) {
+        addNextDayChart(
+          supabase,
+          selectedChart?.io_id.io_id!,
+          selectedChart?.hos_id!,
+          selectedChart?.pet_id.pet_id!,
+          selectedChart?.main_vet.vet_id!,
+          selectedChart?.sub_vet.vet_id,
+          format(addDays(new Date(selectedDate), 1), "yyyy-MM-dd"),
+          selectedChart?.target_weight ?? null
+        );
+      }
+
       // icu_chart_tx 기본 차트 삽입
       DEFAULT_ICU_CHART.forEach(async (element) => {
         const { error: icuChartTxError } = await supabase
@@ -84,7 +87,7 @@ export default function NewChartDialog({
           .insert({
             data_type: element.dataType,
             icu_chart_id: icuChart.icu_chart_id,
-            io_id: selectedIo?.io_id.io_id!,
+            io_id: selectedChart?.io_id.io_id!,
             todo_name: element.todoName,
             todo_memo: element.todoMemo,
           });
@@ -98,6 +101,20 @@ export default function NewChartDialog({
           return;
         }
       });
+
+      // 임시 icu_chart 삭제
+      const { error } = await supabase
+        .from("icu_chart")
+        .delete()
+        .match({ icu_chart_id: selectedChart?.icu_chart_id });
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: error.message,
+          description: "관리자에게 문의하세요",
+        });
+        return;
+      }
     } catch (error) {
       toast({
         variant: "destructive",
@@ -113,8 +130,8 @@ export default function NewChartDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <TooltipIconButton
-        Icon={hasChart ? PiArrowCounterClockwise : PiMagicWand}
-        description={hasChart ? "차트 초기화" : "기본차트 생성"}
+        Icon={isNext ? PiMagicWand : PiArrowCounterClockwise}
+        description={isNext ? "기본차트 생성" : "차트 초기화"}
         setOpen={setOpen}
       />
 
@@ -122,26 +139,28 @@ export default function NewChartDialog({
         <DialogHeader>
           <DialogTitle>
             <span className="text-xl">
-              {selectedDate}일 {selectedIo?.pet_id.name}
-            </span>{" "}
+              {selectedDate}날 {selectedChart?.pet_id.name}
+            </span>
             <span className="font-normal">
               의{" "}
-              {hasChart
-                ? "처치기록이 모두 초기화됩니다."
-                : "기본차트가 생성됩니다."}
+              {isNext
+                ? "기본차트가 생성됩니다."
+                : "처치기록이 모두 초기화됩니다."}
             </span>
           </DialogTitle>
           <DialogDescription>
-            {hasChart && "초기화된 차트는 복구가 불가능합니다."}
+            {isNext
+              ? "환자정보는 자동으로 입력됩니다."
+              : "환자정보는 보존됩니다."}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button
-            variant={hasChart ? "destructive" : "default"}
+            variant={isNext ? "default" : "destructive"}
             onClick={handleNewChart}
             disabled={isSubmitting}
           >
-            {hasChart ? "초기화" : "생성"}
+            {isNext ? "생성" : "초기화"}
             <AiOutlineLoading3Quarters
               className={cn("ml-2", isSubmitting ? "animate-spin" : "hidden")}
             />
