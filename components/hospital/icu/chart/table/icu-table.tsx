@@ -1,3 +1,4 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -5,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ICU_CHART_TX_DATA_TYPE } from "@/constants/icu-chart-tx-data-type";
 import { TIME } from "@/constants/time";
 import { useSelectedIcuChart } from "@/lib/store/selected-icu-chart";
 import { useSelectedIcuIo } from "@/lib/store/selected-icu-io";
@@ -13,14 +15,15 @@ import { useMemo } from "react";
 import IcuTableCellInput from "./Icu-table-cell-input";
 import IcuChartTxDialog from "./icu-chart-tx-edit-dialog";
 import IcuTableCellTitle from "./icu-table-cell-title";
-import { ICU_CHART_TX_DATA_TYPE } from "@/constants/icu-chart-tx-data-type";
 
 export default function IcuTable({
   selectedChartTx,
   chartState,
+  icuChartOrIcuChartTxFetching,
 }: {
   selectedChartTx?: IcuChartTxJoined[];
   chartState?: "past" | "today";
+  icuChartOrIcuChartTxFetching: boolean;
 }) {
   const sortedChartTx = useMemo(() => {
     const dataTypeOrder = ICU_CHART_TX_DATA_TYPE.map(
@@ -40,6 +43,25 @@ export default function IcuTable({
 
   const { selectedIcuChartId } = useSelectedIcuChart();
   const { selectedIcuIoId } = useSelectedIcuIo();
+
+  if (icuChartOrIcuChartTxFetching) {
+    return (
+      <div className="space-y-1">
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+        <Skeleton className="w-full h-8 rounded-none" />
+      </div>
+    );
+  }
 
   return (
     <Table className="border">

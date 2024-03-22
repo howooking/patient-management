@@ -192,8 +192,8 @@ export default function IcuChart() {
     };
   }, [queryClient, supabase]);
 
-  const { icuChart } = useIcuChart();
-  const { icuChartTx } = useIcuChartTx();
+  const { icuChart, icuChartFetching } = useIcuChart();
+  const { icuChartTx, icuChartTxFetching } = useIcuChartTx();
 
   const selectedChart = useMemo(
     () => icuChart?.find((chart) => chart.icu_chart_id === selectedIcuChartId),
@@ -214,6 +214,12 @@ export default function IcuChart() {
     [icuChartTx, selectedIcuChartId]
   );
 
+  // 차트 복사 혹은 최기화시에 refetching과정 로딩 boolean
+  const icuChartOrIcuChartTxFetching = useMemo(
+    () => icuChartFetching || icuChartTxFetching,
+    [icuChartFetching, icuChartTxFetching]
+  );
+
   // // tx
   // const { tx, isLoading: txLoading } = useTx();
   // const selectedTx = useMemo(
@@ -231,6 +237,7 @@ export default function IcuChart() {
   //   selectedIcuChartId,
   // });
 
+  // 차트가 현재인지 과거인지 상태를 return, 미래는 today와 past가 아닌경우이므로 굳이 return할 필요없음
   const chartState = useCallback(() => {
     if (!selectedChart?.target_date) {
       return undefined;
@@ -257,16 +264,17 @@ export default function IcuChart() {
         selectedChart={selectedChart}
       />
 
-      {selectedChart ? (
+      {selectedChart && (
         <>
           <IcuPatientInfo selectedChart={selectedChart} />
           <IcuTable
+            icuChartOrIcuChartTxFetching={icuChartOrIcuChartTxFetching}
             selectedChartTx={selectedChartTx}
             chartState={chartState()}
           />
           <IcuMemo selectedChart={selectedChart} />
         </>
-      ) : null}
+      )}
     </div>
   );
 }

@@ -9,7 +9,11 @@ export default function useIcuChartTx() {
   const hos_id = useCurrentHospitalId();
   const { date } = useIcuSearchRange();
 
-  const { data: icuChartTx, isLoading } = useQuery({
+  const {
+    data: icuChartTx,
+    isLoading: icuChartTxLoading,
+    isFetching: icuChartTxFetching,
+  } = useQuery({
     queryKey: ["icu_chart_tx", date?.from, date?.to],
     queryFn: async () => {
       const supabase = createSupabaseBrowserClient();
@@ -64,5 +68,5 @@ export default function useIcuChartTx() {
     },
   });
 
-  return { icuChartTx, isLoading };
+  return { icuChartTx, icuChartTxLoading, icuChartTxFetching };
 }
